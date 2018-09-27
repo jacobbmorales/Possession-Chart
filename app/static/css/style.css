@@ -1,0 +1,26 @@
+.court{
+    position: absolute;
+    right: 250px;
+    left: 250px;
+}
+.left {
+    left: 0px;
+    width: 200px;
+}
+.menu{
+    position: absolute;
+    top: 500px;
+    right: 250px;
+    left: 250px;
+}
+.right {
+    float: right;
+    width: 200px;
+}
+.signin {
+    position: absolute;
+    left: 0px;
+    top:100px;
+    width: 800px;
+    height: 200px
+}
