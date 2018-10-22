@@ -4,7 +4,9 @@
   "description": "Ball is life",
   "main": "webpack.config.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
@@ -13,7 +15,7 @@
     "babel-preset-react": "^6.24.1",
     "css-loader": "^1.0.0",
     "flask": "^0.2.10",
-    "jquery": "^3.2.1",
+    "jquery": "^3.3.1",
     "react": "^16.5.0",
     "react-dom": "^16.5.2",
     "style-loader": "^0.23.0",
@@ -26,12 +28,14 @@
     "bootstrap": "^3.3.7",
     "devs": "^0.2.2",
     "joi-browser": "^10.6.1",
-    "jquery": "^3.2.1",
+    "jsonify": "0.0.0",
     "material-ui": "^1.0.0-beta.47",
     "material-ui-icons": "^1.0.0-beta.36",
     "mysql": "^2.16.0",
     "node": "^8.2.1",
     "pip": "0.0.1",
-    "react-tap-event-plugin": "^2.0.1"
+    "react-tap-event-plugin": "^2.0.1",
+    "stringify": "^5.2.0",
+    "webpack-cli": "^3.1.2"
   }
 }

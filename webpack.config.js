@@ -7,7 +7,7 @@ module.exports = {
         homepage: "./app/static/scripts/js/homepage.js",
         offense: "./app/static/scripts/js/offense.js",
         signin: "./app/static/scripts/js/signin.js",
-        signup: "./app/static/scripts/js/signin.js",
+        signup: "./app/static/scripts/js/signup.js",
     },
     node: {
         console: false,
@@ -20,7 +20,7 @@ module.exports = {
         filename: "[name].bundle.js",
     },
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.js?$/,
                 exclude: /node_modules/,
@@ -28,7 +28,8 @@ module.exports = {
                 query: {
                     presets: ['es2015', 'react']
 
-                }},
+                }
+            },
             {
                 test: /\.css$/,
                 loader: 'style-loader'
@@ -41,6 +42,6 @@ module.exports = {
                 }
             }
         ]
-},
+    },
     plugins: []
 }
