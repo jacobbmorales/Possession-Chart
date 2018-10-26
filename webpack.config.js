@@ -4,7 +4,9 @@ var path = require('path')
 var injectTapEventPlugin = require('react-tap-event-plugin');
 module.exports = {
     entry: {
-        homepage: "./app/static/scripts/js/homepage.js",
+        addplayer: "./app/static/scripts/js/addplayer.js",
+        addplay: "./app/static/scripts/js/addplay.js",
+        home: "./app/static/scripts/js/home.js",
         offense: "./app/static/scripts/js/offense.js",
         signin: "./app/static/scripts/js/signin.js",
         signup: "./app/static/scripts/js/signup.js",

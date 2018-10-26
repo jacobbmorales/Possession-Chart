@@ -11,11 +11,18 @@
 
 <body>
     <center>
-        <h1>Offense</h1>
+        <h1> Offense </h1>
     </center>
 
-    <div id="offense"></div>
+    <div id="offense">
+        <script>
+            play = {{play | safe}}
+            last = {{ last | safe }}
+            window.last = last
+            window.play = play
+        </script>
     </div>
+
     <script type="text/javascript" src="static/scripts/jsx/offense.bundle.js"></script>
 
 </body>

@@ -20,10 +20,11 @@ class SignUp extends React.Component {
         this.state = {
             user: "",
             password: "",
+            test: this.props.test,
         };
         this.handleUser = this.handleUser.bind(this);
         this.handlePassword = this.handlePassword.bind(this);
-        this.handleSignIn = this.handleSignIn.bind(this);
+        this.handleSignUp = this.handleSignUp.bind(this);
     }
 
     handleUser(event) {
@@ -38,7 +39,7 @@ class SignUp extends React.Component {
         });
     };
 
-    handleSignIn(user, password) {
+    handleSignUp(user, password, test) {
         $.ajax({
             url: '/signup',
             data: { 'user': user, 'password': password },
@@ -47,6 +48,10 @@ class SignUp extends React.Component {
                 console.log({ 'user': user, 'password': password });
             }
         });
+        console.log(test)
+        if (test == 'false'){
+            console.log("this username exists")
+        }
 
     };
     render() {
@@ -75,7 +80,7 @@ class SignUp extends React.Component {
                             value={this.state.password}
                             onChange={this.handlePassword}
                         />
-                        <Button variant="outlined" onClick={this.handleSignIn(this.state.user, this.state.password)}>Sign Up</Button>
+                        <Button variant="outlined" onClick={() => this.handleSignUp(this.state.user, this.state.password, this.state.test)}>Sign Up</Button>
                     </CardActions>
                 </CardContent>
             </Card>
@@ -86,6 +91,6 @@ class SignUp extends React.Component {
 export default SignUp;
 
 ReactDOM.render(
-    <SignUp />,
+    <SignUp/>,
     document.getElementById('signup')
 );
