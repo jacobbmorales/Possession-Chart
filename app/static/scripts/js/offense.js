@@ -5,23 +5,88 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import MenuList from '@material-ui/core/MenuList';
+import MenuItem from '@material-ui/core/MenuItem';
+import red from '@material-ui/core/colors/red';
 import styles from '../../css/style.css';
+import $ from "jquery";
 injectTapEventPlugin();
 
+const mystyle = {
+    backgroundColor: red
+}
 class Offense extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            last: [],
+            playerSelected: '',
+            playSelected: '',
+            possession: 0
         };
+        this.updatePlayerSelected = this.updatePlayerSelected.bind(this);
+        this.updatePlaySelected = this.updatePlaySelected.bind(this);
+        this.handleMake = this.handleMake.bind(this);
+        this.handleMiss = this.handleMiss.bind(this);
+        this.handleTurnover = this.handleTurnover.bind(this);
     };
-    render() {
+    updatePlayerSelected(selectedIndex) {
+        this.setState({ playerSelected: selectedIndex });
+        console.log(this.state.playerSelected)
+    }
+    updatePlaySelected(selectedIndex) {
+        this.setState({ playSelected: selectedIndex });
+        console.log(this.state.playSelected)
+    }
 
+    handleMake(play, player) {
+        var possession = this.state.possesion + 1;
+        this.setState({ possession: possession });
+        console.log(this.state.possession)
+        $.ajax({
+            url: '/offense',
+            data: { 'play': play, 'player': player, zone: '1', result: 'make' },
+            type: 'POST',
+            success: function (response) {
+                console.log({ 'play': play, 'player': player, zone: '1', result: 'make' });
+            }
+        });
+
+    };
+    handleMiss(play, player) {
+        var possession = this.state.possesion + 1;
+        this.setState({ possession: possession });
+        console.log(this.state.possession)
+        $.ajax({
+            url: '/offense',
+            data: { 'play': play, 'player': player, zone: '1', result: 'miss' },
+            type: 'POST',
+            success: function (response) {
+                console.log({ 'play': play, 'player': player, zone: '1', result: 'miss' });
+            }
+        });
+
+    };
+    handleTurnover(play, player) {
+        var possession = this.state.possesion + 1;
+        this.setState({ possession: possession });
+        console.log(this.state.possession)
+        $.ajax({
+            url: '/offense',
+            data: { 'play': play, 'player': player, zone: '1', result: 'turnover' },
+            type: 'POST',
+            success: function (response) {
+                console.log({ 'play': play, 'player': player, zone: '1', result: 'turnover' });
+            }
+        });
+
+    };
+
+    render() {
+        const playerSelected = String(this.state.playerSelected);
+        const playSelected = this.state.playSelected;
         var temp = (window.last)
         var last = [];
         var key;
@@ -34,7 +99,6 @@ class Offense extends React.Component {
         var temp = (window.play)
         var plays = [];
         var key;
-        console.log(temp)
         for (key in temp) {
             plays.push({
                 key: key.toString(),
@@ -43,17 +107,21 @@ class Offense extends React.Component {
         }
         return (
             <div>
-                <List subheader={<ListSubheader>Players</ListSubheader>} className={styles.right}>
+                <MenuList subheader={<ListSubheader>Players</ListSubheader>} className={styles.right}>
                     {last.map((name) => (
                         <div>
-                            <ListItem key={name.key}>
-
+                            <MenuItem
+                                key={name.key}
+                                onClick={() => this.updatePlayerSelected(name.key)}
+                                //selected={playerSelected}
+                               // classes={{ selected: mystyle}}
+                            >
                                 <ListItemText primary={name.value} />
-                            </ListItem>
+                            </MenuItem>
                             <Divider inset={false} />
                         </div>
                     ))}
-                </List>
+                </MenuList>
                 <Card className={styles.court}>
                     <CardContent>
                         <CardActions>
@@ -70,24 +138,30 @@ class Offense extends React.Component {
                     <center>
                         <CardContent>
                             <CardActions>
-                                <Button variant="outlined">Make</Button>
-                                <Button variant="outlined">Miss</Button>
-                                <Button variant="outlined">Turnover</Button>
+                                <Button variant="outlined" onClick={() => this.handleMake(plays[this.state.playSelected].value, last[this.state.playerSelected].value)}>Make</Button>
+                                <Button variant="outlined" onClick={() => this.handleMiss(plays[this.state.playSelected].value, last[this.state.playerSelected].value)}>Miss</Button>
+                                <Button variant="outlined" onClick={() => this.handleTurnover(plays[this.state.playSelected].value, last[this.state.playerSelected].value)}>Turnover</Button>
+                                <Button variant="outlined" href='/home'>End Game</Button>
                             </CardActions>
                         </CardContent>
                     </center>
                 </Card>
-                <List subheader={<ListSubheader>Plays</ListSubheader>} className={styles.left} >
+                <MenuList subheader={<ListSubheader>Plays</ListSubheader>} className={styles.left} >
                     {plays.map((play) => (
                         <div>
-                            <ListItem key={play.key}>
+                            <MenuItem 
+                                key={play.key}
+                                onClick={() => this.updatePlaySelected(play.key)}
+                                //selected={playSelected === play.key}
+                                //classes={{ selected: mystyle}}
+                            >
 
                                 <ListItemText primary={play.value} />
-                            </ListItem>
+                            </MenuItem>
                             <Divider inset={false} />
                         </div>
                     ))}
-                </List>
+                </MenuList>
 
             </div >
         )

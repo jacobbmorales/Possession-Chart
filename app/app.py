@@ -1,29 +1,40 @@
 from flask import Flask
-from flask import Flask, render_template, request, jsonify, json
+from flask import Flask, render_template, request, jsonify, json, session
 from flaskext.mysql import MySQL
+import os
 
 app = Flask(__name__)
 
 @app.route("/", methods=['GET', 'POST'])
-def signin():
-    user = str(request.form.get('user'))
-    password = str(request.form.get('password'))
-    mysql = MySQL()
-    app.config['MYSQL_DATABASE_USER'] = 'root'
-    app.config['MYSQL_DATABASE_PASSWORD'] = 'Rufus1209'
-    app.config['MYSQL_DATABASE_DB'] = 'chart'
-    app.config['MYSQL_DATABASE_HOST'] = 'localhost'
-    mysql.init_app(app)
-    conn = mysql.connect()
-    cursor = conn.cursor()
-    execute = "SELECT * FROM user WHERE username = "+"'"+user+"'"+" and password = "+"'"+password+"'"
-    success = cursor.execute(execute)
-    print(success)
-    return render_template('index.html', success=success)
+def index():
+    if not session.get('logged_in'):
+        user = str(request.form.get('user'))
+        password = str(request.form.get('password'))
+        mysql = MySQL()
+        app.config['MYSQL_DATABASE_USER'] = 'root'
+        app.config['MYSQL_DATABASE_PASSWORD'] = 'Rufus1209'
+        app.config['MYSQL_DATABASE_DB'] = 'chart'
+        app.config['MYSQL_DATABASE_HOST'] = 'localhost'
+        mysql.init_app(app)
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        execute = "SELECT * FROM user WHERE username = "+"'"+user+"'"+" and password = "+"'"+password+"'"
+        if(cursor.execute(execute) == 1):
+            session['logged_in'] = True
+            print('we made it')
+        else:
+            print('signin failed')
+        return render_template('index.html')
+    else:
+        return render_template('home.html')
 
 @app.route("/offense", methods=['GET', 'POST'])
 def offense():
     first, last, number, play = [],[],[],[]
+    playName = str(request.form.get('play'))
+    player = str(request.form.get('player'))
+    zone = str(request.form.get('zone'))
+    result = str(request.form.get('result'))
     mysql = MySQL()
     app.config['MYSQL_DATABASE_USER'] = 'root'
     app.config['MYSQL_DATABASE_PASSWORD'] = 'Rufus1209'
@@ -34,8 +45,8 @@ def offense():
     cursor = conn.cursor()
     players = "SELECT * FROM user_id"
     plays = "SELECT * FROM plays"
-    
-
+    execute = "INSERT INTO possessions(play, player, zone, result) VALUES('"+playName+"', '"+player+"', '"+zone+"', '"+result+"')"
+    cursor.execute(execute)
     try:
         cursor.execute(players)
         rcount = int(cursor.rowcount)
@@ -62,9 +73,6 @@ def offense():
     except:
         print "Error: unable to fecth data"
     conn.commit()
-    print(first[0])
-    print(last)
-    print(number)
     return render_template('offense.html', first = first, last = last, number = number, play = play)
 
 @app.route("/addplayer", methods=['GET', 'POST'])
@@ -123,6 +131,11 @@ def defense():
 
 @app.route("/home")
 def home():
+    print(str(request.form.get('signout')))
+    if (str(request.form.get('signout')) == 'true'):
+        session['logged_in'] = False
+    else:
+        print('do nothing')
     return render_template('home.html')
 
 @app.route("/signup", methods=['GET', 'POST'])
@@ -151,4 +164,5 @@ def signup():
     return render_template('signup.html', user=user, password=password, success=success)
 
 if __name__ == "__main__":
+    app.secret_key = os.urandom(12)
     app.run()

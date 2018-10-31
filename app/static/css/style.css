@@ -6,6 +6,7 @@
 .left {
     left: 0px;
     width: 200px;
+    background: lightgrey;
 }
 .menu{
     position: absolute;
@@ -16,11 +17,12 @@
 .right {
     float: right;
     width: 200px;
+    background: lightgrey;
 }
 .signin {
     position: absolute;
     left: 0px;
     top:100px;
     width: 800px;
-    height: 200px
+    height: 200px;
 }

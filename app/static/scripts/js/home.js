@@ -18,8 +18,19 @@ class Home extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            signout: 'true',
         };
+        this.handleSignout = this.handleSignout.bind(this);
     }
+
+    handleSignout() {
+        $.ajax({
+            url: '/home',
+            data: { 'signout': 'true'},
+            type: 'POST',
+        });
+
+    };
 
     render() {
         return (
@@ -28,6 +39,8 @@ class Home extends React.Component {
                     <CardActions>
                         <Button variant="outlined" href='/addplayer'>Add Player</Button>
                         <Button variant="outlined" href='/addplay'>Add Play</Button>
+                        <Button variant="outlined" href='/offense'>New Game</Button>
+                        <Button variant="outlined" href='/' onClick={() => this.handleSignout()}>Signout</Button>
                     </CardActions>
                 </CardContent>
             </Card>
