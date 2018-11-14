@@ -40,7 +40,7 @@ class Home extends React.Component {
                         <Button variant="outlined" href='/addplayer'>Add Player</Button>
                         <Button variant="outlined" href='/addplay'>Add Play</Button>
                         <Button variant="outlined" href='/offense'>New Game</Button>
-                        <Button variant="outlined" href='/' onClick={() => this.handleSignout()}>Signout</Button>
+                        <Button variant="outlined" onClick={() => this.handleSignout()}>Signout</Button>
                     </CardActions>
                 </CardContent>
             </Card>

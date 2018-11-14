@@ -47,10 +47,10 @@ class Offense extends React.Component {
         console.log(this.state.possession)
         $.ajax({
             url: '/offense',
-            data: { 'play': play, 'player': player, zone: '1', result: 'make' },
+            data: { 'play': play, 'player': player, 'zone': '1', 'result': 'make' },
             type: 'POST',
             success: function (response) {
-                console.log({ 'play': play, 'player': player, zone: '1', result: 'make' });
+                console.log({ 'play': play, 'player': player, 'zone': '1', 'result': 'make' });
             }
         });
 
@@ -61,10 +61,10 @@ class Offense extends React.Component {
         console.log(this.state.possession)
         $.ajax({
             url: '/offense',
-            data: { 'play': play, 'player': player, zone: '1', result: 'miss' },
+            data: { 'play': play, 'player': player, 'zone': '1', 'result': 'miss' },
             type: 'POST',
             success: function (response) {
-                console.log({ 'play': play, 'player': player, zone: '1', result: 'miss' });
+                console.log({ 'play': play, 'player': player, 'zone': '1', 'result': 'miss' });
             }
         });
 
@@ -75,10 +75,10 @@ class Offense extends React.Component {
         console.log(this.state.possession)
         $.ajax({
             url: '/offense',
-            data: { 'play': play, 'player': player, zone: '1', result: 'turnover' },
+            data: { 'play': play, 'player': player, 'zone': '1', 'result': 'turnover' },
             type: 'POST',
             success: function (response) {
-                console.log({ 'play': play, 'player': player, zone: '1', result: 'turnover' });
+                console.log({ 'play': play, 'player': player, 'zone': '1', 'result': 'turnover' });
             }
         });
 

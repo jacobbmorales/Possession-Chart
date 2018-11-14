@@ -80,7 +80,7 @@ class SignUp extends React.Component {
                             value={this.state.password}
                             onChange={this.handlePassword}
                         />
-                        <Button variant="outlined" href ='/' onClick={() => this.handleSignUp(this.state.user, this.state.password, this.state.test)}>Sign Up</Button>
+                        <Button variant="outlined" onClick={() => this.handleSignUp(this.state.user, this.state.password, this.state.test)}>Sign Up</Button>
                     </CardActions>
                 </CardContent>
             </Card>

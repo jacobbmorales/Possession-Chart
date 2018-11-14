@@ -23,7 +23,7 @@ class SignIn extends React.Component {
         };
         this.handleUser = this.handleUser.bind(this);
         this.handlePassword = this.handlePassword.bind(this);
-        this.handleSignIn = this.handleSignIn.bind(this);
+        this.handleSignIn = this.handleSignIn.bind(this)
     }
 
     handleUser(event) {
@@ -75,7 +75,7 @@ class SignIn extends React.Component {
                             value={this.state.password}
                             onChange={this.handlePassword}
                         />
-                        <Button variant="outlined" href="/" onClick={() => this.handleSignIn(this.state.user, this.state.password)}>Sign In</Button>
+                        <Button type='submit' variant="outlined" onClick={ () => {this.handleSignIn(this.state.user, this.state.password)}}>Sign In</Button>
                         <Button variant="outlined" href="/signup">Create Account</Button>
                     </CardActions>
                 </CardContent>

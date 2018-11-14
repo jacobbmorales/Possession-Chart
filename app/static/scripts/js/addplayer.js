@@ -95,7 +95,7 @@ class AddPlayer extends React.Component {
                             value={this.state.number}
                             onChange={this.handleNumber}
                         />
-                        <Button variant="outlined" href='home' onClick={() => this.handleAdd(this.state.first, this.state.last, this.state.number)}>Add Player</Button>
+                        <Button variant="outlined" onClick={() => this.handleAdd(this.state.first, this.state.last, this.state.number)}>Add Player</Button>
                     </CardActions>
                 </CardContent>
             </Card>
