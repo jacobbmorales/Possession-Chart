@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
     <link rel="shortcut icon" href="">
     <title>Possession Charter</title>
 
@@ -18,13 +18,19 @@
     <div id="offense">
         <script>
             play = {{play | safe}}
-            last = {{ last | safe }}
+            play_id = {{play_id | safe}}
+            last = {{last | safe}}
+            player_id = {{player_id | safe}}
+            game = {{game | safe}}
             window.last = last
             window.play = play
+            window.play_id = play_id
+            window.player_id = player_id
+            window.game = game
         </script>
     </div>
 
-    <script type="text/javascript" src="static/scripts/jsx/offense.bundle.js"></script>
+    <script type="text/javascript" src="../../static/scripts/jsx/offense.bundle.js"></script>
 
 </body>
 

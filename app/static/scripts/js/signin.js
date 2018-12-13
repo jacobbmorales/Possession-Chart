@@ -43,8 +43,8 @@ class SignIn extends React.Component {
             url: '/',
             data: { 'user': user, 'password': password },
             type: 'POST',
-            success: function (response) {
-                console.log({ 'user': user, 'password': password });
+            success: function(response){
+                window.location.href = '/' + user
             }
         });
 

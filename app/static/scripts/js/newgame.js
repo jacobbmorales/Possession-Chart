@@ -14,30 +14,30 @@ import styles from '../../css/style.css';
 import $ from "jquery";
 injectTapEventPlugin();
 
-class AddPlay extends React.Component {
+class NewGame extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            play: "",
+            game: "",
         };
-        this.handlePlay = this.handlePlay.bind(this);
+        this.handleGame = this.handleGame.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
     }
 
-    handlePlay(event) {
+    handleGame(event) {
         this.setState({
-            play: event.target.value
+            game: event.target.value
         });
     };
 
-    handleAdd(play) {
+    handleAdd(game) {
         $.ajax({
-            url: '/addplay',
-            data: { 'play': play},
+            url: '/newgame',
+            data: { 'game': game, click : 'true'},
             type: 'POST',
             success: function(response){
                 document.write(response)
-                window.location.href = '/'
+                window.location.href = '/offense/' + game
             }
         });
 
@@ -49,15 +49,15 @@ class AddPlay extends React.Component {
                     <CardActions>
                         <TextField
                             id="filled-email-input"
-                            label="Name of Play"
+                            label="Name of Game"
                             name="email"
                             autoComplete="email"
                             margin="normal"
                             variant="filled"
-                            value={this.state.play}
-                            onChange={this.handlePlay}
+                            value={this.state.game}
+                            onChange={this.handleGame}
                         />
-                        <Button variant="outlined" onClick={() => this.handleAdd(this.state.play)}>Add Play</Button>
+                        <Button variant="outlined" onClick={() => this.handleAdd(this.state.game)}>Start</Button>
                     </CardActions>
                 </CardContent>
             </Card>
@@ -65,9 +65,9 @@ class AddPlay extends React.Component {
     }
 }
 
-export default AddPlay;
+export default NewGame;
 
 ReactDOM.render(
-    <AddPlay />,
-    document.getElementById('addplay')
+    <NewGame />,
+    document.getElementById('newgame')
 );

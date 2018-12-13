@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+    <title>Possession Charter</title>
+
+</head>
+
+<body>
+    <center>
+        <h1> Season Totals </h1>
+    </center>
+    <div id="playlist">
+        <script>
+            window.most_used = {{ most_used | safe }}
+            window.most_efficient = {{ most_efficient | safe }}
+            window.used_name = {{ used_name | safe }}
+            window.efficient_name = {{ efficient_name | safe }}
+            window.player_names = {{ player_names | safe }}
+            window.player_values = {{ player_values | safe }}
+            window.ind_names = {{ ind_names | safe }}
+            window.ind_values = {{ ind_values | safe }}
+            window.used_play_id = {{ used_play_id | safe }}
+            window.used_player_id = {{ used_player_id | safe }}
+            window.eff_play_id = {{ eff_play_id | safe }}
+            window.eff_player_id = {{ eff_player_id | safe }}
+        </script>
+    </div>
+    <script type="text/javascript" src="static/scripts/jsx/playList.bundle.js"></script>
+</body>
+
+</html>

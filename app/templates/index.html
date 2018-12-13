@@ -10,8 +10,10 @@
 </head>
 
 <body>
-    <div id="signin"></div>
-    <script type="text/javascript" src="static/scripts/jsx/signin.bundle.js"></script>
+    <div data-role="page" data-url="{{ url_for('index') }}">
+        <div id="signin"></div>
+        <script type="text/javascript" src="static/scripts/jsx/signin.bundle.js"></script>
+    </div>
 </body>
 
 </html>

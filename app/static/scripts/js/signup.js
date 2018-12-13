@@ -44,15 +44,10 @@ class SignUp extends React.Component {
             url: '/signup',
             data: { 'user': user, 'password': password },
             type: 'POST',
-            success: function (response) {
-                console.log({ 'user': user, 'password': password });
+            success: function(response){
+                window.location.href = '/'
             }
         });
-        console.log(test)
-        if (test == 'false'){
-            console.log("this username exists")
-        }
-
     };
     render() {
         return (

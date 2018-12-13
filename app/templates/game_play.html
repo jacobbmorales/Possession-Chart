@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="../../static/css/style.css">
+    <title>Possession Charter</title>
+
+</head>
+
+</html>
+
+<body>
+        <center>
+                <h1> {{ my_play | safe}} </h1>
+        </center>
+        <div id="play">
+            <script>
+                window.player_names = {{ player_names | safe}}
+                window.player_values = {{ player_values | safe}}
+                window.ind_names = {{ ind_names | safe}}
+                window.ind_values = {{ ind_values | safe}}
+                window.used_player_id= {{ used_player_id | safe}}
+                window.eff_player_id= {{ eff_player_id | safe}}
+            </script>
+        </div>
+        <script type="text/javascript" src="../../static/scripts/jsx/play.bundle.js"></script>
+</body>
+
+</html>

@@ -6,8 +6,12 @@ module.exports = {
     entry: {
         addplayer: "./app/static/scripts/js/addplayer.js",
         addplay: "./app/static/scripts/js/addplay.js",
+        gameList: "./app/static/scripts/js/gameList.js",
         home: "./app/static/scripts/js/home.js",
+        newgame: "./app/static/scripts/js/newgame.js",
         offense: "./app/static/scripts/js/offense.js",
+        play: "./app/static/scripts/js/play.js",
+        playList: "./app/static/scripts/js/playList.js",
         signin: "./app/static/scripts/js/signin.js",
         signup: "./app/static/scripts/js/signup.js",
     },

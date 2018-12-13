@@ -10,8 +10,19 @@
 </head>
 
 <body>
-    <div id="home"></div>
-    <script type="text/javascript" src="static/scripts/jsx/home.bundle.js"></script>
+    <div data-role="page" id="home" data-url="/{{username}}">
+        <div id="home">
+            <script>
+                games = {{ games | safe }}
+                game_id = {{ game_id | safe }}
+                data = {{ data | safe }}
+                window.games = games
+                window.game_id = game_id
+                window.data = data
+            </script>
+        </div>
+        <script type="text/javascript" src="static/scripts/jsx/home.bundle.js"></script>
+    </div>
 </body>
 
 </html>

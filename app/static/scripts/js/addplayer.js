@@ -57,6 +57,10 @@ class AddPlayer extends React.Component {
             url: '/addplayer',
             data: { 'first': first, 'last': last, 'number': number },
             type: 'POST',
+            success: function(response){
+                document.write(response)
+                window.location.href = '/'
+            }
         });
 
     };

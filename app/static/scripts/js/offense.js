@@ -22,64 +22,63 @@ class Offense extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            playerSelected: '',
-            playSelected: '',
-            possession: 0
+            playerSelected: 0,
+            playSelected: 0,
+            possession: 1,
+            zone: 1
         };
         this.updatePlayerSelected = this.updatePlayerSelected.bind(this);
         this.updatePlaySelected = this.updatePlaySelected.bind(this);
+        this.updateZone = this.updateZone.bind(this);
         this.handleMake = this.handleMake.bind(this);
         this.handleMiss = this.handleMiss.bind(this);
         this.handleTurnover = this.handleTurnover.bind(this);
+        this.increment = this.increment.bind(this)
     };
     updatePlayerSelected(selectedIndex) {
         this.setState({ playerSelected: selectedIndex });
-        console.log(this.state.playerSelected)
     }
-    updatePlaySelected(selectedIndex) {
+    updatePlaySelected(selectedIndex) {  
         this.setState({ playSelected: selectedIndex });
-        console.log(this.state.playSelected)
     }
 
-    handleMake(play, player) {
-        var possession = this.state.possesion + 1;
-        this.setState({ possession: possession });
-        console.log(this.state.possession)
+    updateZone(zone) {
+        this.setState({ zone: zone });
+    }
+
+    increment(){
+        var pos = this.state.possession
+        pos += 1
+        this.setState({possession: pos})
+    }
+
+    handleMake(play, player, zone) {
+        this.increment()
         $.ajax({
-            url: '/offense',
-            data: { 'play': play, 'player': player, 'zone': '1', 'result': 'make' },
+            url: '/offense/' + window.game,
+            data: {'play': play, 'player': player, 'zone': zone, 'result': 'make', 'possession' : this.state.possession },
             type: 'POST',
-            success: function (response) {
-                console.log({ 'play': play, 'player': player, 'zone': '1', 'result': 'make' });
-            }
+            success: function(response){ document.write(response) }
         });
 
     };
-    handleMiss(play, player) {
-        var possession = this.state.possesion + 1;
-        this.setState({ possession: possession });
-        console.log(this.state.possession)
+    handleMiss(play, player, zone) {
+        this.increment()
         $.ajax({
-            url: '/offense',
-            data: { 'play': play, 'player': player, 'zone': '1', 'result': 'miss' },
+            url: '/offense/' + window.game,
+            data: {'play': play, 'player': player, 'zone': zone, 'result': 'miss', 'possession' : this.state.possession },
             type: 'POST',
-            success: function (response) {
-                console.log({ 'play': play, 'player': player, 'zone': '1', 'result': 'miss' });
-            }
+            success: function(response){ document.write(response) }
         });
 
     };
-    handleTurnover(play, player) {
-        var possession = this.state.possesion + 1;
-        this.setState({ possession: possession });
-        console.log(this.state.possession)
+    handleTurnover(play, player, zone) {
+        this.increment()
         $.ajax({
-            url: '/offense',
-            data: { 'play': play, 'player': player, 'zone': '1', 'result': 'turnover' },
+            url: '/offense/' + window.game,
+            data: {'play': play, 'player': player, 'zone': zone, 'result': 'turnover', 'possession' : this.state.possession },
             type: 'POST',
-            success: function (response) {
-                console.log({ 'play': play, 'player': player, 'zone': '1', 'result': 'turnover' });
-            }
+            success: function(response){ document.write(response) }
         });
 
     };
@@ -89,19 +88,21 @@ class Offense extends React.Component {
         const playSelected = this.state.playSelected;
         var temp = (window.last)
         var last = [];
+        var player_id = (window.player_id)
         var key;
         for (key in temp) {
             last.push({
-                key: key.toString(),
+                key: player_id[key],
                 value: temp[key].toString(),
             });
         }
         var temp = (window.play)
         var plays = [];
+        var play_id = (window.play_id)
         var key;
         for (key in temp) {
             plays.push({
-                key: key.toString(),
+                key: play_id[key],
                 value: temp[key].toString(),
             });
         }
@@ -125,12 +126,12 @@ class Offense extends React.Component {
                 <Card className={styles.court}>
                     <CardContent>
                         <CardActions>
-                            <Button variant="outlined">1</Button>
-                            <Button variant="outlined">2</Button>
-                            <Button variant="outlined">3</Button>
-                            <Button variant="outlined">4</Button>
-                            <Button variant="outlined">5</Button>
-                            <Button variant="outlined">6</Button>
+                            <Button variant="outlined" onClick={() => this.updateZone(1)}>1</Button>
+                            <Button variant="outlined" onClick={() => this.updateZone(2)}>2</Button>
+                            <Button variant="outlined" onClick={() => this.updateZone(3)}>3</Button>
+                            <Button variant="outlined" onClick={() => this.updateZone(4)}>4</Button>
+                            <Button variant="outlined" onClick={() => this.updateZone(5)}>5</Button>
+                            <Button variant="outlined" onClick={() => this.updateZone(6)}>6</Button>
                         </CardActions>
                     </CardContent>
                 </Card>
@@ -138,10 +139,10 @@ class Offense extends React.Component {
                     <center>
                         <CardContent>
                             <CardActions>
-                                <Button variant="outlined" onClick={() => this.handleMake(plays[this.state.playSelected].value, last[this.state.playerSelected].value)}>Make</Button>
-                                <Button variant="outlined" onClick={() => this.handleMiss(plays[this.state.playSelected].value, last[this.state.playerSelected].value)}>Miss</Button>
-                                <Button variant="outlined" onClick={() => this.handleTurnover(plays[this.state.playSelected].value, last[this.state.playerSelected].value)}>Turnover</Button>
-                                <Button variant="outlined" href='/home'>End Game</Button>
+                                <Button variant="outlined" onClick={() => this.handleMake(this.state.playSelected, this.state.playerSelected, this.state.zone)}>Make</Button>
+                                <Button variant="outlined" onClick={() => this.handleMiss(this.state.playSelected, this.state.playerSelected, this.state.zone)}>Miss</Button>
+                                <Button variant="outlined" onClick={() => this.handleTurnover(this.state.playSelected, this.state.playerSelected, this.state.zone)}>Turnover</Button>
+                                <Button variant="outlined" href='/'>End Game</Button>
                             </CardActions>
                         </CardContent>
                     </center>
