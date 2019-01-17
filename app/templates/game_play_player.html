@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="../../static/css/style.css">
+    <title>Possession Charter</title>
+    <style>
+        body {
+              background-image: url("/static/css/images/floor.jpg");
+            }
+    </style>
+
+</head>
+
+</html>
+
+<body>
+    <div id="navbar">
+    </div>
+    <center>
+        <div class="title">
+            <h1> {{ my_game | safe}}: <br>{{ my_play | safe}}: <br> {{ my_player | safe}}</h1>
+        </div>
+    </center>
+    <div id="game_play_player">
+        <script>
+            window.zone_used = {{ zone_used | safe }}
+            window.zone_eff = {{ zone_eff | safe }}
+        </script>
+    </div>
+    <script type="text/javascript" src="../../static/scripts/jsx/navbar.bundle.js"></script>
+    <script type="text/javascript" src="../../static/scripts/jsx/game_play_player.bundle.js"></script>
+</body>
+
+</html>

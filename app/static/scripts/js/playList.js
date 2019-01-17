@@ -27,25 +27,34 @@ class PlayList extends React.Component {
         };
         this.updatePlaySelected = this.updatePlaySelected.bind(this);
         this.updatePlayerSelected = this.updatePlayerSelected.bind(this);
-        
+
     }
     updatePlaySelected(play) {
         console.log(play)
         $.ajax({
-            url: '/plays',
-            data: { play: play},
+            url: '/season',
+            data: { play: play, player: 'false' },
             type: 'POST',
-            success: function(response){
+            success: function (response) {
                 document.write(response)
-                window.location.href = '/plays/'+play
+                window.location.href = '/season/' + play
             }
         });
     }
 
-    updatePlayerSelected(selectedIndex) {
-        console.log(selectedIndex)
+    updatePlayerSelected(player) {
+        console.log(player)
+        $.ajax({
+            url: '/season',
+            data: { player: player, play: 'false' },
+            type: 'POST',
+            success: function (response) {
+                document.write(response)
+                window.location.href = '/season/player/' + player
+            }
+        });
     }
-    
+
 
     render() {
         var most_used = []
@@ -64,38 +73,40 @@ class PlayList extends React.Component {
         var used_player_id = window.used_player_id
         var eff_play_id = window.eff_play_id
         var eff_player_id = window.eff_player_id
+        var zone_used = window.zone_used
+        var zone_eff = window.zone_eff
         var key
         for (key in used) {
             most_used.push({
-                key: used_pct[key],
+                key: used_pct[key] + '%',
                 value: used[key],
                 id: used_play_id[key]
             });
         }
         for (key in efficient) {
             most_efficient.push({
-                key: eff_pct[key],
+                key: eff_pct[key] + '%',
                 value: efficient[key],
                 id: eff_play_id[key]
             });
         }
         for (key in player) {
             players.push({
-                key: player_pct[key],
+                key: player_pct[key] + '%',
                 value: player[key],
                 id: eff_player_id[key]
             });
         }
         for (key in used_player) {
             players_used.push({
-                key: used_player_pct[key],
+                key: used_player_pct[key] + '%',
                 value: used_player[key],
                 id: used_player_id[key]
             });
         }
         return (
             <div>
-            <MenuList subheader={<ListSubheader>Most Used Play</ListSubheader>} className={styles.right}>
+                <MenuList subheader={<ListSubheader><center><h6>Most Used Play</h6></center></ListSubheader>} className={styles.left}>
                     {most_used.map((play) => (
                         <div>
                             <MenuItem
@@ -108,7 +119,7 @@ class PlayList extends React.Component {
                         </div>
                     ))}
                 </MenuList>
-                <MenuList subheader={<ListSubheader>Most Efficient Play</ListSubheader>} className={styles.right}>
+                <MenuList subheader={<ListSubheader><center><h6>Most Efficient Play</h6></center></ListSubheader>} className={styles.left}>
                     {most_efficient.map((play) => (
                         <div>
                             <MenuItem
@@ -121,7 +132,59 @@ class PlayList extends React.Component {
                         </div>
                     ))}
                 </MenuList>
-                <MenuList subheader={<ListSubheader>Most Efficient Player</ListSubheader>} className={styles.right}>
+                <Card className={styles.courtdisplay}>
+                    <Card className={styles.corner} >
+                        Used: {zone_used[0]}%
+                    Efficiency: {zone_eff[0]}%
+                    </Card>
+                    <Card className={styles.shortcorner} >
+                        Used: {zone_used[1]}%
+                    Efficiency: {zone_eff[1]}%
+                    </Card>
+                    <Card className={styles.paint} >
+                        Used: {zone_used[2]}%
+                    Efficiency: {zone_eff[2]}%
+                    </Card>
+                    <Card className={styles.shortcorner2} >
+                        Used: {zone_used[3]}%
+                    Efficiency: {zone_eff[3]}%
+                    </Card>
+                    <Card className={styles.corner2} >
+                        Used: {zone_used[4]}%
+                    Efficiency: {zone_eff[4]}%
+                    </Card>
+                    <Card className={styles.twowing} >
+                        Used: {zone_used[5]}%
+                    Efficiency: {zone_eff[5]}%
+                    </Card>
+                    <Card className={styles.upperpaint} >
+                        Used: {zone_used[6]}%
+                    Efficiency: {zone_eff[6]}%
+                    </Card>
+                    <Card className={styles.twowing2} >
+                        Used: {zone_used[7]}%
+                    Efficiency: {zone_eff[7]}%
+                    </Card>
+                    <Card className={styles.topkey} >
+                        Used: {zone_used[8]}%
+                    Efficiency: {zone_eff[8]}%
+                    </Card>
+                    <Card className={styles.wing} >
+                        Used: {zone_used[9]}%
+                    Efficiency: {zone_eff[9]}%
+                    </Card>
+                    <Card className={styles.top} >
+                        Used: {zone_used[10]}%
+                    Efficiency: {zone_eff[10]}%
+                    </Card>
+                    <Card className={styles.wing2} >
+                        Used: {zone_used[11]}%
+                    Efficiency: {zone_eff[11]}%
+                    </Card>
+
+
+                </Card>
+                <MenuList subheader={<ListSubheader><center><h6>Most Efficient Player</h6></center></ListSubheader>} className={styles.right}>
                     {players.map((player) => (
                         <div>
                             <MenuItem
@@ -134,7 +197,7 @@ class PlayList extends React.Component {
                         </div>
                     ))}
                 </MenuList>
-                <MenuList subheader={<ListSubheader>Most Used Player</ListSubheader>} className={styles.right}>
+                <MenuList subheader={<ListSubheader><center><h6>Most Used Player</h6></center></ListSubheader>} className={styles.right}>
                     {players_used.map((player) => (
                         <div>
                             <MenuItem

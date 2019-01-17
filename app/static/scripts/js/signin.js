@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme'
@@ -43,7 +44,7 @@ class SignIn extends React.Component {
             url: '/',
             data: { 'user': user, 'password': password },
             type: 'POST',
-            success: function(response){
+            success: function (response) {
                 window.location.href = '/' + user
             }
         });
@@ -51,35 +52,64 @@ class SignIn extends React.Component {
     };
     render() {
         return (
-            <Card className={styles.signin}>
-                <CardContent>
+            <div>
+                <Card className={styles.logoleft}>
+                </Card>
+                <Card className={styles.logoright}>
+                </Card>
+                <Card className={styles.signin}>
+                    <CardContent>
+                        <CardActions>
+                            <div className={styles.ten}>
+                                <TextField
+                                    id="filled-email-input"
+                                    label="User Name"
+                                    type="email"
+                                    name="email"
+                                    autoComplete="email"
+                                    margin="normal"
+                                    variant="filled"
+                                    value={this.state.user}
+                                    onChange={this.handleUser}
+                                    className={styles.ten}
+                                />
+                                <br></br>
+                                <TextField
+                                    id="filled-password-input"
+                                    label="Password"
+                                    type="password"
+                                    autoComplete="current-password"
+                                    margin="normal"
+                                    variant="filled"
+                                    value={this.state.password}
+                                    onChange={this.handlePassword}
+                                    className={styles.ten}
+                                />
+                                <br></br>
+                                <Button type='submit' variant="outlined" onClick={() => { this.handleSignIn(this.state.user, this.state.password) }}>Sign In</Button>
+                                <br></br>
+                                <center>
+                                    <Button variant="outlined" href="/signup">Create Account</Button>
+                                </center>
+                            </div>
+                        </CardActions>
+                    </CardContent>
+                </Card>
+
+                <Card className={styles.border}>
+
                     <CardActions>
-                        <TextField
-                            id="filled-email-input"
-                            label="User Name"
-                            type="email"
-                            name="email"
-                            autoComplete="email"
-                            margin="normal"
-                            variant="filled"
-                            value={this.state.user}
-                            onChange={this.handleUser}
-                        />
-                        <TextField
-                            id="filled-password-input"
-                            label="Password"
-                            type="password"
-                            autoComplete="current-password"
-                            margin="normal"
-                            variant="filled"
-                            value={this.state.password}
-                            onChange={this.handlePassword}
-                        />
-                        <Button type='submit' variant="outlined" onClick={ () => {this.handleSignIn(this.state.user, this.state.password)}}>Sign In</Button>
-                        <Button variant="outlined" href="/signup">Create Account</Button>
+                        <center>
+                            <Typography>
+                                This app is designed to track possessions from your games. With this data we will
+                                calculate the efficiency of each of your players and plays. The hope is that you can
+                                figure out what your most effective player/play combinations are.
+                        </Typography>
+                        </center>
                     </CardActions>
-                </CardContent>
-            </Card>
+
+                </Card>
+            </div>
         )
     }
 }

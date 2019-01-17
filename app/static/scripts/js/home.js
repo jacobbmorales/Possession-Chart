@@ -18,40 +18,26 @@ import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import styles from '../../css/style.css';
 import $ from "jquery";
+import Center from 'react-center';
 injectTapEventPlugin();
 
 class Home extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            signout: 'true',
             game: 0
         };
-        this.handleSignout = this.handleSignout.bind(this);
         this.handleGame = this.handleGame.bind(this);
     }
-
-    handleSignout() {
-        $.ajax({
-            url: '/home',
-            data: { 'signout': 'true'},
-            type: 'POST',
-            success: function(response){
-                document.write(response)
-                window.location.href = '/'
-            }
-        });
-
-    };
 
     handleGame(game) {
         $.ajax({
             url: '/home',
-            data: { game: game},
+            data: { game: game },
             type: 'POST',
-            success: function(response){
+            success: function (response) {
                 document.write(response)
-                window.location.href = '/game/'+game
+                window.location.href = '/game/' + game
             }
         });
 
@@ -61,6 +47,8 @@ class Home extends React.Component {
         var data = window.data
         var most_used = data[0]
         var efficient = data[1]
+        var eff_player = data[2]
+        var used_player = data[3]
         var temp = (window.games)
         var games = [];
         var game_id = (window.game_id)
@@ -73,52 +61,62 @@ class Home extends React.Component {
         }
         return (
             <div>
-            <Card>
-                <CardContent>
-                    <CardActions>
-                        <Button variant="outlined" href='/addplayer'>Add Player</Button>
-                        <Button variant="outlined" href='/addplay'>Add Play</Button>
-                        <Button variant="outlined" href='/newgame'>New Game</Button>
-                        <Button variant="outlined" href='/plays'>Play Data</Button>
-                        <Button variant="outlined" onClick={() => this.handleSignout()}>Signout</Button>
-                    </CardActions>
-                </CardContent>
-            </Card>
-            <Card>
-                <CardContent>
-                    <CardActions>
-                        <Typography>
-                            Most used play:
-                            <br></br>
-                                {most_used}
-                        </Typography>
-                    </CardActions>
-                </CardContent>
-            </Card>
-            <Card>
-                <CardContent>
-                    <CardActions>
-                        <Typography>
-                            Most efficient play:
-                            <br></br>
-                                {efficient}
-                        </Typography>
-                    </CardActions>
-                </CardContent>
-            </Card>
-            <MenuList subheader={<ListSubheader>Games</ListSubheader>} className={styles.right}>
-                    {games.map((name) => (
-                        <div>
-                            <MenuItem
-                                key={name.key}
-                                onClick={() => this.handleGame(name.key)}
-                            >
-                                <ListItemText primary={name.value} />
-                            </MenuItem>
-                            <Divider inset={false} />
-                        </div>
-                    ))}
-                </MenuList>
+                <Card className={styles.homeplay}>
+                    <CardContent>
+                        <CardActions>
+                            <Typography>
+                                <center>
+                                    <h3>Most used play:</h3>
+                                    <br></br>
+                                    {most_used}
+                                </center>
+                            </Typography>
+                        </CardActions>
+                    </CardContent>
+                </Card>
+                <Card className={styles.homeplay2}>
+                    <CardContent>
+                        <CardActions>
+                            <Typography>
+                                <center>
+                                    <h3>Most efficient play:</h3>
+                                    <br></br>
+                                    {efficient}
+                                </center>
+                            </Typography>
+                        </CardActions>
+                    </CardContent>
+                </Card>
+                <Center>
+                <Card className={styles.logo}>
+                </Card>
+                </Center>
+                <Card className={styles.homeplayer}>
+                    <CardContent>
+                        <CardActions>
+                            <Typography>
+                                <center>
+                                    <h3>Most used player:</h3>
+                                    <br></br>
+                                    {used_player}
+                                </center>
+                            </Typography>
+                        </CardActions>
+                    </CardContent>
+                </Card>
+                <Card className={styles.homeplayer2}>
+                    <CardContent>
+                        <CardActions>
+                            <Typography>
+                                <center>
+                                    <h3>Most efficient player:</h3>
+                                    <br></br>
+                                    {eff_player}
+                                </center>
+                            </Typography>
+                        </CardActions>
+                    </CardContent>
+                </Card>
             </div>
         )
     }

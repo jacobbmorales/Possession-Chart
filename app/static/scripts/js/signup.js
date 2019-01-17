@@ -44,7 +44,7 @@ class SignUp extends React.Component {
             url: '/signup',
             data: { 'user': user, 'password': password },
             type: 'POST',
-            success: function(response){
+            success: function (response) {
                 window.location.href = '/'
             }
         });
@@ -54,28 +54,34 @@ class SignUp extends React.Component {
             <Card className={styles.signin}>
                 <CardContent>
                     <CardActions>
-                        <TextField
-                            id="filled-email-input"
-                            label="User Name"
-                            type="email"
-                            name="email"
-                            autoComplete="email"
-                            margin="normal"
-                            variant="filled"
-                            value={this.state.user}
-                            onChange={this.handleUser}
-                        />
-                        <TextField
-                            id="filled-password-input"
-                            label="Password"
-                            type="password"
-                            autoComplete="current-password"
-                            margin="normal"
-                            variant="filled"
-                            value={this.state.password}
-                            onChange={this.handlePassword}
-                        />
-                        <Button variant="outlined" onClick={() => this.handleSignUp(this.state.user, this.state.password, this.state.test)}>Sign Up</Button>
+                        <div className={styles.ten}>
+                            <TextField
+                                id="filled-email-input"
+                                label="User Name"
+                                type="email"
+                                name="email"
+                                autoComplete="email"
+                                margin="normal"
+                                variant="filled"
+                                value={this.state.user}
+                                onChange={this.handleUser}
+                            />
+                            <br></br>
+                            <TextField
+                                id="filled-password-input"
+                                label="Password"
+                                type="password"
+                                autoComplete="current-password"
+                                margin="normal"
+                                variant="filled"
+                                value={this.state.password}
+                                onChange={this.handlePassword}
+                            />
+                            <br></br>
+                            <Button variant="outlined" onClick={() => this.handleSignUp(this.state.user, this.state.password, this.state.test)}>Sign Up</Button>
+                            <br></br>
+                            <Button variant="outlined" href='/'>Home</Button>
+                        </div>
                     </CardActions>
                 </CardContent>
             </Card>
@@ -86,6 +92,6 @@ class SignUp extends React.Component {
 export default SignUp;
 
 ReactDOM.render(
-    <SignUp/>,
+    <SignUp />,
     document.getElementById('signup')
 );

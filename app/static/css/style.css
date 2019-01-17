@@ -1,28 +1,407 @@
+@import "/static/css/images/paint.jpg";
+@import "/static/css/images/upperpaint.jpg";
+@import "/static/css/images/basketball.jpg";
+@import "/static/css/images/corner.jpg";
+@import "/static/css/images/shortcorner.jpg";
+@import "/static/css/images/shortcorner2.jpg";
+@import "/static/css/images/3wing.jpg";
+@import "/static/css/images/corner2.jpg";
+@import "/static/css/images/topkey.jpg";
+@import "/static/css/images/3wing2.jpg";
+@import "/static/css/images/wing.jpg";
+@import "/static/css/images/wing2.jpg";
+@import "/static/css/images/top.jpg";
+@import "/static/css/images/floor.jpg";
+@import "/static/css/images/hoopalytics.jpg";
+
 .court{
     position: absolute;
-    right: 250px;
-    left: 250px;
+    top: 125px;
+    left:50%;
+    height: 375px;
+    width: 552px;
+    border: 3px solid rgb(233, 121, 29);
+    transform: translate(-50%, 0);
+}
+
+.courtdisplay{
+    position: absolute;
+    top: 190px;
+    left:50%;
+    height: 375px;
+    width: 552px;
+    border: 3px solid rgb(233, 121, 29);
+    transform: translate(-50%, 0);
+}
+.courtdisplay2{
+    position: absolute;
+    top: 225px;
+    left:50%;
+    height: 375px;
+    width: 552px;
+    border: 3px solid rgb(233, 121, 29);
+    transform: translate(-50%, 0);
+}
+.courtdisplay3{
+    position: absolute;
+    top: 250px;
+    left:50%;
+    height: 375px;
+    width: 552px;
+    border: 3px solid rgb(233, 121, 29);
+    transform: translate(-50%, 0);
+}
+
+.logo{
+    position: absolute;
+    top: 200px;
+    left:50%;
+    height: 144px;
+    width: 144px;
+    background-image: url('/static/css/images/hoopalytics.jpg');
+    background-repeat: no-repeat;
+    border: 3px solid rgb(233, 121, 29);
+    transform: translate(-50%, 0);
+}
+
+.logoleft{
+    position: absolute;
+    top: 350px;
+    left:100px;
+    height: 144px;
+    width: 144px;
+    background-image: url('/static/css/images/hoopalytics.jpg');
+    background-repeat: no-repeat;
+    border: 3px solid rgb(233, 121, 29);
+}
+.logoright{
+    position: absolute;
+    top: 350px;
+    right:100px;
+    height: 144px;
+    width: 144px;
+    background-image: url('/static/css/images/hoopalytics.jpg');
+    background-repeat: no-repeat;
+    border: 3px solid rgb(233, 121, 29);
+}
+.corner{
+    position: absolute;
+    left:25px;
+    height: 141px;
+    width: 32px;
+    background-image: url('/static/css/images/corner.jpg');
+    background-repeat: no-repeat;
+}
+.cornershape{
+    position: absolute;
+    height: 141px;
+    width: 32px;
+}
+.twowing{
+    position: absolute;
+    left:57px;
+    top:112px;
+    height: 128px;
+    width: 142px;
+    background-image: url('/static/css/images/wing.jpg');
+    background-repeat: no-repeat;
+}
+.twowingshape{
+    position: absolute;
+    height: 128px;
+    width: 142px;
+}
+.twowing2{
+    position: absolute;
+    left:355px;
+    top:112px;
+    height: 134px;
+    width: 141px;
+    background-image: url('/static/css/images/wing2.jpg');
+    background-repeat: no-repeat;
+}
+.twowing2shape{
+    position: absolute;
+    height: 134px;
+    width: 141px;
+}
+.wing{
+    position: absolute;
+    left:25px;
+    top:141px;
+    height: 209px;
+    width: 104px;
+    background-image: url('/static/css/images/3wing.jpg');
+    background-repeat: no-repeat;
+}
+.wingshape{
+    position: absolute;
+    height: 209px;
+    width: 104px;
+}
+.topkey{
+    position: absolute;
+    left:129px;
+    top:191px;
+    height: 101px;
+    width: 294px;
+    background-image: url('/static/css/images/topkey.jpg');
+    background-repeat: no-repeat;
+}
+.topkeyshape{
+    position: absolute;
+    height: 101px;
+    width:294px;
+}
+.top{
+    position: absolute;
+    left:129px;
+    top:240px;
+    height: 110px;
+    width: 294px;
+    background-image: url('/static/css/images/top.jpg');
+    background-repeat: no-repeat;
+}
+.topshape{
+    position: absolute;
+    height: 110px;
+    width:294px;
+}
+.wing2{
+    position: absolute;
+    left:423px;
+    top:141px;
+    height: 209px;
+    width: 104px;
+    background-image: url('/static/css/images/3wing2.jpg');
+    background-repeat: no-repeat;
+}
+.wing2shape{
+    position: absolute;
+    height: 209px;
+    width:104px;
+}
+.shortcorner{
+    position: absolute;
+    left:57px;
+    height: 112px;
+    width: 140px;
+    background-image: url('/static/css/images/shortcorner.jpg');
+    background-repeat: no-repeat;
+}
+.shortcornershape{
+    position: absolute;
+    height: 112px;
+    width: 140px;
+}
+.paint{
+    position: absolute;
+    left:197px;
+    height: 112px;
+    width: 158px;
+    background-image: url('/static/css/images/paint.jpg');
+    background-repeat: no-repeat;
+}
+.paintshape{
+    position: absolute;
+    height: 112px;
+    width: 158px;
+}
+.upperpaint{
+    position: absolute;
+    left:197px;
+    top:112px;
+    height: 79px;
+    width: 158px;
+    background-image: url('/static/css/images/upperpaint.jpg');
+    background-repeat: no-repeat;
+}
+.upperpaintshape{
+    position: absolute;
+    height: 79px;
+    width: 158px;
+}
+.shortcorner2{
+    position: absolute;
+    left:355px;
+    height: 112px;
+    width: 141px;
+    background-image: url('/static/css/images/shortcorner2.jpg');
+    background-repeat: no-repeat;
+}
+.shortcorner2shape{
+    position: absolute;
+    height: 112px;
+    width: 141px;
+}
+.corner2{
+    position: absolute;
+    left:496px;
+    height: 141px;
+    width: 31px;
+    background-image: url('/static/css/images/corner2.jpg');
+    background-repeat: no-repeat;
+}
+.corner2shape{
+    position: absolute;
+    height: 141px;
+    width: 31px;
 }
 .left {
-    left: 0px;
-    width: 200px;
-    background: lightgrey;
+    position: relative;
+    top: 25px;
+    float: left;
+    width: 160px;
+    background:  rgb(253, 207, 120);
+    border: 3px solid rgb(233, 121, 29);
 }
 .menu{
     position: absolute;
-    top: 500px;
-    right: 250px;
-    left: 250px;
+    top: 550px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    border: 3px solid rgb(233, 121, 29);
 }
 .right {
+    position: relative;
+    top: 25px;
     float: right;
-    width: 200px;
-    background: lightgrey;
+    width: 160px;
+    background: rgb(253, 207, 120);
+    border: 3px solid rgb(233, 121, 29);
 }
 .signin {
     position: absolute;
-    left: 0px;
-    top:100px;
-    width: 800px;
-    height: 200px;
+    top:125px;
+    left: 50%;
+    border: 3px solid rgb(233, 121, 29);
+    text-align: center;
+    transform: translate(-50%, 0);
 }
+.addplayer {
+    position: relative;
+    top:50px;
+    left: 50%;
+    height: 250px;
+    width: 300px;
+    border: 3px solid rgb(233, 121, 29);
+    text-align: center;
+    transform: translate(-50%, 0);
+}
+.addplay {
+    position: relative;
+    top:50px;
+    left: 50%;
+    height: 175px;
+    width: 300px;
+    border: 3px solid rgb(233, 121, 29);
+    text-align: center;
+    transform: translate(-50%, 0);
+}
+.navbar {
+    background: rgb(233, 121, 29);
+}
+.navbarbutton{
+    background: transparent;
+    color: white;
+}
+.border{
+    position: absolute;
+    top:450px;
+    width: 550px;
+    left: 50%;
+    border: 3px solid rgb(233, 121, 29);
+    transform: translate(-50%, 0);
+}
+.homeplay{
+    position: absolute;
+    float:left;
+    left: 0px;
+    top: 200px;
+    width: 150px;
+    border: 3px solid rgb(233, 121, 29);
+}
+.homeplay2{
+    position: absolute;
+    float:left;
+    left: 175px;
+    top: 200px;
+    width: 150px;
+    border: 3px solid rgb(233, 121, 29);
+}
+.homeplayer{
+    position: absolute;
+    float:right;
+    right: 0px;
+    top: 200px;
+    width: 150px;
+    border: 3px solid rgb(233, 121, 29);
+}
+.homeplayer2{
+    position: absolute;
+    float:right;
+    right: 175px;
+    top: 200px;
+    width: 150px;
+    border: 3px solid rgb(233, 121, 29);
+}
+.newgame{
+    position: relative;
+    left: 50%;
+    top: 25px;
+    width: 300px;
+    height:200px;
+    border: 3px solid rgb(233, 121, 29);
+    transform: translate(-50%, 0);
+}
+.gamelist {
+    left: 50%;
+    top: 25px;
+    width: 1000px;
+    background: whitesmoke;
+    transform: translate(-50%, 0);
+    border: 3px solid rgb(233, 121, 29);
+}
+.title{
+    background-color: black;
+    border: 5px solid rgb(233, 121, 29);
+    color: white;
+}
+.background{
+    background-image: url('/static/css/images/floor.jpg');
+}
+.ten{
+    position: relative;
+    left: 50%;
+    top: 10px;
+    transform: translate(-50%, 0);
+}
+.editgame{
+    position: absolute;
+    top:600px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    border: 3px solid rgb(233, 121, 29);
+
+}
+.editgame2{
+    position: relative;
+    top: 50px;
+    left: 50%;
+    height:150px;
+    width: 200px;
+    transform: translate(-50%, 0);
+    background-color: rgb(253, 207, 120);
+    border: 3px solid rgb(233, 121, 29);
+
+}
+.background{
+    background: rgb(253, 207, 120);
+}
+
+.court {
+    fill: #7A7A7A;
+    stroke: #2B2B2B;
+    stroke-width: 4;
+    stroke-miterlimit: 10;
+  }

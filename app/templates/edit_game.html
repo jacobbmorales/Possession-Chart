@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="../../static/css/style.css">
+    <title>Possession Charter</title>
+    <style>
+        body {
+              background-image: url("/static/css/images/floor.jpg");
+            }
+    </style>
+
+</head>
+
+</html>
+
+<body>
+    <div id="navbar">
+    </div>
+    <center>
+        <div class="title">
+            <h1> Edit: {{ game_name | safe}}</h1>
+        </div>
+    </center>
+    <div id="edit_game">
+        <script>
+            window.possession = {{ possession | safe }}
+            window.play = {{ play | safe }}
+            window.player = {{ player | safe }}
+            window.play_id = {{ play_id | safe }}
+            window.player_id = {{ player_id | safe }}
+            window.play_name = {{ play_name | safe }}
+            window.play_id_list = {{ play_id_list | safe }}
+            window.player_name = {{ player_name | safe }}
+            window.player_number = {{ player_number | safe }}
+            window.player_id_list = {{ player_id_list | safe }}
+            window.zone = {{ zone | safe }}
+            window.result = {{ result | safe }}
+            window.game = {{ game | safe }}
+        </script>
+    </div>
+    <script type="text/javascript" src="../../static/scripts/jsx/navbar.bundle.js"></script>
+    <script type="text/javascript" src="../../static/scripts/jsx/edit_game.bundle.js"></script>
+</body>
+
+</html>

@@ -6,11 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="static/css/style.css">
     <title>Possession Charter</title>
+    <style>
+        body {
+              background-image: url("/static/css/images/floor.jpg");
+            }
+    </style>
 
 </head>
 
 <body>
-    <div id="addplayer"></div>
+    <div id="navbar">
+    </div>
+    <center>
+        <div class="title">
+            <h1> Edit Roster </h1>
+        </div>
+    </center>
+        <div id="addplayer">
+            <script>
+                window.last = {{ last | safe }}
+                window.player_id = {{ player_id | safe }}
+                window.number = {{ number | safe }}
+            </script>
+        </div>
+    <script type="text/javascript" src="static/scripts/jsx/navbar.bundle.js"></script>
     <script type="text/javascript" src="static/scripts/jsx/addplayer.bundle.js"></script>
 </body>
 

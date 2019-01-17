@@ -33,9 +33,9 @@ class NewGame extends React.Component {
     handleAdd(game) {
         $.ajax({
             url: '/newgame',
-            data: { 'game': game, click : 'true'},
+            data: { 'game': game, click: 'true' },
             type: 'POST',
-            success: function(response){
+            success: function (response) {
                 document.write(response)
                 window.location.href = '/offense/' + game
             }
@@ -44,23 +44,34 @@ class NewGame extends React.Component {
     };
     render() {
         return (
-            <Card className={styles.signin}>
-                <CardContent>
-                    <CardActions>
-                        <TextField
-                            id="filled-email-input"
-                            label="Name of Game"
-                            name="email"
-                            autoComplete="email"
-                            margin="normal"
-                            variant="filled"
-                            value={this.state.game}
-                            onChange={this.handleGame}
-                        />
-                        <Button variant="outlined" onClick={() => this.handleAdd(this.state.game)}>Start</Button>
-                    </CardActions>
-                </CardContent>
-            </Card>
+            <div>
+                <Card className={styles.logoleft}>
+                </Card>
+                <Card className={styles.logoright}>
+                </Card>
+                <Card className={styles.newgame}>
+                    <CardContent>
+                        <CardActions>
+                            <div className={styles.ten}>
+                                <TextField
+                                    id="filled-email-input"
+                                    label="Name of Game"
+                                    name="email"
+                                    autoComplete="email"
+                                    margin="normal"
+                                    variant="filled"
+                                    value={this.state.game}
+                                    onChange={this.handleGame}
+                                />
+                                <br></br>
+                                <center>
+                                    <Button variant="outlined" onClick={() => this.handleAdd(this.state.game)}>Start</Button>
+                                </center>
+                            </div>
+                        </CardActions>
+                    </CardContent>
+                </Card>
+            </div>
         )
     }
 }

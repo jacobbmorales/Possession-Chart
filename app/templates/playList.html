@@ -6,12 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="static/css/style.css">
     <title>Possession Charter</title>
+    <style>
+        body {
+              background-image: url("/static/css/images/floor.jpg");
+            }
+    </style>
 
 </head>
 
 <body>
+    <div id="navbar">
+    </div>
     <center>
-        <h1> Season Totals </h1>
+        <div class="title">
+            <h1> Season Totals </h1>
+        </div>
     </center>
     <div id="playlist">
         <script>
@@ -27,8 +36,11 @@
             window.used_player_id = {{ used_player_id | safe }}
             window.eff_play_id = {{ eff_play_id | safe }}
             window.eff_player_id = {{ eff_player_id | safe }}
+            window.zone_used = {{ zone_used | safe }}
+            window.zone_eff = {{ zone_eff | safe }}
         </script>
     </div>
+    <script type="text/javascript" src="static/scripts/jsx/navbar.bundle.js"></script>
     <script type="text/javascript" src="static/scripts/jsx/playList.bundle.js"></script>
 </body>
 
