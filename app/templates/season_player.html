@@ -4,8 +4,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="../../static/css/style.css">
-    <title>Possession Charter</title>
+    <link rel="stylesheet" type="text/css" href="../../../static/css/style.css">
+    <link rel="shortcut icon" type="image/x-icon" href="static/css/images/favicon.ico" />
+    <title>Season Total: {{ my_player | safe}}</title>
     <style>
         body {
               background-image: url("/static/css/images/floor.jpg");
@@ -18,6 +19,9 @@
 
 <body>
     <div id="navbar">
+        <script>
+            window.username = ['{{ username | safe }}']
+        </script>
     </div>
     <center>
         <div class="title">
@@ -35,10 +39,11 @@
             window.zone_used = {{ zone_used | safe }}
             window.zone_eff = {{ zone_eff | safe }}
             window.player = {{ player | safe }}
+            window.zone = '{{ zone | safe }}'
         </script>
     </div>
-    <script type="text/javascript" src="../../static/scripts/jsx/navbar.bundle.js"></script>
-    <script type="text/javascript" src="../../static/scripts/jsx/season_player.bundle.js"></script>
+    <script type="text/javascript" src="../../../static/scripts/jsx/navbar.bundle.js"></script>
+    <script type="text/javascript" src="../../../static/scripts/jsx/season_player.bundle.js"></script>
 </body>
 
 </html>

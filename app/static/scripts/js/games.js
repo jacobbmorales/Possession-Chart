@@ -31,12 +31,12 @@ class Games extends React.Component {
 
     handleGame(game) {
         $.ajax({
-            url: '/home',
+            url: '/games',
             data: { game: game },
             type: 'POST',
             success: function (response) {
                 document.write(response)
-                window.location.href = '/game/' + game
+                window.location.href = '/game/' + game + '/None'
             }
         });
 
@@ -46,23 +46,30 @@ class Games extends React.Component {
         var temp = (window.games)
         var games = [];
         var game_id = (window.game_id)
+        var date = (window.date)
         var key;
         for (key in temp) {
             games.push({
                 key: game_id[key],
                 value: temp[key].toString(),
+                date: date[key].toString(),
             });
         }
         return (
             <div>
                 <MenuList subheader={<ListSubheader><center><h3>Games</h3></center></ListSubheader>} className={styles.gamelist}>
+                    <MenuItem disabled={true}>
+                        <ListItemText className={styles.left200} primary="GAME" />
+                        <ListItemText className={styles.left800} primary="DATE" />
+                    </MenuItem>
                     {games.map((name) => (
                         <div>
                             <MenuItem
                                 key={name.key}
                                 onClick={() => this.handleGame(name.key)}
                             >
-                                <ListItemText primary={name.value} />
+                                <ListItemText className={styles.left200} primary={name.value} />
+                                <ListItemText className={styles.left800} primary={name.date} />
                             </MenuItem>
                             <Divider inset={false} />
                         </div>

@@ -5,7 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="../../static/css/style.css">
-    <title>Possession Charter</title>
+    <link rel="shortcut icon" type="image/x-icon" href="static/css/images/favicon.ico" />
+    <title>Season Total: {{ my_play | safe}}: {{ my_player | safe}}</title>
     <style>
         body {
               background-image: url("/static/css/images/floor.jpg");
@@ -18,6 +19,9 @@
 
 <body>
     <div id="navbar">
+        <script>
+            window.username = ['{{ username | safe }}']
+        </script>
     </div>
     <center>
         <div class="title">

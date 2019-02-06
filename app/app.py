@@ -23,8 +23,7 @@ def index():
             return render_template('index.html')
     elif request.method == "POST":
         username = str(request.form.get('user'))
-        password = str(request.form.get('password'))
-        print(password)       
+        password = str(request.form.get('password'))      
         user = User(username = username)
         my_hash = user.get_password(username)
         if user.check_password(my_hash, password):
@@ -46,43 +45,58 @@ def home(username):
         last, number, player_id = players.get_players(current_user.id)
         play = Plays()
         playList, play_id = play.get_plays(current_user.id)
-        total , efficient, individual, ind_used = game.data(current_user.id, player_id, play_id)
-        total = total.most_common(1)[0][0]
-        efficient = efficient.most_common(1)[0][0]
-        eff_player = individual.most_common(1)[0][0]
-        used_player = ind_used.most_common(1)[0][0]
-        eff_player = players.get_player(eff_player)
-        used_player = players.get_player(used_player)
-        play = Plays()
-        total = play.get_play(total)
-        efficient = play.get_play(efficient)
+        total , efficient, individual, ind_used = game.data(current_user.id, player_id, play_id, None)
+        if (len(total) != 0):
+            total = total.most_common(1)[0][0]
+            total = play.get_play(total)
+        else:
+            total = "You haven't used any plays yet."
+        if (len(efficient) != 0):
+            efficient = efficient.most_common(1)[0][0]
+            efficient = play.get_play(efficient)
+        else:
+            efficient = "You haven't used any plays yet."
+        if (len(individual) != 0):
+            eff_player = individual.most_common(1)[0][0]
+            eff_number = players.get_number(eff_player)
+            player_name = players.get_player(eff_player)
+            eff_player = eff_number + ' - ' + player_name
+        else:
+            eff_player = "You haven't used any players yet."
+        if (len(ind_used) != 0):
+            used_player = ind_used.most_common(1)[0][0]
+            used_number = players.get_number(used_player)    
+            player_name = players.get_player(used_player)
+            used_player = used_number + ' - ' + player_name
+            
+        else:
+            used_player = "You haven't used any players yet."       
+        
         data = []
         data.append(str(total))
         data.append(str(efficient))
         data.append(str(eff_player))
         data.append(str(used_player))
-        games, game_id = game_list.list_games(current_user.id)
+        games, game_id, date = game_list.list_games(current_user.id)
         return render_template('home.html', games = games, game_id = game_id, data = data, username=username)
     elif request.method == "POST":
         if (str(request.form.get('signout')) == 'true'):
             logout_user()
             return redirect(url_for('index'))
-        else:
-            game = str(request.form.get('game'))
-            g = NewGame()
-            return redirect(url_for('game', game = game))
 
-@app.route("/game/<game>", methods=['GET', 'POST'])
+@app.route("/game/<game>/<zone>", methods=['GET', 'POST'])
 @login_required
-def game(game):
+def game(game, zone):
     if request.method == "GET":
+        if zone == 'None':
+            zone = None
         g = Game()
         players = Players()
         last, number, player_id = players.get_deleted_players(current_user.id)
-        total , efficient, individual, ind_used = g.individual_data(current_user.id, game, player_id)
+        total , efficient, individual, ind_used = g.individual_data(current_user.id, game, player_id, zone)
         play = Plays()
         zone_eff, zone_used = g.zones_plays(current_user.id, player_id, None, game)
-        most_used, most_efficient, used_name, efficient_name, player_names, player_values, ind_names, ind_values, used_play_id, used_player_id, eff_play_id, eff_player_id = [], [], [], [], [], [], [], [], [], [], [], []
+        most_used, most_efficient, used_name, efficient_name, player_names, player_values, ind_names, ind_values, used_play_id, used_player_id, eff_play_id, eff_player_id, used_number, eff_number = [], [], [], [], [], [], [], [], [], [], [], [], [], []
         for key, value in sorted(efficient.iteritems(), key=lambda (k,v): (v,k), reverse=True):
             most_efficient.append(play.get_play(key))
             efficient_name.append(str(value))
@@ -95,27 +109,32 @@ def game(game):
             player_names.append(players.get_player(key))
             player_values.append(str(value))
             eff_player_id.append(key)
+            eff_number.append(players.get_number(key))
         for key, value in sorted(ind_used.iteritems(), key=lambda (k,v): (v,k), reverse=True):
             ind_names.append(players.get_player(key))
             ind_values.append(str(value))
             used_player_id.append(key)
+            used_number.append(players.get_number(key))
         ng = NewGame()
         my_game = []
         game_Name = ng.get_game_name(game)
         my_game.append(game_Name)
-        return render_template('gameList.html', game = game, game_Name = game_Name, my_game = my_game, most_used = most_used, most_efficient = most_efficient, used_name = used_name, efficient_name = efficient_name, player_names = player_names, player_values = player_values, ind_names = ind_names, ind_values = ind_values, used_play_id = used_play_id, eff_player_id = eff_player_id, eff_play_id = eff_play_id, used_player_id = used_player_id, zone_eff = zone_eff, zone_used = zone_used)    
+        return render_template('gameList.html', game = game, game_Name = game_Name, my_game = my_game, most_used = most_used, most_efficient = most_efficient, used_name = used_name, efficient_name = efficient_name, player_names = player_names, player_values = player_values, ind_names = ind_names, ind_values = ind_values, used_play_id = used_play_id, eff_player_id = eff_player_id, eff_play_id = eff_play_id, used_player_id = used_player_id, zone_eff = zone_eff, zone_used = zone_used, username = str(current_user.username), used_number = used_number, eff_number = eff_number, zone = zone)    
     elif request.method == "POST" and str(request.form.get('player')) == 'false':
-        play = str(request.form.get('play'))
-        return redirect(url_for('game_play', game = game, play = play))
+        play_id = str(request.form.get('play'))
+        return redirect(url_for('game_play', game = game, play = play_id, zone = 'None'))
     elif request.method == "POST" and str(request.form.get('play')) == 'false':
         player_id = str(request.form.get('player'))
-        return redirect(url_for('game_player', game = game, player = player_id))
+        return redirect(url_for('game_player', game = game, player = player_id, zone='None'))
+    elif request.method == "POST" and str(request.form.get('play')) == 'fals' and str(request.form.get('player')) == 'fals':
+        zone = str(request.form.get('zone'))
+        return redirect(url_for('game', game = game, zone = zone))
 
 @app.route("/edit/game/<game>", methods=['GET', 'POST'])
 @login_required
 def edit_game(game):
     if request.method == "GET":
-        play, player = [],[]
+        play, player, number = [],[],[]
         g = Game()
         p = Plays()
         play_name, play_id_list = p.get_plays(current_user.id)
@@ -126,11 +145,12 @@ def edit_game(game):
             play.append(p.get_play(i))
         for i in player_id:
             player.append(pl.get_player(i))
+            number.append(pl.get_number(i))
         ng = NewGame()
         my_game = []
         game_name = ng.get_game_name(game)
         my_game.append(game_name)
-        return render_template('edit_game.html', game = game, game_name = game_name, my_game = my_game, possession = possession, play = play, player = player, zone = zone, result = result, play_id = play_id, player_id = player_id, player_name = player_name, player_number = player_number, player_id_list = player_id_list, play_name = play_name, play_id_list = play_id_list)    
+        return render_template('edit_game.html', game = game, game_name = game_name, my_game = my_game, possession = possession, play = play, player = player, zone = zone, result = result, play_id = play_id, player_id = player_id, player_name = player_name, player_number = player_number, player_id_list = player_id_list, play_name = play_name, play_id_list = play_id_list, username = str(current_user.username), number = number)    
     if request.method == "POST" and str(request.form.get('add')) == 'false':
         possession = str(request.form.get('possession'))
         play = str(request.form.get('play'))
@@ -176,7 +196,7 @@ def edit_game(game):
         my_game = []
         game_name = ng.get_game_name(game)
         my_game.append(game_name)
-        return render_template('edit_game.html', game = game, game_name = game_name, my_game = my_game, possession = possession, play = play, player = player, zone = zone, result = result, play_id = play_id, player_id = player_id, player_name = player_name, player_number = player_number, player_id_list = player_id_list, play_name = play_name, play_id_list = play_id_list)
+        return render_template('edit_game.html', game = game, game_name = game_name, my_game = my_game, possession = possession, play = play, player = player, zone = zone, result = result, play_id = play_id, player_id = player_id, player_name = player_name, player_number = player_number, player_id_list = player_id_list, play_name = play_name, play_id_list = play_id_list, username = str(current_user.username))
     if request.method == "POST" and str(request.form.get('delete')) == 'true':
         game = str(request.form.get('game'))
         g = Game()
@@ -185,51 +205,63 @@ def edit_game(game):
         ng.delete_game(game)
         return redirect(url_for('games'))
 
-
-@app.route("/season", methods=['GET', 'POST'])
+@app.route("/season/<zone>", methods=['GET', 'POST'])
 @login_required
-def playList():
+def season(zone):
     if request.method == "GET":
+        if zone == 'None':
+            zone = None
         game = Game()
         players = Players()
-        last, number, player_id = players.get_players(current_user.id)
+        last, number, player_id = players.get_deleted_players(current_user.id)
         play = Plays()
-        playList, play_id = play.get_plays(current_user.id)
-        total , efficient, individual, ind_used = game.data(current_user.id, player_id, play_id)
+        playList, play_id = play.get_deleted_plays(current_user.id)
+        total , efficient, individual, ind_used = game.data(current_user.id, player_id, play_id, zone)
         zone_eff, zone_used = game.zones_plays(current_user.id, player_id, None, None)
-        most_used, most_efficient, used_name, efficient_name, player_names, player_values, ind_names, ind_values, used_play_id, used_player_id, eff_play_id, eff_player_id = [], [], [], [], [], [], [], [], [], [], [], []
-        for key, value in sorted(efficient.iteritems(), key=lambda (k,v): (v,k), reverse=True):
-            most_efficient.append(play.get_play(key))
-            efficient_name.append(str(value))
-            eff_play_id.append(key)
+        most_used, most_efficient, used_name, efficient_name, player_names, player_values, ind_names, ind_values, used_play_id, used_player_id, eff_play_id, eff_player_id, used_number, eff_number = [], [], [], [], [], [], [], [], [], [], [], [], [], []
         for key, value in sorted(total.iteritems(), key=lambda (k,v): (v,k), reverse=True):
-            most_used.append(play.get_play(key))
-            used_name.append(str(value))
-            used_play_id.append(key)
-        for key, value in sorted(individual.iteritems(), key=lambda (k,v): (v,k), reverse=True):
-            player_names.append(players.get_player(key))
-            player_values.append(str(value))
-            eff_player_id.append(key)
+            if value != 0:
+                most_used.append(play.get_play(key))
+                used_name.append(str(value))
+                used_play_id.append(key)
+        for key, value in sorted(efficient.iteritems(), key=lambda (k,v): (v,k), reverse=True):
+            if key in used_play_id:
+                most_efficient.append(play.get_play(key))
+                efficient_name.append(str(value))
+                eff_play_id.append(key)
         for key, value in sorted(ind_used.iteritems(), key=lambda (k,v): (v,k), reverse=True):
-            ind_names.append(players.get_player(key))
-            ind_values.append(str(value))
-            used_player_id.append(key)
-        return render_template('playList.html', most_used = most_used, most_efficient = most_efficient, used_name = used_name, efficient_name = efficient_name, player_names = player_names, player_values = player_values, ind_names = ind_names, ind_values = ind_values, used_play_id = used_play_id, eff_player_id = eff_player_id, eff_play_id = eff_play_id, used_player_id = used_player_id, zone_eff = zone_eff, zone_used = zone_used)    
+            if value != 0:
+                ind_names.append(players.get_player(key))
+                ind_values.append(str(value))
+                used_player_id.append(key)
+                used_number.append(players.get_number(key))
+        for key, value in sorted(individual.iteritems(), key=lambda (k,v): (v,k), reverse=True):
+            if key in used_player_id:
+                player_names.append(players.get_player(key))
+                player_values.append(str(value))
+                eff_player_id.append(key)
+                eff_number.append(players.get_number(key))
+        return render_template('playList.html', most_used = most_used, most_efficient = most_efficient, used_name = used_name, efficient_name = efficient_name, player_names = player_names, player_values = player_values, ind_names = ind_names, ind_values = ind_values, used_play_id = used_play_id, eff_player_id = eff_player_id, eff_play_id = eff_play_id, used_player_id = used_player_id, zone_eff = zone_eff, zone_used = zone_used, username = str(current_user.username), used_number = used_number, eff_number = eff_number, zone=str(zone))    
     elif request.method == "POST" and str(request.form.get('player')) == 'false':
         play_id = str(request.form.get('play'))
-        return redirect(url_for('play', play = play_id))
+        return redirect(url_for('play', play = play_id, zone = 'None'))
     elif request.method == "POST" and str(request.form.get('play')) == 'false':
         player_id = str(request.form.get('player'))
-        return redirect(url_for('season_player', player = player_id))
+        return redirect(url_for('season_player', player = player_id, zone='None'))
+    elif request.method == "POST" and str(request.form.get('play')) == 'fals' and str(request.form.get('player')) == 'fals':
+        zone = str(request.form.get('zone'))
+        return redirect(url_for('season', zone = zone))
 
-@app.route("/season/player/<player>", methods=['GET', 'POST'])
+@app.route("/season/player/<player>/<zone>", methods=['GET', 'POST'])
 @login_required
-def season_player(player):
+def season_player(player, zone):
     if request.method == "GET":
+        if zone == 'None':
+            zone = None
         play = Plays()
-        playlist, play_id = play.get_plays(current_user.id)
+        playlist, play_id = play.get_deleted_plays(current_user.id)
         game = Game()
-        individual, ind_used = game.player_data(current_user.id, player, None, play_id)
+        individual, ind_used = game.player_data(current_user.id, player, None, play_id, zone)
         zone_eff, zone_used = game.zones_players(current_user.id, play_id, player, None)
         play_names, play_values, ind_names, ind_values, used_play_id, eff_play_id = [], [], [], [], [], []
         for key, value in sorted(individual.iteritems(), key=lambda (k,v): (v,k), reverse=True):
@@ -241,24 +273,28 @@ def season_player(player):
             ind_values.append(str(value))
             used_play_id.append(key)
         p = Players()
-        my_player = p.get_player(player)
-        return render_template('season_player.html', player = player, my_player = my_player, play_names = play_names, play_values = play_values, ind_names = ind_names, ind_values = ind_values,  eff_play_id = eff_play_id,  used_play_id = used_play_id, zone_eff = zone_eff, zone_used = zone_used)
-    if request.method == "POST":
+        player_name = p.get_player(player)
+        player_number = p.get_number(player)
+        my_player = player_number + ' - ' + player_name
+        return render_template('season_player.html', player = player, my_player = my_player, play_names = play_names, play_values = play_values, ind_names = ind_names, ind_values = ind_values,  eff_play_id = eff_play_id,  used_play_id = used_play_id, zone_eff = zone_eff, zone_used = zone_used, username = str(current_user.username), zone=zone)
+    if request.method == "POST" and str(request.form.get('zone')) == 'false':
         play_id = str(request.form.get('play'))
         return redirect(url_for('season_play_player', play = play_id, player = player))
+    elif request.method == "POST" and str(request.form.get('zone')) != 'false':
+        zone = str(request.form.get('zone'))
+        return redirect(url_for('season_player', player = player, zone=zone))
 
-@app.route("/<game>/player/<player>", methods=['GET', 'POST'])
+@app.route("/<game>/player/<player>/<zone>", methods=['GET', 'POST'])
 @login_required
-def game_player(game, player):
+def game_player(game, player, zone):
     if request.method == "GET":
+        if zone == 'None':
+            zone = None
         play = Plays()
-        playlist, play_id = play.get_plays(current_user.id)
-        print(play_id)
+        playlist, play_id = play.get_deleted_plays(current_user.id)
         g = Game()
-        individual, ind_used = g.player_data(current_user.id, player, game, play_id)
+        individual, ind_used = g.player_data(current_user.id, player, game, play_id, zone)
         zone_eff, zone_used = g.zones_players(current_user.id, play_id, player, game)
-        print(individual)
-        print(ind_used)
         play_names, play_values, ind_names, ind_values, used_play_id, eff_play_id = [], [], [], [], [], []
         for key, value in sorted(individual.iteritems(), key=lambda (k,v): (v,k), reverse=True):
             play_names.append(play.get_play(key))
@@ -269,39 +305,50 @@ def game_player(game, player):
             ind_values.append(str(value))
             used_play_id.append(key)
         p = Players()
-        my_player = p.get_player(player)
+        player_name = p.get_player(player)
+        player_number = p.get_number(player)
+        my_player = player_number + ' - ' + player_name
         ng = NewGame()
         game_name = ng.get_game_name(game)
-        return render_template('game_player.html', game = game, game_name = game_name, player = player, my_player = my_player, play_names = play_names, play_values = play_values, ind_names = ind_names, ind_values = ind_values,  eff_play_id = eff_play_id,  used_play_id = used_play_id, zone_eff = zone_eff, zone_used = zone_used)
-    if request.method == "POST":
+        return render_template('game_player.html', game = game, game_name = game_name, player = player, my_player = my_player, play_names = play_names, play_values = play_values, ind_names = ind_names, ind_values = ind_values,  eff_play_id = eff_play_id,  used_play_id = used_play_id, zone_eff = zone_eff, zone_used = zone_used, username = str(current_user.username), zone = zone)
+    if request.method == "POST" and str(request.form.get('zone')) == 'false':
         play_id = str(request.form.get('play'))
         return redirect(url_for('game_play_player',game= game, play = play_id, player = player))
+    elif request.method == "POST" and str(request.form.get('zone')) != 'false':
+        zone = str(request.form.get('zone'))
+        return redirect(url_for('season_player', game = game, player = player, zone=zone))
 
-@app.route("/season/<play>", methods=['GET', 'POST'])
+@app.route("/season/play/<play>/<zone>", methods=['GET', 'POST'])
 @login_required
-def play(play):
+def play(play, zone):
     if request.method == "GET":
+        if zone == "None":
+            zone = None
         game = Game()
         players = Players()
-        last, number, player_id = players.get_players(current_user.id)
-        individual, ind_used = game.play_data(current_user.id, play, None, player_id)
+        last, number, player_id = players.get_deleted_players(current_user.id)
+        individual, ind_used = game.play_data(current_user.id, play, None, player_id, zone)
         zone_eff, zone_used = game.zones_plays(current_user.id, player_id, play, None)
-        player_names, player_values, ind_names, ind_values, used_player_id, eff_player_id = [], [], [], [], [], []
+        player_names, player_values, ind_names, ind_values, used_player_id, eff_player_id, eff_number, used_number = [], [], [], [], [], [], [], []
         for key, value in sorted(individual.iteritems(), key=lambda (k,v): (v,k), reverse=True):
             player_names.append(players.get_player(key))
             player_values.append(str(value))
             eff_player_id.append(key)
+            eff_number.append(players.get_number(key))
         for key, value in sorted(ind_used.iteritems(), key=lambda (k,v): (v,k), reverse=True):
             ind_names.append(players.get_player(key))
             ind_values.append(str(value))
             used_player_id.append(key)
+            used_number.append(players.get_number(key))
         p = Plays()
         my_play = p.get_play(play)
-        return render_template('play.html', play = play, my_play = my_play, player_names = player_names, player_values = player_values, ind_names = ind_names, ind_values = ind_values,  eff_player_id = eff_player_id,  used_player_id = used_player_id, zone_used = zone_used, zone_eff = zone_eff)
-    if request.method == "POST":
+        return render_template('play.html', play = play, my_play = my_play, player_names = player_names, player_values = player_values, ind_names = ind_names, ind_values = ind_values,  eff_player_id = eff_player_id,  used_player_id = used_player_id, zone_used = zone_used, zone_eff = zone_eff, username = str(current_user.username), eff_number = eff_number, used_number = used_number, zone=zone)
+    if request.method == "POST" and request.form.get('zone') == 'false':
         player_id = str(request.form.get('player'))
-        print(player_id)
         return redirect(url_for('season_play_player', play = play, player = player_id))
+    if request.method == "POST" and request.form.get('zone') != 'false':
+        zone = str(request.form.get('zone'))
+        return redirect(url_for('play', play = play, zone=zone))
 
 @app.route("/season/<play>/<player>", methods=['GET'])
 @login_required
@@ -310,39 +357,46 @@ def season_play_player(play, player):
         game = Game()
         zone_eff, zone_used = game.zones_both(current_user.id, play, player, None)
         players = Players()
-        my_player = players.get_player(player)
+        player_name = players.get_player(player)
+        player_number = players.get_number(player)
+        my_player = player_number + ' - ' + player_name
         p = Plays()
         my_play = p.get_play(play)
-        return render_template('season_play_player.html', my_player = my_player, my_play = my_play, zone_used = zone_used, zone_eff = zone_eff)
+        return render_template('season_play_player.html', my_player = my_player, my_play = my_play, zone_used = zone_used, zone_eff = zone_eff, username = str(current_user.username))
 
-@app.route("/<game>/plays/<play>", methods=['GET', 'POST'])
+@app.route("/<game>/play/<play>/<zone>", methods=['GET', 'POST'])
 @login_required
-def game_play(game, play):
+def game_play(game, play, zone):
     if request.method == "GET":
+        if zone == 'None':
+            zone = None
         g = Game()
         players = Players()
-        print(game)
         last, number, player_id = players.get_deleted_players(current_user.id)
-        individual, ind_used = g.play_data(current_user.id, play, game, player_id)
+        individual, ind_used = g.play_data(current_user.id, play, game, player_id, zone)
         zone_eff, zone_used = g.zones_plays(current_user.id, player_id, play, game)
-        player_names, player_values, ind_names, ind_values, used_player_id, eff_player_id = [], [], [], [], [], []
+        player_names, player_values, ind_names, ind_values, used_player_id, eff_player_id, eff_player_id, used_number, eff_number = [], [], [], [], [], [], [], [], []
         for key, value in sorted(individual.iteritems(), key=lambda (k,v): (v,k), reverse=True):
             player_names.append(players.get_player(key))
             player_values.append(str(value))
             eff_player_id.append(key)
+            eff_number.append(players.get_number(key))
         for key, value in sorted(ind_used.iteritems(), key=lambda (k,v): (v,k), reverse=True):
             ind_names.append(players.get_player(key))
             ind_values.append(str(value))
             used_player_id.append(key)
+            used_number.append(players.get_number(key))
         p = Plays()
         ng = NewGame()
         game_Name = ng.get_game_name(game)
         my_play = p.get_play(play)
-        return render_template('game_play.html', play = play, game_Name = game_Name, game = game, my_play = my_play, player_names = player_names, player_values = player_values, ind_names = ind_names, ind_values = ind_values,  eff_player_id = eff_player_id,  used_player_id = used_player_id, zone_eff = zone_eff, zone_used = zone_used)
-    if request.method == "POST":
+        return render_template('game_play.html', play = play, game_Name = game_Name, game = game, my_play = my_play, player_names = player_names, player_values = player_values, ind_names = ind_names, ind_values = ind_values,  eff_player_id = eff_player_id,  used_player_id = used_player_id, zone_eff = zone_eff, zone_used = zone_used, username = str(current_user.username), used_number = used_number, eff_number = eff_number, zone = zone)
+    if request.method == "POST" and request.form.get('zone') == 'false':
         player_id = str(request.form.get('player'))
-        print(player_id)
         return redirect(url_for('game_play_player', game = game, play = play, player = player_id))
+    if request.method == "POST" and request.form.get('zone') != 'false':
+        zone = str(request.form.get('zone'))
+        return redirect(url_for('game_play', game=game, play = play, zone=zone))
 
 @app.route("/<game>/<play>/<player>", methods=['GET'])
 @login_required
@@ -351,12 +405,14 @@ def game_play_player(game, play, player):
         g = Game()
         zone_eff, zone_used = g.zones_both(current_user.id, play, player, game)
         players = Players()
-        my_player = players.get_player(player)
+        player_name = players.get_player(player)
+        player_number = players.get_number(player)
+        my_player = player_number + ' - ' + player_name
         p = Plays()
         my_play = p.get_play(play)
         ng = NewGame()
         my_game = ng.get_game_name(game)
-        return render_template('game_play_player.html', my_game = my_game, my_player = my_player, my_play = my_play, zone_used = zone_used, zone_eff = zone_eff)
+        return render_template('game_play_player.html', my_game = my_game, my_player = my_player, my_play = my_play, zone_used = zone_used, zone_eff = zone_eff, username = str(current_user.username))
 
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
@@ -365,8 +421,9 @@ def signup():
     elif request.method == "POST":
         username = str(request.form.get('user'))
         password = str(request.form.get('password'))
+        email = str(request.form.get('email'))
         user = User()
-        success = user.create_user(username, password)
+        success = user.create_user(username, password, email)
         if success == True:
             my_id = user.get_user_id(username)
             user = User(username = username, id = my_id)
@@ -387,7 +444,9 @@ def offense(game):
         last, number, player_id = players.get_players(current_user.id)
         gamereturn = []
         gamereturn.append(str(game))
-        return render_template('offense.html', last = last, play = playlist, player_id = player_id, play_id = play_id,game = gamereturn, gameName = game)
+        get_game = NewGame()
+        game_id = get_game.get_game(game, current_user.id)
+        return render_template('offense.html', last = last, play = playlist, player_id = player_id, play_id = play_id,game = gamereturn, gameName = game, game_id = game_id, username = str(current_user.username), number = number)
     elif request.method == "POST":
         playName = request.form.get('play')
         player = request.form.get('player')
@@ -401,16 +460,15 @@ def offense(game):
         game_id = get_game.get_game(game, current_user.id)
         my_game.add_possession(str(game_id), str(possession), str(playName), str(player), str(zone), str(result), str(current_user.id))
         abort(401)
-    
 
 @app.route("/addplayer", methods=['GET', 'POST'])
 @login_required
 def addplayer():
     if request.method == 'GET':
-        first, last, number= [],[],[]
+        last, number= [],[]
         players = Players()
         last, number, player_id = players.get_players(current_user.id)
-        return render_template('addplayer.html', last = last, player_id = player_id, number = number)
+        return render_template('addplayer.html', last = last, player_id = player_id, number = number, username = str(current_user.username))
     if request.method == 'POST' and request.form.get('edit') == 'false':
         last = str(request.form.get('last'))
         number = str(request.form.get('number'))
@@ -418,7 +476,7 @@ def addplayer():
         players.add_player(last, number, current_user.id)
         first, last, number= [],[],[]
         last, number, player_id = players.get_players(current_user.id)
-        return render_template('addplayer.html', last = last, player_id = player_id, number = number)
+        return render_template('addplayer.html', last = last, player_id = player_id, number = number, username = str(current_user.username))
     if request.method == 'POST' and request.form.get('edit') == 'true':
         name = str(request.form.get('name'))
         number = str(request.form.get('number'))
@@ -427,14 +485,14 @@ def addplayer():
         players.edit_player(name, number, current_user.id, player_id)
         first, last, number= [],[],[]
         last, number, player_id = players.get_players(current_user.id)
-        return render_template('addplayer.html', last = last, player_id = player_id, number = number)
+        return render_template('addplayer.html', last = last, player_id = player_id, number = number, username = str(current_user.username))
     if request.method == 'POST' and request.form.get('delete') == 'true':
         player_id = str(request.form.get('id'))
         players = Players()
         players.delete_player(player_id)
         first, last, number= [],[],[]
         last, number, player_id = players.get_players(current_user.id)
-        return render_template('addplayer.html', last = last, player_id = player_id, number = number)
+        return render_template('addplayer.html', last = last, player_id = player_id, number = number, username = str(current_user.username))
 
 @app.route("/addplay", methods=['GET', 'POST'])
 @login_required
@@ -442,25 +500,26 @@ def addplay():
     if request.method == 'GET':
         plays = Plays()
         play, play_id = plays.get_plays(current_user.id)
-        return render_template('addplay.html', play = play, play_id = play_id)
+        return render_template('addplay.html', play = play, play_id = play_id, username = str(current_user.username))
     if request.method == 'POST' and request.form.get('edit') == 'false':
         play = str(request.form.get('play'))
         plays = Plays()
         plays.add_play(play, current_user.id)
-        return render_template('addplay.html')
+        play, play_id = plays.get_plays(current_user.id)
+        return render_template('addplay.html', play = play, play_id = play_id, username = str(current_user.username))
     if request.method == 'POST' and request.form.get('edit') == 'true':
         play = str(request.form.get('play'))
         play_id = str(request.form.get('id'))
         plays = Plays()
         plays.edit_play(play, current_user.id, play_id)
         play, play_id = plays.get_plays(current_user.id)
-        return render_template('addplay.html', play = play, play_id = play_id)
+        return render_template('addplay.html', play = play, play_id = play_id, username = str(current_user.username))
     if request.method == 'POST' and request.form.get('delete') == 'true':
         play_id = str(request.form.get('id'))
         plays = Plays()
         plays.delete_play(play_id)
         play, play_id = plays.get_plays(current_user.id)
-        return render_template('addplay.html', play = play, play_id = play_id)
+        return render_template('addplay.html', play = play, play_id = play_id, username = str(current_user.username))
 
 @app.route("/games", methods=['GET', 'POST'])
 @login_required
@@ -469,21 +528,22 @@ def games():
         games, game_id = [],[]
         game_list = NewGame()
         game = Game()
-        games, game_id = game_list.list_games(current_user.id)
-        return render_template('games.html', games = games, game_id = game_id)
+        games, game_id, date = game_list.list_games(current_user.id)
+        return render_template('games.html', games = games, game_id = game_id, date=date, username = str(current_user.username))
     elif request.method == "POST":
         game = str(request.form.get('game'))
-        return redirect(url_for('game', game = game))
+        return redirect(url_for('game', game = game, zone = 'None'))
 
 @app.route("/newgame", methods=['GET', 'POST'])
 @login_required
 def newgame():
     if request.method == "GET":
-        return render_template('newgame.html')
+        return render_template('newgame.html', username = str(current_user.username))
     if request.method == "POST":
         name = str(request.form.get('game'))
+        date = request.form.get('date')
         game = NewGame()
-        success = game.add_game(name, current_user.id)
+        success = game.add_game(name, current_user.id, date)
         if success == True:
             return redirect(url_for('offense', game = name))
         else:

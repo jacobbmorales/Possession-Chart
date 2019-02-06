@@ -5,7 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="static/css/style.css">
-    <title>Possession Charter</title>
+    <link rel="shortcut icon" type="image/x-icon" href="static/css/images/favicon.ico" />
+    <title>Completed Games</title>
     <style>
         body {
               background-image: url("/static/css/images/floor.jpg");
@@ -16,23 +17,25 @@
 
 <body>
     <div id="navbar">
+        <script>
+            window.username = ['{{ username | safe }}']
+        </script>
     </div>
     <center>
         <div class="title">
             <h1>Completed Games</h1>
         </div>
     </center>
-        <div data-role="page" id="games" data-url="/{{username}}">
-            <div id="games">
-                <script>
-                    games = {{ games | safe }}
-                    game_id = {{ game_id | safe }}
-                    window.games = games
-                    window.game_id = game_id
-                </script>
-            </div>
-    <script type="text/javascript" src="static/scripts/jsx/navbar.bundle.js"></script>
-    <script type="text/javascript" src="static/scripts/jsx/games.bundle.js"></script>
+    <div data-role="page" id="games" data-url="/{{username}}">
+        <div id="games">
+            <script>
+                window.games = {{ games | safe }}
+                window.game_id = {{ game_id | safe }}
+                window.date = {{ date | safe }}
+            </script>
+        </div>
+        <script type="text/javascript" src="static/scripts/jsx/navbar.bundle.js"></script>
+        <script type="text/javascript" src="static/scripts/jsx/games.bundle.js"></script>
 </body>
 
 </html>

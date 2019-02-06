@@ -66,7 +66,7 @@ class Home extends React.Component {
                         <CardActions>
                             <Typography>
                                 <center>
-                                    <h3>Most used play:</h3>
+                                    <h3>Most Used Play:</h3>
                                     <br></br>
                                     {most_used}
                                 </center>
@@ -79,7 +79,7 @@ class Home extends React.Component {
                         <CardActions>
                             <Typography>
                                 <center>
-                                    <h3>Most efficient play:</h3>
+                                    <h3>Most Efficient Play:</h3>
                                     <br></br>
                                     {efficient}
                                 </center>
@@ -88,15 +88,14 @@ class Home extends React.Component {
                     </CardContent>
                 </Card>
                 <Center>
-                <Card className={styles.logo}>
-                </Card>
+                <div className={styles.logo}/>
                 </Center>
                 <Card className={styles.homeplayer}>
                     <CardContent>
                         <CardActions>
                             <Typography>
                                 <center>
-                                    <h3>Most used player:</h3>
+                                    <h3>Most Used Player:</h3>
                                     <br></br>
                                     {used_player}
                                 </center>
@@ -109,7 +108,7 @@ class Home extends React.Component {
                         <CardActions>
                             <Typography>
                                 <center>
-                                    <h3>Most efficient player:</h3>
+                                    <h3>Most Efficient Player:</h3>
                                     <br></br>
                                     {eff_player}
                                 </center>

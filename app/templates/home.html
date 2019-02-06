@@ -5,35 +5,33 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="static/css/style.css">
-    <title>Possession Charter</title>
+    <link rel="shortcut icon" type="image/x-icon" href="static/css/images/favicon.ico" />
+    <title>Sixth Man Statistics</title>
     <style>
         body {
               background-image: url("/static/css/images/floor.jpg");
             }
     </style>
-
 </head>
 
 <body>
     <div id="navbar">
+        <script>
+            window.username = ['{{ username | safe }}']
+        </script>
     </div>
     <center>
         <div class="title">
-            <h1> Hoopalytics </h1>
+            <h1> Sixth Man Statistics </h1>
         </div>
     </center>
-    <div data-role="page" id="home" data-url="/{{username}}">
         <div id="home">
             <script>
-                games = {{ games | safe }}
-                game_id = {{ game_id | safe }}
-                data = {{ data | safe }}
-                window.games = games
-                window.game_id = game_id
-                window.data = data
+                window.games = {{ games | safe }}
+                window.game_id = {{ game_id | safe }}
+                window.data = {{ data | safe }}
             </script>
         </div>
-    </div>
     <script type="text/javascript" src="static/scripts/jsx/navbar.bundle.js"></script>
     <script type="text/javascript" src="static/scripts/jsx/home.bundle.js"></script>
 

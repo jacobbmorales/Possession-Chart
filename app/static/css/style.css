@@ -1,34 +1,37 @@
-@import "/static/css/images/paint.jpg";
-@import "/static/css/images/upperpaint.jpg";
-@import "/static/css/images/basketball.jpg";
-@import "/static/css/images/corner.jpg";
-@import "/static/css/images/shortcorner.jpg";
-@import "/static/css/images/shortcorner2.jpg";
-@import "/static/css/images/3wing.jpg";
-@import "/static/css/images/corner2.jpg";
-@import "/static/css/images/topkey.jpg";
-@import "/static/css/images/3wing2.jpg";
-@import "/static/css/images/wing.jpg";
-@import "/static/css/images/wing2.jpg";
-@import "/static/css/images/top.jpg";
 @import "/static/css/images/floor.jpg";
-@import "/static/css/images/hoopalytics.jpg";
+@import "/static/css/images/logo.jpg";
+@font-face {
+    font-family: 'kionaregular';
+    src: url('./fonts/kiona-regular-webfont.woff2') format('woff2'),
+         url('./fonts/kiona-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
 
 .court{
     position: absolute;
     top: 125px;
     left:50%;
-    height: 375px;
+    height: 360px;
     width: 552px;
     border: 3px solid rgb(233, 121, 29);
     transform: translate(-50%, 0);
 }
-
+.courtdisplayreset{
+    position: absolute;
+    top: 190px;
+    left:50%;
+    height: 400px;
+    width: 552px;
+    border: 3px solid rgb(233, 121, 29);
+    transform: translate(-50%, 0);
+}
 .courtdisplay{
     position: absolute;
     top: 190px;
     left:50%;
-    height: 375px;
+    height: 360px;
     width: 552px;
     border: 3px solid rgb(233, 121, 29);
     transform: translate(-50%, 0);
@@ -37,7 +40,16 @@
     position: absolute;
     top: 225px;
     left:50%;
-    height: 375px;
+    height: 360px;
+    width: 552px;
+    border: 3px solid rgb(233, 121, 29);
+    transform: translate(-50%, 0);
+}
+.courtdisplay2reset{
+    position: absolute;
+    top: 225px;
+    left:50%;
+    height: 400px;
     width: 552px;
     border: 3px solid rgb(233, 121, 29);
     transform: translate(-50%, 0);
@@ -46,7 +58,7 @@
     position: absolute;
     top: 250px;
     left:50%;
-    height: 375px;
+    height: 360px;
     width: 552px;
     border: 3px solid rgb(233, 121, 29);
     transform: translate(-50%, 0);
@@ -56,11 +68,10 @@
     position: absolute;
     top: 200px;
     left:50%;
-    height: 144px;
-    width: 144px;
-    background-image: url('/static/css/images/hoopalytics.jpg');
+    height: 150px;
+    width: 150px;
+    background-image: url('/static/css/images/logo.jpg');
     background-repeat: no-repeat;
-    border: 3px solid rgb(233, 121, 29);
     transform: translate(-50%, 0);
 }
 
@@ -68,191 +79,27 @@
     position: absolute;
     top: 350px;
     left:100px;
-    height: 144px;
-    width: 144px;
-    background-image: url('/static/css/images/hoopalytics.jpg');
+    height: 150px;
+    width: 150px;
+    background-image: url('/static/css/images/logo.jpg');
     background-repeat: no-repeat;
-    border: 3px solid rgb(233, 121, 29);
 }
 .logoright{
     position: absolute;
     top: 350px;
     right:100px;
-    height: 144px;
-    width: 144px;
-    background-image: url('/static/css/images/hoopalytics.jpg');
-    background-repeat: no-repeat;
-    border: 3px solid rgb(233, 121, 29);
-}
-.corner{
-    position: absolute;
-    left:25px;
-    height: 141px;
-    width: 32px;
-    background-image: url('/static/css/images/corner.jpg');
+    height: 150px;
+    width: 150px;
+    background-image: url('/static/css/images/logo.jpg');
     background-repeat: no-repeat;
 }
-.cornershape{
-    position: absolute;
-    height: 141px;
-    width: 32px;
-}
-.twowing{
-    position: absolute;
-    left:57px;
-    top:112px;
-    height: 128px;
-    width: 142px;
-    background-image: url('/static/css/images/wing.jpg');
-    background-repeat: no-repeat;
-}
-.twowingshape{
-    position: absolute;
-    height: 128px;
-    width: 142px;
-}
-.twowing2{
-    position: absolute;
-    left:355px;
-    top:112px;
-    height: 134px;
-    width: 141px;
-    background-image: url('/static/css/images/wing2.jpg');
-    background-repeat: no-repeat;
-}
-.twowing2shape{
-    position: absolute;
-    height: 134px;
-    width: 141px;
-}
-.wing{
-    position: absolute;
-    left:25px;
-    top:141px;
-    height: 209px;
-    width: 104px;
-    background-image: url('/static/css/images/3wing.jpg');
-    background-repeat: no-repeat;
-}
-.wingshape{
-    position: absolute;
-    height: 209px;
-    width: 104px;
-}
-.topkey{
-    position: absolute;
-    left:129px;
-    top:191px;
-    height: 101px;
-    width: 294px;
-    background-image: url('/static/css/images/topkey.jpg');
-    background-repeat: no-repeat;
-}
-.topkeyshape{
-    position: absolute;
-    height: 101px;
-    width:294px;
-}
-.top{
-    position: absolute;
-    left:129px;
-    top:240px;
-    height: 110px;
-    width: 294px;
-    background-image: url('/static/css/images/top.jpg');
-    background-repeat: no-repeat;
-}
-.topshape{
-    position: absolute;
-    height: 110px;
-    width:294px;
-}
-.wing2{
-    position: absolute;
-    left:423px;
-    top:141px;
-    height: 209px;
-    width: 104px;
-    background-image: url('/static/css/images/3wing2.jpg');
-    background-repeat: no-repeat;
-}
-.wing2shape{
-    position: absolute;
-    height: 209px;
-    width:104px;
-}
-.shortcorner{
-    position: absolute;
-    left:57px;
-    height: 112px;
-    width: 140px;
-    background-image: url('/static/css/images/shortcorner.jpg');
-    background-repeat: no-repeat;
-}
-.shortcornershape{
-    position: absolute;
-    height: 112px;
-    width: 140px;
-}
-.paint{
-    position: absolute;
-    left:197px;
-    height: 112px;
-    width: 158px;
-    background-image: url('/static/css/images/paint.jpg');
-    background-repeat: no-repeat;
-}
-.paintshape{
-    position: absolute;
-    height: 112px;
-    width: 158px;
-}
-.upperpaint{
-    position: absolute;
-    left:197px;
-    top:112px;
-    height: 79px;
-    width: 158px;
-    background-image: url('/static/css/images/upperpaint.jpg');
-    background-repeat: no-repeat;
-}
-.upperpaintshape{
-    position: absolute;
-    height: 79px;
-    width: 158px;
-}
-.shortcorner2{
-    position: absolute;
-    left:355px;
-    height: 112px;
-    width: 141px;
-    background-image: url('/static/css/images/shortcorner2.jpg');
-    background-repeat: no-repeat;
-}
-.shortcorner2shape{
-    position: absolute;
-    height: 112px;
-    width: 141px;
-}
-.corner2{
-    position: absolute;
-    left:496px;
-    height: 141px;
-    width: 31px;
-    background-image: url('/static/css/images/corner2.jpg');
-    background-repeat: no-repeat;
-}
-.corner2shape{
-    position: absolute;
-    height: 141px;
-    width: 31px;
-}
+
 .left {
     position: relative;
     top: 25px;
     float: left;
     width: 160px;
-    background:  rgb(253, 207, 120);
+    background:  white;
     border: 3px solid rgb(233, 121, 29);
 }
 .menu{
@@ -267,7 +114,7 @@
     top: 25px;
     float: right;
     width: 160px;
-    background: rgb(253, 207, 120);
+    background: white;
     border: 3px solid rgb(233, 121, 29);
 }
 .signin {
@@ -280,7 +127,7 @@
 }
 .addplayer {
     position: relative;
-    top:50px;
+    top:25px;
     left: 50%;
     height: 250px;
     width: 300px;
@@ -290,7 +137,7 @@
 }
 .addplay {
     position: relative;
-    top:50px;
+    top:25px;
     left: 50%;
     height: 175px;
     width: 300px;
@@ -302,8 +149,15 @@
     background: rgb(233, 121, 29);
 }
 .navbarbutton{
+    position: relative;
     background: transparent;
     color: white;
+}
+.navbarsignout{
+    position: absolute;
+    background: transparent;
+    color: white;
+    right: 10px;
 }
 .border{
     position: absolute;
@@ -314,14 +168,16 @@
     transform: translate(-50%, 0);
 }
 .homeplay{
+    font-family: 'kionaregular';
     position: absolute;
     float:left;
-    left: 0px;
+    left: 10px;
     top: 200px;
     width: 150px;
     border: 3px solid rgb(233, 121, 29);
 }
 .homeplay2{
+    font-family: 'kionaregular';
     position: absolute;
     float:left;
     left: 175px;
@@ -330,14 +186,16 @@
     border: 3px solid rgb(233, 121, 29);
 }
 .homeplayer{
+    font-family: 'kionaregular';
     position: absolute;
     float:right;
-    right: 0px;
+    right: 10px;
     top: 200px;
     width: 150px;
     border: 3px solid rgb(233, 121, 29);
 }
 .homeplayer2{
+    font-family: 'kionaregular';
     position: absolute;
     float:right;
     right: 175px;
@@ -350,19 +208,48 @@
     left: 50%;
     top: 25px;
     width: 300px;
-    height:200px;
+    height:250px;
     border: 3px solid rgb(233, 121, 29);
     transform: translate(-50%, 0);
 }
 .gamelist {
+    position: relative;
     left: 50%;
     top: 25px;
     width: 1000px;
-    background: whitesmoke;
+    background: white;
+    transform: translate(-50%, 0);
+    border: 3px solid rgb(233, 121, 29);
+}
+.playerlist {
+    position: absolute;
+    left: 50%;
+    top: 475px;
+    width: 1000px;
+    background: white;
+    transform: translate(-50%, 0);
+    border: 3px solid rgb(233, 121, 29);
+}
+.playlist {
+    position: absolute;
+    left: 50%;
+    top: 400px;
+    width: 1000px;
+    background: white;
+    transform: translate(-50%, 0);
+    border: 3px solid rgb(233, 121, 29);
+}
+.possessionlist {
+    position: absolute;
+    left: 50%;
+    top: 350px;
+    width: 1000px;
+    background: white;
     transform: translate(-50%, 0);
     border: 3px solid rgb(233, 121, 29);
 }
 .title{
+    font-family: 'kionaregular';
     background-color: black;
     border: 5px solid rgb(233, 121, 29);
     color: white;
@@ -373,7 +260,7 @@
 .ten{
     position: relative;
     left: 50%;
-    top: 10px;
+    padding: 10px;
     transform: translate(-50%, 0);
 }
 .editgame{
@@ -386,22 +273,92 @@
 }
 .editgame2{
     position: relative;
-    top: 50px;
+    top: 25px;
     left: 50%;
-    height:150px;
+    height:125px;
     width: 200px;
     transform: translate(-50%, 0);
-    background-color: rgb(253, 207, 120);
+    background-color: white;
     border: 3px solid rgb(233, 121, 29);
 
 }
 .background{
     background: rgb(253, 207, 120);
 }
-
-.court {
-    fill: #7A7A7A;
+  
+.zone {
+    fill: rgb(233, 121, 29);
     stroke: #2B2B2B;
     stroke-width: 4;
     stroke-miterlimit: 10;
-  }
+}
+.blackzone {
+    fill: black;
+    stroke: #2B2B2B;
+    stroke-width: 4;
+    stroke-miterlimit: 10;
+}
+
+.zonedisplay {
+    fill: rgb(233, 121, 29);
+    stroke: #2B2B2B;
+    stroke-width: 4;
+    stroke-miterlimit: 10;
+}
+ 
+.zone:hover {
+    fill: black;
+    cursor: pointer;
+}
+ 
+.zonedisplay:hover {
+    fill: white;
+    cursor: pointer;
+}
+
+.kiona{
+    position: absolute;
+    color: white;
+    font-size: 32;
+    right: 125px
+}
+
+.buttonten{
+    position: relative;
+    padding: 10px;
+}
+.buttonten2{
+    position: relative;
+    top: 10px;
+}
+
+.primary{
+    fill: rgb(233, 121, 29);
+}
+
+.left200{
+    position: absolute;
+    left: 200px;
+    font-family: 'kionaregular';
+}
+.left400{
+    position: absolute;
+    left: 400px;
+    font-family: 'kionaregular';
+}
+.left600{
+    position: absolute;
+    left: 600px;
+    font-family: 'kionaregular';
+}
+.left800{
+    position: absolute;
+    left: 800px;
+    font-family: 'kionaregular';
+}
+.reset{
+    position: absolute;
+    top: 360px;
+    left:50%;
+    transform: translate(-50%, 0);
+}

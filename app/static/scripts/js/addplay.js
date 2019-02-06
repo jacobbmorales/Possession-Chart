@@ -19,6 +19,7 @@ import Divider from '@material-ui/core/Divider';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
+import Typography from '@material-ui/core/Typography';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import $ from "jquery";
@@ -31,7 +32,8 @@ class AddPlay extends React.Component {
             play: "",
             open: false,
             editPlay: "",
-            editId: ""
+            editId: "", 
+            confirm: false
         };
         this.handlePlay = this.handlePlay.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
@@ -40,6 +42,9 @@ class AddPlay extends React.Component {
         this.handleAdd = this.handleAdd.bind(this);
         this.editPlay = this.editPlay.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
+        this.handleConfirm = this.handleConfirm.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        
     }
 
     handlePlay(event) {
@@ -51,6 +56,19 @@ class AddPlay extends React.Component {
     handleEditPlay(event) {
         this.setState({
             editPlay: event.target.value,
+        });
+    };
+
+    handleConfirm() {
+        this.setState({
+            confirm: true,
+        });
+    };
+
+    handleClose() {
+        this.setState({
+            confirm: false,
+            open: false,
         });
     };
 
@@ -112,7 +130,25 @@ class AddPlay extends React.Component {
         }
         return (
             <div>
-                <MenuList subheader={<ListSubheader><center><h3>Plays</h3></center></ListSubheader>} className={styles.gamelist}>
+                <Card className={styles.addplay}>
+                    <CardContent>
+                        <CardActions>
+                            <div className={styles.ten}>
+                                <TextField
+                                    label="Name of Play"
+                                    name="email"
+                                    autoComplete="email"
+                                    margin="normal"
+                                    value={this.state.play}
+                                    onChange={this.handlePlay}
+                                />
+                                <br></br>
+                                <Button variant="outlined" onClick={() => this.handleAdd(this.state.play)}>Add Play</Button>
+                            </div>
+                        </CardActions>
+                    </CardContent>
+                </Card>
+                <MenuList subheader={<ListSubheader><center><h3>Plays</h3></center></ListSubheader>} className={styles.playlist}>
                     {plays.map((name) => (
                         <div>
                             <MenuItem
@@ -128,6 +164,22 @@ class AddPlay extends React.Component {
                     ))}
                 </MenuList>
                 <Dialog
+                    open={this.state.confirm}
+                    onClose={this.handleClose}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="form-dialog-title"></DialogTitle>
+                    <DialogActions>
+                        <div className={styleMedia.ten}>
+                            <Typography>
+                                <center>Are you sure you want to delete this play?</center>
+                            </Typography>
+                            <Button variant="outlined" onClick={() => { this.handleClose() }} color="primary">Do Not Delete</Button>
+                            <Button variant="outlined" onClick={() => { this.handleDelete(this.state.editId) }} color="primary">Delete Play</Button>
+                        </div>
+                    </DialogActions>
+                </Dialog>
+                <Dialog
                     open={this.state.open}
                     onClose={this.handleClose}
                     aria-labelledby="form-dialog-title"
@@ -136,12 +188,10 @@ class AddPlay extends React.Component {
                     <DialogContent>
                         <center>
                             <TextField
-                                id="filled-email-input"
                                 label="Name of Play"
                                 name="email"
                                 autoComplete="email"
                                 margin="normal"
-                                variant="filled"
                                 value={this.state.editPlay}
                                 onChange={this.handleEditPlay}
                             />
@@ -150,30 +200,10 @@ class AddPlay extends React.Component {
                     <DialogActions>
                         <div className={styleMedia.ten}>
                             <Button variant="outlined" onClick={() => this.handleEdit(this.state.editPlay, this.state.editId)} color="primary">Save</Button>
-                            <Button variant="outlined" onClick={() => { this.handleDelete(this.state.editId) }} color="primary">Delete Play</Button>
+                            <Button variant="outlined" onClick={() => { this.handleConfirm() }} color="primary">Delete Play</Button>
                         </div>
                     </DialogActions>
                 </Dialog>
-                <Card className={styles.addplay}>
-                    <CardContent>
-                        <CardActions>
-                            <div className={styleMedia.ten}>
-                                <TextField
-                                    id="filled-email-input"
-                                    label="Name of Play"
-                                    name="email"
-                                    autoComplete="email"
-                                    margin="normal"
-                                    variant="filled"
-                                    value={this.state.play}
-                                    onChange={this.handlePlay}
-                                />
-                                <br></br>
-                                <Button variant="outlined" onClick={() => this.handleAdd(this.state.play)}>Add Play</Button>
-                            </div>
-                        </CardActions>
-                    </CardContent>
-                </Card>
             </div>
         )
     }

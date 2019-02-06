@@ -20,6 +20,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Typography from '@material-ui/core/Typography';
 import styles from '../../css/style.css';
 import $ from "jquery";
 injectTapEventPlugin();
@@ -33,7 +34,8 @@ class AddPlayer extends React.Component {
             open: false,
             editLast: "",
             editNumber: "",
-            editId: ""
+            editId: "",
+            close: false
         };
         this.handleLast = this.handleLast.bind(this);
         this.handleNumber = this.handleNumber.bind(this);
@@ -43,7 +45,22 @@ class AddPlayer extends React.Component {
         this.handleAdd = this.handleAdd.bind(this);
         this.editPlayer = this.editPlayer.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
+        this.handleConfirm = this.handleConfirm.bind(this);
+        this.handleClose = this.handleClose.bind(this);
     }
+
+    handleConfirm() {
+        this.setState({
+            confirm: true,
+        });
+    };
+
+    handleClose() {
+        this.setState({
+            confirm: false,
+            open: false,
+        });
+    };
 
     handleLast(event) {
         this.setState({
@@ -132,14 +149,39 @@ class AddPlayer extends React.Component {
         }
         return (
             <div>
-                <MenuList subheader={<ListSubheader><center><h3>Players</h3></center></ListSubheader>} className={styles.gamelist}>
+                <Card className={styles.addplayer}>
+                    <CardContent>
+                        <CardActions>
+                            <div className={styles.ten}>
+                                <TextField
+                                    label="Last Name"
+                                    name="email"
+                                    autoComplete="email"
+                                    margin="normal"
+                                    value={this.state.last}
+                                    onChange={this.handleLast}
+                                />
+                                <br></br>
+                                <TextField
+                                    label="Number"
+                                    name="email"
+                                    autoComplete="email"
+                                    margin="normal"
+                                    value={this.state.number}
+                                    onChange={this.handleNumber}
+                                />
+                                <br></br>
+                                <Button variant="outlined" onClick={() => this.handleAdd(this.state.last, this.state.number)}>Add Player</Button>
+                            </div>
+                        </CardActions>
+                    </CardContent>
+                </Card>
+                <MenuList subheader={<ListSubheader><center><h3>Players</h3></center></ListSubheader>} className={styles.playerlist}>
                     {last.map((name) => (
                         <div>
                             <MenuItem
                                 key={name.key}
                                 onClick={() => this.editPlayer(name.name, name.number, name.key)}
-                            //selected={playerSelected}
-                            // classes={{ selected: mystyle}}
                             >
                                 <ListItemText primary={name.value} />
                             </MenuItem>
@@ -155,64 +197,46 @@ class AddPlayer extends React.Component {
                     <DialogTitle id="form-dialog-title"><center>Edit Player</center></DialogTitle>
                     <DialogContent>
                         <TextField
-                            id="filled-email-input"
                             label="Last Name"
                             name="email"
                             autoComplete="email"
                             margin="normal"
-                            variant="filled"
                             value={this.state.editLast}
                             onChange={this.handleEditLast}
                         />
                         <TextField
-                            id="filled-email-input"
                             label="Number"
                             name="email"
                             autoComplete="email"
                             margin="normal"
-                            variant="filled"
                             value={this.state.editNumber}
                             onChange={this.handleEditNumber}
                         />
                     </DialogContent>
                     <DialogActions>
-                    <div className={styleMedia.ten}>
-                        <Button onClick={() => this.handleEdit(this.state.editLast, this.state.editNumber, this.state.editId)} color="primary">Save</Button>
-                        <Button onClick={() => { this.handleDelete(this.state.editId) }} color="primary">Delete Player</Button>
-                    </div>
+                        <div className={styleMedia.ten}>
+                            <Button onClick={() => this.handleEdit(this.state.editLast, this.state.editNumber, this.state.editId)} color="primary">Save</Button>
+                            <Button onClick={() => { this.handleConfirm() }} color="primary">Delete Player</Button>
+                        </div>
                     </DialogActions>
                 </Dialog>
-                <Card className={styles.addplayer}>
-                    <CardContent>
-                        <CardActions>
-                            <div className={styleMedia.ten}>
-                                <TextField
-                                    id="filled-email-input"
-                                    label="Last Name"
-                                    name="email"
-                                    autoComplete="email"
-                                    margin="normal"
-                                    variant="filled"
-                                    value={this.state.last}
-                                    onChange={this.handleLast}
-                                />
-                                <br></br>
-                                <TextField
-                                    id="filled-email-input"
-                                    label="Number"
-                                    name="email"
-                                    autoComplete="email"
-                                    margin="normal"
-                                    variant="filled"
-                                    value={this.state.number}
-                                    onChange={this.handleNumber}
-                                />
-                                <br></br>
-                                <Button variant="outlined" onClick={() => this.handleAdd(this.state.last, this.state.number)}>Add Player</Button>
-                            </div>
-                        </CardActions>
-                    </CardContent>
-                </Card>
+                <Dialog
+                    open={this.state.confirm}
+                    onClose={this.handleClose}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="form-dialog-title"></DialogTitle>
+                    <DialogActions>
+                        <div className={styleMedia.ten}>
+                            <Typography>
+                                <center>Are you sure you want to delete this player?</center>
+                            </Typography>
+                            <Button variant="outlined" onClick={() => { this.handleClose() }} color="primary">Do Not Delete</Button>
+                            <Button variant="outlined" onClick={() => { this.handleDelete(this.state.editId) }} color="primary">Delete Player</Button>
+                        </div>
+                    </DialogActions>
+                </Dialog>
+
             </div>
         )
     }

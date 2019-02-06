@@ -53,44 +53,36 @@ class SignIn extends React.Component {
     render() {
         return (
             <div>
-                <Card className={styles.logoleft}>
-                </Card>
-                <Card className={styles.logoright}>
-                </Card>
+                <div className={styles.logoleft}/>
+                <div className={styles.logoright}/>
                 <Card className={styles.signin}>
                     <CardContent>
                         <CardActions>
-                            <div className={styles.ten}>
+                            <div>
                                 <TextField
-                                    id="filled-email-input"
                                     label="User Name"
                                     type="email"
                                     name="email"
                                     autoComplete="email"
                                     margin="normal"
-                                    variant="filled"
                                     value={this.state.user}
                                     onChange={this.handleUser}
                                     className={styles.ten}
                                 />
                                 <br></br>
                                 <TextField
-                                    id="filled-password-input"
                                     label="Password"
                                     type="password"
                                     autoComplete="current-password"
                                     margin="normal"
-                                    variant="filled"
                                     value={this.state.password}
                                     onChange={this.handlePassword}
                                     className={styles.ten}
                                 />
                                 <br></br>
-                                <Button type='submit' variant="outlined" onClick={() => { this.handleSignIn(this.state.user, this.state.password) }}>Sign In</Button>
+                                <Button className={styles.buttonten} type='submit' variant="outlined" onClick={() => { this.handleSignIn(this.state.user, this.state.password) }}>Sign In</Button>
                                 <br></br>
-                                <center>
-                                    <Button variant="outlined" href="/signup">Create Account</Button>
-                                </center>
+                                <Button className={styles.buttonten2} variant="outlined" href="/signup">Create Account</Button>
                             </div>
                         </CardActions>
                     </CardContent>

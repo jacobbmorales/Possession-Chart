@@ -19,9 +19,11 @@ class NewGame extends React.Component {
         super(props);
         this.state = {
             game: "",
+            date: "1892-03-11"
         };
         this.handleGame = this.handleGame.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
+        this.handleDate = this.handleDate.bind(this);
     }
 
     handleGame(event) {
@@ -30,10 +32,17 @@ class NewGame extends React.Component {
         });
     };
 
-    handleAdd(game) {
+    handleDate(event) {
+        this.setState({
+            date: event.target.value
+        });
+    };
+
+    handleAdd(game, date) {
+        console.log(date)
         $.ajax({
             url: '/newgame',
-            data: { 'game': game, click: 'true' },
+            data: { 'game': game, 'date': date },
             type: 'POST',
             success: function (response) {
                 document.write(response)
@@ -45,27 +54,35 @@ class NewGame extends React.Component {
     render() {
         return (
             <div>
-                <Card className={styles.logoleft}>
-                </Card>
-                <Card className={styles.logoright}>
-                </Card>
+                <div className={styles.logoleft}/>
+                <div className={styles.logoright}/>
                 <Card className={styles.newgame}>
                     <CardContent>
                         <CardActions>
                             <div className={styles.ten}>
                                 <TextField
-                                    id="filled-email-input"
                                     label="Name of Game"
                                     name="email"
                                     autoComplete="email"
                                     margin="normal"
-                                    variant="filled"
                                     value={this.state.game}
                                     onChange={this.handleGame}
                                 />
+                                <center>
+                                <TextField
+                                    id="date"
+                                    label="Date of Game"
+                                    type="date"
+                                    value={this.state.date}
+                                    onChange={this.handleDate}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />
+                                </center>
                                 <br></br>
                                 <center>
-                                    <Button variant="outlined" onClick={() => this.handleAdd(this.state.game)}>Start</Button>
+                                    <Button className={styles.buttonten2} variant="outlined" onClick={() => this.handleAdd(this.state.game, this.state.date)}>Start</Button>
                                 </center>
                             </div>
                         </CardActions>

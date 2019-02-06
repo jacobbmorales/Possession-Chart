@@ -5,7 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="static/css/style.css">
-    <title>Possession Charter</title>
+    <link rel="shortcut icon" type="image/x-icon" href="static/css/images/favicon.ico" />
+    <title>Edit Roster</title>
     <style>
         body {
               background-image: url("/static/css/images/floor.jpg");
@@ -16,19 +17,22 @@
 
 <body>
     <div id="navbar">
+        <script>
+            window.username = ['{{ username | safe }}']
+        </script>
     </div>
     <center>
         <div class="title">
             <h1> Edit Roster </h1>
         </div>
     </center>
-        <div id="addplayer">
-            <script>
-                window.last = {{ last | safe }}
-                window.player_id = {{ player_id | safe }}
-                window.number = {{ number | safe }}
-            </script>
-        </div>
+    <div id="addplayer">
+        <script>
+            window.last = {{ last | safe }}
+            window.player_id = {{ player_id | safe }}
+            window.number = {{ number | safe }}
+        </script>
+    </div>
     <script type="text/javascript" src="static/scripts/jsx/navbar.bundle.js"></script>
     <script type="text/javascript" src="static/scripts/jsx/addplayer.bundle.js"></script>
 </body>
