@@ -4,7 +4,6 @@ certifi==2018.8.24
 cffi==1.11.5
 Cheetah==2.4.4
 Click==7.0
-cloud-init==0.7.5
 colorama==0.2.5
 configobj==4.7.2
 cryptography==2.2.2
