@@ -218,23 +218,23 @@ def season(zone):
         total , efficient, individual, ind_used = game.data(current_user.id, player_id, play_id, zone)
         zone_eff, zone_used = game.zones_plays(current_user.id, player_id, None, None)
         most_used, most_efficient, used_name, efficient_name, player_names, player_values, ind_names, ind_values, used_play_id, used_player_id, eff_play_id, eff_player_id, used_number, eff_number = [], [], [], [], [], [], [], [], [], [], [], [], [], []
-        for key, value in sorted(total.iteritems(), key=lambda k,v: sort_order.index(k)):
+        for key, value in sorted(total):
             if value != 0:
                 most_used.append(play.get_play(key))
                 used_name.append(str(value))
                 used_play_id.append(key)
-        for key, value in sorted(efficient.iteritems(), key=lambda k,v: sort_order.index(k)):
+        for key, value in sorted(efficient):
             if key in used_play_id:
                 most_efficient.append(play.get_play(key))
                 efficient_name.append(str(value))
                 eff_play_id.append(key)
-        for key, value in sorted(ind_used.iteritems(), key=lambda k,v: sort_order.index(k)):
+        for key, value in sorted(ind_used):
             if value != 0:
                 ind_names.append(players.get_player(key))
                 ind_values.append(str(value))
                 used_player_id.append(key)
                 used_number.append(players.get_number(key))
-        for key, value in sorted(individual.iteritems(), key=lambda k,v: sort_order.index(k)):
+        for key, value in sorted(individual):
             if key in used_player_id:
                 player_names.append(players.get_player(key))
                 player_values.append(str(value))
