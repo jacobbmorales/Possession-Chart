@@ -23,7 +23,6 @@ itsdangerous==1.1.0
 jmespath==0.2.1
 ply==3.4
 pycurl==7.19.3
-python-apt==0.9.3.5ubuntu2
 python-dateutil==2.0
 python-editor==1.0.4
 requests==2.2.1
