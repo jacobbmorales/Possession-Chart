@@ -4,7 +4,8 @@ from flaskext.mysql import MySQL
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from models import User, app, login, Plays, Players, Game, NewGame
-from collections import Counter
+from collections import Counter, OrderedDict
+from sortedcontainers import SortedDict
 
 @login.user_loader
 def load_user(user_id):
@@ -218,26 +219,28 @@ def season(zone):
         total , efficient, individual, ind_used = game.data(current_user.id, player_id, play_id, zone)
         zone_eff, zone_used = game.zones_plays(current_user.id, player_id, None, None)
         most_used, most_efficient, used_name, efficient_name, player_names, player_values, ind_names, ind_values, used_play_id, used_player_id, eff_play_id, eff_player_id, used_number, eff_number = [], [], [], [], [], [], [], [], [], [], [], [], [], []
-        for key, value in sorted(total):
-            if value != 0:
+        total = OrderedDict(sorted(total.items()))
+        print(total)
+        for key in total:
+            if total[key] != 0:
                 most_used.append(play.get_play(key))
-                used_name.append(str(value))
+                used_name.append(str(total[key]))
                 used_play_id.append(key)
-        for key, value in sorted(efficient):
+        for key in sorted(efficient):
             if key in used_play_id:
                 most_efficient.append(play.get_play(key))
-                efficient_name.append(str(value))
+                efficient_name.append(str(efficient[key]))
                 eff_play_id.append(key)
-        for key, value in sorted(ind_used):
-            if value != 0:
+        for key in sorted(ind_used):
+            if ind_used[key] != 0:
                 ind_names.append(players.get_player(key))
-                ind_values.append(str(value))
+                ind_values.append(str(ind_used[key]))
                 used_player_id.append(key)
                 used_number.append(players.get_number(key))
-        for key, value in sorted(individual):
+        for key in sorted(individual):
             if key in used_player_id:
                 player_names.append(players.get_player(key))
-                player_values.append(str(value))
+                player_values.append(str(individual[key]))
                 eff_player_id.append(key)
                 eff_number.append(players.get_number(key))
         return render_template('playList.html', most_used = most_used, most_efficient = most_efficient, used_name = used_name, efficient_name = efficient_name, player_names = player_names, player_values = player_values, ind_names = ind_names, ind_values = ind_values, used_play_id = used_play_id, eff_player_id = eff_player_id, eff_play_id = eff_play_id, used_player_id = used_player_id, zone_eff = zone_eff, zone_used = zone_used, username = str(current_user.username), used_number = used_number, eff_number = eff_number, zone=str(zone))    
