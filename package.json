@@ -30,6 +30,7 @@
     "bootstrap": "^3.4.0",
     "deep-extend": "^0.6.0",
     "devs": "^0.2.2",
+    "gcc": "^1.0.2",
     "heroku": "^7.20.1",
     "joi-browser": "^10.6.1",
     "jsonify": "0.0.0",
