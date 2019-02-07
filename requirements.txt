@@ -42,7 +42,6 @@ requests==2.2.1
 six==1.11.0
 SQLAlchemy==1.2.14
 ssh-import-id==3.21
-Twisted-Web==13.2.0
 urllib3==1.7.1
 virtualenv==16.0.0
 virtualenv-clone==0.3.0
