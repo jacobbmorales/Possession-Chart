@@ -108,7 +108,7 @@ class Plays(UserMixin, db.Model):
                 playlist.append(str(row[0]))
                 play_id.append(str(row[1]))
         except:
-            print "Error: unable to fecth data"
+            abort(401)
         return(playlist, play_id)
 
     def get_deleted_plays(self, user_id):
@@ -122,7 +122,7 @@ class Plays(UserMixin, db.Model):
                 playlist.append(str(row[0]))
                 play_id.append(str(row[1]))
         except:
-            print "Error: unable to fecth data"
+            abort(401)
         return(playlist, play_id)
 
     def get_play(self, play_id):
@@ -177,7 +177,7 @@ class Players(UserMixin, db.Model):
                 player_id.append(str(row[2]))
 
         except:
-            print "Error: unable to fecth data"
+            abort(401)
         return(last, number, player_id)
 
     def get_deleted_players(self, user_id):
@@ -194,7 +194,7 @@ class Players(UserMixin, db.Model):
                 player_id.append(str(row[2]))
 
         except:
-            print "Error: unable to fecth data"
+            abort(401)
         return(last, number, player_id)
 
     def get_player(self, player_id):
@@ -321,7 +321,7 @@ class Game(UserMixin, db.Model):
                 zone.append(str(row[4]))
                 result.append(str(row[5]))
         except:
-            print('this is cooked')
+            abort(401)
         return(possession, play, player, zone, result)
 
     def zones_both(self, user, play, player, game):
@@ -426,7 +426,7 @@ class Game(UserMixin, db.Model):
                     row = cursor.fetchone()
                     makes.append(str(row[2]))               
             except:
-                print "No makes"
+                abort(401)
             try:
                 cursor.execute("SELECT * FROM possessions WHERE (user_id, game_id) = ('"+user+"', '"+game+"')")
                 rcount = int(cursor.rowcount)
@@ -434,7 +434,7 @@ class Game(UserMixin, db.Model):
                     row = cursor.fetchone()
                     total.append(str(row[2]))               
             except:
-                print "No plays"
+                abort(401)
         else:
             try:
                     cursor.execute("SELECT * FROM possessions WHERE (user_id, result, game_id, zone) = ('"+user+"', 'make', '"+game+"', '"+zone+"')")
@@ -443,7 +443,7 @@ class Game(UserMixin, db.Model):
                         row = cursor.fetchone()
                         makes.append(str(row[2]))               
             except:
-                print "No makes"
+                abort(401)
             try:
                 cursor.execute("SELECT * FROM possessions WHERE (user_id, game_id, zone) = ('"+user+"', '"+game+"', '"+zone+"')")
                 rcount = int(cursor.rowcount)
@@ -451,7 +451,7 @@ class Game(UserMixin, db.Model):
                     row = cursor.fetchone()
                     total.append(str(row[2]))               
             except:
-                print "No plays"
+                abort(401)
         if(len(total) != 0):
             total = Counter(total)
             makes = Counter(makes)
@@ -539,7 +539,6 @@ class NewGame(UserMixin, db.Model):
             conn.commit()
             return(True)
         else:
-            print('already a game')
             return(False)
 
     def get_game(self, game, user):    
@@ -571,7 +570,7 @@ class NewGame(UserMixin, db.Model):
                 game_id.append(str(row[1]))
                 date.append(str(row[2]))
         except:
-            print "Error: unable to fecth data"
+            abort(401)
         return(games,game_id,date)
 
     def delete_game(self, game):

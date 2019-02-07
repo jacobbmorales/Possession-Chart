@@ -1,4 +1,3 @@
-from flask import Flask
 from flask import Flask, render_template, request, jsonify, json, redirect, url_for, abort
 from flask_login import current_user, LoginManager, login_user, logout_user, login_required
 from flaskext.mysql import MySQL
@@ -97,20 +96,20 @@ def game(game, zone):
         play = Plays()
         zone_eff, zone_used = g.zones_plays(current_user.id, player_id, None, game)
         most_used, most_efficient, used_name, efficient_name, player_names, player_values, ind_names, ind_values, used_play_id, used_player_id, eff_play_id, eff_player_id, used_number, eff_number = [], [], [], [], [], [], [], [], [], [], [], [], [], []
-        for key, value in sorted(efficient.iteritems(), key=lambda (k,v): (v,k), reverse=True):
+        for key, value in sorted(efficient.iteritems(), key=lambda k,v: sort_order.index(k)):
             most_efficient.append(play.get_play(key))
             efficient_name.append(str(value))
             eff_play_id.append(key)
-        for key, value in sorted(total.iteritems(), key=lambda (k,v): (v,k), reverse=True):
+        for key, value in sorted(total.iteritems(), key=lambda k,v: sort_order.index(k)):
             most_used.append(play.get_play(key))
             used_name.append(str(value))
             used_play_id.append(key)
-        for key, value in sorted(individual.iteritems(), key=lambda (k,v): (v,k), reverse=True):
+        for key, value in sorted(individual.iteritems(), key=lambda k,v: sort_order.index(k)):
             player_names.append(players.get_player(key))
             player_values.append(str(value))
             eff_player_id.append(key)
             eff_number.append(players.get_number(key))
-        for key, value in sorted(ind_used.iteritems(), key=lambda (k,v): (v,k), reverse=True):
+        for key, value in sorted(ind_used.iteritems(), key=lambda k,v: sort_order.index(k)):
             ind_names.append(players.get_player(key))
             ind_values.append(str(value))
             used_player_id.append(key)
@@ -219,23 +218,23 @@ def season(zone):
         total , efficient, individual, ind_used = game.data(current_user.id, player_id, play_id, zone)
         zone_eff, zone_used = game.zones_plays(current_user.id, player_id, None, None)
         most_used, most_efficient, used_name, efficient_name, player_names, player_values, ind_names, ind_values, used_play_id, used_player_id, eff_play_id, eff_player_id, used_number, eff_number = [], [], [], [], [], [], [], [], [], [], [], [], [], []
-        for key, value in sorted(total.iteritems(), key=lambda (k,v): (v,k), reverse=True):
+        for key, value in sorted(total.iteritems(), key=lambda k,v: sort_order.index(k)):
             if value != 0:
                 most_used.append(play.get_play(key))
                 used_name.append(str(value))
                 used_play_id.append(key)
-        for key, value in sorted(efficient.iteritems(), key=lambda (k,v): (v,k), reverse=True):
+        for key, value in sorted(efficient.iteritems(), key=lambda k,v: sort_order.index(k)):
             if key in used_play_id:
                 most_efficient.append(play.get_play(key))
                 efficient_name.append(str(value))
                 eff_play_id.append(key)
-        for key, value in sorted(ind_used.iteritems(), key=lambda (k,v): (v,k), reverse=True):
+        for key, value in sorted(ind_used.iteritems(), key=lambda k,v: sort_order.index(k)):
             if value != 0:
                 ind_names.append(players.get_player(key))
                 ind_values.append(str(value))
                 used_player_id.append(key)
                 used_number.append(players.get_number(key))
-        for key, value in sorted(individual.iteritems(), key=lambda (k,v): (v,k), reverse=True):
+        for key, value in sorted(individual.iteritems(), key=lambda k,v: sort_order.index(k)):
             if key in used_player_id:
                 player_names.append(players.get_player(key))
                 player_values.append(str(value))
@@ -264,11 +263,11 @@ def season_player(player, zone):
         individual, ind_used = game.player_data(current_user.id, player, None, play_id, zone)
         zone_eff, zone_used = game.zones_players(current_user.id, play_id, player, None)
         play_names, play_values, ind_names, ind_values, used_play_id, eff_play_id = [], [], [], [], [], []
-        for key, value in sorted(individual.iteritems(), key=lambda (k,v): (v,k), reverse=True):
+        for key, value in sorted(individual.iteritems(), key=lambda k,v: sort_order.index(k)):
             play_names.append(play.get_play(key))
             play_values.append(str(value))
             eff_play_id.append(key)
-        for key, value in sorted(ind_used.iteritems(), key=lambda (k,v): (v,k), reverse=True):
+        for key, value in sorted(ind_used.iteritems(), key=lambda k,v: sort_order.index(k)):
             ind_names.append(play.get_play(key))
             ind_values.append(str(value))
             used_play_id.append(key)
@@ -296,11 +295,11 @@ def game_player(game, player, zone):
         individual, ind_used = g.player_data(current_user.id, player, game, play_id, zone)
         zone_eff, zone_used = g.zones_players(current_user.id, play_id, player, game)
         play_names, play_values, ind_names, ind_values, used_play_id, eff_play_id = [], [], [], [], [], []
-        for key, value in sorted(individual.iteritems(), key=lambda (k,v): (v,k), reverse=True):
+        for key, value in sorted(individual.iteritems(), key=lambda k,v: sort_order.index(k)):
             play_names.append(play.get_play(key))
             play_values.append(str(value))
             eff_play_id.append(key)
-        for key, value in sorted(ind_used.iteritems(), key=lambda (k,v): (v,k), reverse=True):
+        for key, value in sorted(ind_used.iteritems(), key=lambda k,v: sort_order.index(k)):
             ind_names.append(play.get_play(key))
             ind_values.append(str(value))
             used_play_id.append(key)
@@ -330,12 +329,12 @@ def play(play, zone):
         individual, ind_used = game.play_data(current_user.id, play, None, player_id, zone)
         zone_eff, zone_used = game.zones_plays(current_user.id, player_id, play, None)
         player_names, player_values, ind_names, ind_values, used_player_id, eff_player_id, eff_number, used_number = [], [], [], [], [], [], [], []
-        for key, value in sorted(individual.iteritems(), key=lambda (k,v): (v,k), reverse=True):
+        for key, value in sorted(individual.iteritems(), key=lambda k,v: sort_order.index(k)):
             player_names.append(players.get_player(key))
             player_values.append(str(value))
             eff_player_id.append(key)
             eff_number.append(players.get_number(key))
-        for key, value in sorted(ind_used.iteritems(), key=lambda (k,v): (v,k), reverse=True):
+        for key, value in sorted(ind_used.iteritems(), key=lambda k,v: sort_order.index(k)):
             ind_names.append(players.get_player(key))
             ind_values.append(str(value))
             used_player_id.append(key)
@@ -376,12 +375,12 @@ def game_play(game, play, zone):
         individual, ind_used = g.play_data(current_user.id, play, game, player_id, zone)
         zone_eff, zone_used = g.zones_plays(current_user.id, player_id, play, game)
         player_names, player_values, ind_names, ind_values, used_player_id, eff_player_id, eff_player_id, used_number, eff_number = [], [], [], [], [], [], [], [], []
-        for key, value in sorted(individual.iteritems(), key=lambda (k,v): (v,k), reverse=True):
+        for key, value in sorted(individual.iteritems(), key=lambda k,v: sort_order.index(k)):
             player_names.append(players.get_player(key))
             player_values.append(str(value))
             eff_player_id.append(key)
             eff_number.append(players.get_number(key))
-        for key, value in sorted(ind_used.iteritems(), key=lambda (k,v): (v,k), reverse=True):
+        for key, value in sorted(ind_used.iteritems(), key=lambda k,v: sort_order.index(k)):
             ind_names.append(players.get_player(key))
             ind_values.append(str(value))
             used_player_id.append(key)
