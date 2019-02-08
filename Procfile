@@ -1,1 +1,1 @@
-web: gunicorn --chdir app app:app -b 0.0.0.0:$PORT
+web: gunicorn --chdir app app:app --log-file-
