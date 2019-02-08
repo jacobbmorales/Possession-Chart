@@ -5,6 +5,7 @@ import inspect
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config(object):
+    SECRET_KEY = os.getenv('SECRET_KEY', 'my_strong_key')
     MYSQL_DATABASE_USER = 'jacob.morales@focus.org'
     MYSQL_DATABASE_PASSWORD = 'Rufus1209'
     MYSQL_DATABASE_DB = 'mydb'
