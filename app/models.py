@@ -228,6 +228,7 @@ class Game(UserMixin, db.Model):
 
     def delete_game(self, game):
         cursor.execute("DELETE FROM possessions WHERE (game_id) = ('"+game+"')")
+        conn.commit()
         return(True)
 
     def edit_possession(self, possession, play, player, zone, result, game):
@@ -575,4 +576,5 @@ class NewGame(UserMixin, db.Model):
 
     def delete_game(self, game):
         cursor.execute("DELETE FROM games WHERE (game_id) = ('"+game+"')")
+        conn.commit()
         return(True)
