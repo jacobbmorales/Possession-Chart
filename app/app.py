@@ -548,3 +548,6 @@ def newgame():
             return redirect(url_for('offense', game = name))
         else:
             abort(401)
+
+if __name__ == '__main__':
+    app.run()
