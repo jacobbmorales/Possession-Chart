@@ -39,10 +39,10 @@ class User(UserMixin, db.Model):
         test = cursor.execute("SELECT * FROM user WHERE username = '"+user+"'")
         if (test == 0 and user != 'None'):
             cursor.execute("INSERT INTO user(username, password, email) VALUES('"+user+"', '"+password_hash+"', '"+email+"')")
+            conn.commit()
             success = True
         else:
             success = False
-        conn.commit()
         return(success)
 
     def get_password(self, username):
@@ -80,7 +80,7 @@ class Plays(UserMixin, db.Model):
     def add_play(self, play, user_id):
         if play != None:
             cursor.execute("INSERT INTO plays(play, user_id, deleted) VALUES('"+play+"', '"+user_id+"', '0')")
-        conn.commit()
+            conn.commit()
         return(True)
 
     def edit_play(self, play, user_id, play_id):
@@ -229,18 +229,20 @@ class Game(UserMixin, db.Model):
     def delete_game(self, game):
         cursor.execute("DELETE FROM possessions WHERE (game_id) = ('"+game+"')")
         conn.commit()
+        cursor.close()
         return(True)
 
     def edit_possession(self, possession, play, player, zone, result, game):
         cursor = conn.cursor()
-        conn.commit()
         cursor.execute("UPDATE possessions SET play_id = '"+play+"', player_id = '"+player+"', zone = '"+zone+"', result = '"+result+"' WHERE possession = '"+possession+"' and game_id  = '"+game+"'")
+        conn.commit()
         cursor.close()
         return(True)
 
     def add_possession(self, game, possession, play, player, zone, result, user): 
         cursor.execute("INSERT INTO possessions(game_id, possession, play_id, player_id, zone, result, user_id) VALUES('"+game+"', '"+possession+"', '"+play+"', '"+player+"', '"+zone+"', '"+result+"', '"+user+"')") 
         conn.commit()
+        cursor.close()
         return(True)
 
     def zones_plays(self, user, players, play, game):
@@ -577,4 +579,5 @@ class NewGame(UserMixin, db.Model):
     def delete_game(self, game):
         cursor.execute("DELETE FROM games WHERE (game_id) = ('"+game+"')")
         conn.commit()
+        cursor.close()
         return(True)
