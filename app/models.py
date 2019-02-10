@@ -165,8 +165,8 @@ class Game(db.Model):
 
 
     def delete_game(self, game_id):
-        game = Game.query.filter_by(game_id = game_id).all()
-        if len(game) != 0:
+        games = Game.query.filter_by(game_id = game_id).all()
+        for game in games:
             db.session.delete(game)
             db.session.commit()
         return(True)
