@@ -423,7 +423,7 @@ class Game(db.Model):
         individual_makes = Counter(individual_makes)
         return (individual_makes, ind_used)
 
-    def player_data(self, user, player, game, plays, zone):
+    def player_data(self, user_id, player, game, plays, zone):
         individual_makes, individual_total, ind_used= {},{},{}
         count = 0
         for play in plays:
