@@ -3,10 +3,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin,LoginManager
 from flaskext.mysql import MySQL
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 from random import randint
 from config import Config
 from collections import Counter, OrderedDict
+from sqlalchemy.orm import synonym
 
 app = Flask(__name__)
 login = LoginManager(app)
@@ -17,7 +17,6 @@ mysql.init_app(app)
 conn = mysql.connect()
 cursor = conn.cursor()
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
 
 class User(UserMixin, db.Model):
 
@@ -26,194 +25,122 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(28), index=True, unique=True)
     password = db.Column(db.String(128))
     user_id = db.Column(db.Integer, primary_key=True)
-    id = user_id
-
-    def __repr__(self):
-        return '<User {}>'.format(self.username) 
-
-    def check_password(self, my_hash, password):
-        return check_password_hash(my_hash, password)
-
-    def create_user(self, user, password, email):
-        password_hash = generate_password_hash(password)
-        test = cursor.execute("SELECT * FROM user WHERE username = '"+user+"'")
-        if (test == 0 and user != 'None'):
-            cursor.execute("INSERT INTO user(username, password, email) VALUES('"+user+"', '"+password_hash+"', '"+email+"')")
-            conn.commit()
-            success = True
-        else:
-            success = False
-        return(success)
-
-    def get_password(self, username):
-        if(cursor.execute("SELECT password FROM user WHERE username = '"+username+"'") == 1):
-            row = cursor.fetchone()
-            password_check = str(row[0])
-            return(password_check)
-        else:
-            return('1')
-
-    def get_user_id(self, username):
-        if(cursor.execute("SELECT user_id FROM user WHERE username = '"+username+"'") == 1):
-            row = cursor.fetchone()
-            user_id = str(row[0])
-            return(user_id)
-        else:
-            return('2')
-
-    def get_username(self, user_id):
-        if(cursor.execute("SELECT username FROM user WHERE user_id = '"+user_id+"'") == 1):
-            row = cursor.fetchone()
-            username = str(row[0])
-            return(username)
-        else:
-            return('3')
+    id = synonym("user_id")
     
-class Plays(UserMixin, db.Model):
+class Plays(db.Model):
 
     __tablename__ = 'plays'
 
     play = db.Column(db.String(28))
     play_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer)
+    deleted = db.Column(db.Integer)
 
     def add_play(self, play, user_id):
-        if play != None:
-            cursor.execute("INSERT INTO plays(play, user_id, deleted) VALUES('"+play+"', '"+user_id+"', '0')")
-            conn.commit()
+        play = Plays(play = play, user_id = user_id, deleted = 0)
+        db.session.add(play)
+        db.session.commit()
         return(True)
 
     def edit_play(self, play, user_id, play_id):
-        cursor = conn.cursor()
-        cursor.execute("UPDATE plays SET play = '"+play+"' WHERE play_id = '"+play_id+"'")
-        conn.commit()
-        cursor.close()
+        play1 = Plays.query.filter_by(play_id = play_id).first()
+        play1.play = play
+        db.session.commit()
         return(True)
 
     def delete_play(self, play_id):
-        cursor = conn.cursor()
-        cursor.execute("UPDATE plays SET deleted = '"+'1'+"' WHERE play_id = '"+play_id+"'")
-        conn.commit()
-        cursor.close()
+        play = Plays.query.filter_by(play_id = play_id).first()
+        play.deleted = 1
+        db.session.commit()
         return(True)
 
     def get_plays(self, user_id):
         playlist, play_id = [], []
-        try:
-            cursor.execute("SELECT * FROM plays  WHERE (user_id, deleted) = ('"+user_id+"', 0)")
-            rcount = int(cursor.rowcount)
 
-            for r in range(0,rcount):
-                row = cursor.fetchone()
-                playlist.append(str(row[0]))
-                play_id.append(str(row[1]))
-        except:
-            abort(401)
+        plays = Plays.query.filter_by(user_id = user_id, deleted = 0).all()
+
+        for play in plays:
+            playlist.append(str(play.play))
+            play_id.append(str(play.play_id))
+
         return(playlist, play_id)
 
     def get_deleted_plays(self, user_id):
         playlist, play_id = [], []
-        try:
-            cursor.execute("SELECT * FROM plays  WHERE (user_id) = ('"+user_id+"')")
-            rcount = int(cursor.rowcount)
 
-            for r in range(0,rcount):
-                row = cursor.fetchone()
-                playlist.append(str(row[0]))
-                play_id.append(str(row[1]))
-        except:
-            abort(401)
+        plays = Plays.query.filter_by(user_id = user_id).all()
+
+        for play in plays:
+            playlist.append(str(play.play))
+            play_id.append(str(play.play_id))
+
         return(playlist, play_id)
 
     def get_play(self, play_id):
-        if(cursor.execute("SELECT play FROM plays WHERE play_id = '"+play_id+"'") == 1):
-            row = cursor.fetchone()
-            play = str(row[0])
-            return(play)
-        else:
-            return('false')
+        play = Plays.query.filter_by(play_id = play_id).first()
+        return(str(play.play))
 
-class Players(UserMixin, db.Model):
+class Players(db.Model):
 
     __tablename__ = 'players'
 
-    first = db.Column(db.String(28))
     last = db.Column(db.String(28))
     number = db.Column(db.String(28))
     player_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer)
+    deleted = db.Column(db.Integer)
 
     def add_player(self, last, number, user_id):
-        if(cursor.execute("SELECT * FROM players WHERE (number, user_id) = ('"+number+"', '"+user_id+"')") == 0):
-            cursor.execute("INSERT INTO players(last, number, user_id, deleted) VALUES('"+last+"', '"+number+"', '"+user_id+"', 0)")
-        conn.commit()
+        if((Players.query.filter_by(user_id = user_id, number = number).count()) == 0):
+            player = Players(last = last, number = number, user_id = user_id, deleted = 0)
+            db.session.add(player)
+            db.session.commit()
         return(True)
 
-    def edit_player(self, name, number, user_id, player_id):
-        cursor = conn.cursor()
-        cursor.execute("UPDATE players SET last = '"+name+"', number = '"+number+"' WHERE player_id = '"+player_id+"'")
-        conn.commit()
-        cursor.close()
+    def edit_player(self, last, number, user_id, player_id):
+        player = Players.query.filter_by(player_id = player_id).first()
+        player.last = last
+        player.number = number
+        db.session.commit()
         return(True)
 
     def delete_player(self, player_id):
-        cursor = conn.cursor()
-        cursor.execute("UPDATE players SET deleted = '"+'1'+"' WHERE player_id = '"+player_id+"'")
-        conn.commit()
-        cursor.close()
+        player = Players.query.filter_by(player_id = player_id).first()
+        player.deleted = 1
+        db.session.commit()
         return(True)
 
     def get_players(self, user_id):
         last, number, player_id = [],[],[]
-        try:
-            cursor.execute("SELECT * FROM players  WHERE (user_id, deleted) = ('"+user_id+"', 0)")
-            rcount = int(cursor.rowcount)
+        players = Players.query.filter_by(user_id = user_id, deleted = 0).all()
+        for player in players:
 
-            for r in range(0,rcount):
-                row = cursor.fetchone()
+            last.append(str(player.last))
+            number.append(str(player.number))
+            player_id.append(str(player.player_id))
 
-                last.append(str(row[0]))
-                number.append(str(row[1]))
-                player_id.append(str(row[2]))
-
-        except:
-            abort(401)
         return(last, number, player_id)
 
     def get_deleted_players(self, user_id):
         last, number, player_id = [],[],[]
-        try:
-            cursor.execute("SELECT * FROM players  WHERE (user_id) = ('"+user_id+"')")
-            rcount = int(cursor.rowcount)
+        players = Players.query.filter_by(user_id = user_id).all()
+        for player in players:
 
-            for r in range(0,rcount):
-                row = cursor.fetchone()
+            last.append(str(player.last))
+            number.append(str(player.number))
+            player_id.append(str(player.player_id))
 
-                last.append(str(row[0]))
-                number.append(str(row[1]))
-                player_id.append(str(row[2]))
-
-        except:
-            abort(401)
         return(last, number, player_id)
 
     def get_player(self, player_id):
-        if(cursor.execute("SELECT last FROM players WHERE player_id = '"+player_id+"'") == 1):
-            row = cursor.fetchone()
-            player = str(row[0])
-            return(player)
-        else:
-            return('false')
+        player = Players.query.filter_by(player_id = player_id).first()
+        return(str(player.last))
 
     def get_number(self, player_id):
-        if(cursor.execute("SELECT number FROM players WHERE player_id = '"+player_id+"'") == 1):
-            row = cursor.fetchone()
-            number = str(row[0])
-            return(number)
-        else:
-            return('false')
+        player = Players.query.filter_by(player_id = player_id).first()
+        return(str(player.number))
 
-class Game(UserMixin, db.Model):
+class Game(db.Model):
 
     __tablename__ = 'possessions'
 
@@ -226,42 +153,45 @@ class Game(UserMixin, db.Model):
     user_id = db.Column(db.Integer)
 
 
-    def delete_game(self, game):
-        cursor.execute("DELETE FROM possessions WHERE (game_id) = ('"+game+"')")
-        conn.commit()
-        cursor.close()
+    def delete_game(self, game_id):
+        game = Game.query.filter_by(game_id = game_id).all()
+        if len(game) != 0:
+            db.session.delete(game)
+            db.session.commit()
         return(True)
 
-    def edit_possession(self, possession, play, player, zone, result, game):
-        cursor = conn.cursor()
-        cursor.execute("UPDATE possessions SET play_id = '"+play+"', player_id = '"+player+"', zone = '"+zone+"', result = '"+result+"' WHERE possession = '"+possession+"' and game_id  = '"+game+"'")
-        conn.commit()
-        cursor.close()
+    def edit_possession(self, possession, play_id, player_id, zone, result, game_id):
+        possession1 = Game.query.filter_by(game_id = game_id, possession = possession).first()
+        possession1.play_id = play_id
+        possession1.player_id = player_id
+        possession1.result = result
+        possession1.zone = zone
+        db.session.commit()
         return(True)
 
-    def add_possession(self, game, possession, play, player, zone, result, user): 
-        cursor.execute("INSERT INTO possessions(game_id, possession, play_id, player_id, zone, result, user_id) VALUES('"+game+"', '"+possession+"', '"+play+"', '"+player+"', '"+zone+"', '"+result+"', '"+user+"')") 
-        conn.commit()
-        cursor.close()
+    def add_possession(self, game_id, possession, play_id, player_id, zone, result, user_id): 
+        pos = Game(game_id = game_id, possession = possession, play_id = play_id, player_id = player_id, zone = zone, user_id = user_id)
+        db.session.add(pos)
+        db.session.commit()
         return(True)
 
-    def zones_plays(self, user, players, play, game):
+    def zones_plays(self, user_id, players, play, game):
         zone = 1
         count = 0
         individual_makes, individual_total, ind_used=[], [], []
         while(zone<=12):
             if game == None and play != None:
-                temp = cursor.execute("SELECT * FROM possessions WHERE (zone, user_id, result, play_id) = ('"+str(zone)+"', '"+user+"', 'make', '"+play+"')")
-                temp2 = cursor.execute("SELECT * FROM possessions WHERE (zone, user_id, play_id) = ('"+str(zone)+"', '"+user+"', '"+play+"')")
+                temp = Game.query.filter_by(zone = zone, user_id = user_id, result = 'make', play_id = play).count()
+                temp2 = Game.query.filter_by(zone = zone, user_id = user_id, play_id = play).count()
             elif game == None and play == None:
-                temp = cursor.execute("SELECT * FROM possessions WHERE (zone, user_id, result) = ('"+str(zone)+"', '"+user+"', 'make')")
-                temp2 = cursor.execute("SELECT * FROM possessions WHERE (zone, user_id) = ('"+str(zone)+"', '"+user+"')")
+                temp = Game.query.filter_by(zone = zone, user_id = user_id, result = 'make').count()
+                temp2 = Game.query.filter_by(zone = zone, user_id = user_id).count()
             elif(game != None and play != None):
-                temp = cursor.execute("SELECT * FROM possessions WHERE (zone, user_id, result, play_id, game_id) = ('"+str(zone)+"', '"+user+"', 'make', '"+play+"', '"+game+"')")
-                temp2 = cursor.execute("SELECT * FROM possessions WHERE (zone, user_id, play_id, game_id) = ('"+str(zone)+"', '"+user+"', '"+play+"', '"+game+"')")
+                temp = Game.query.filter_by(zone = zone, user_id = user_id, result = 'make', play_id = play, game_id = game).count()
+                temp2 = Game.query.filter_by(zone = zone, user_id = user_id, player_id = play, game_id = game).count()
             elif(game != None and play == None):
-                temp = cursor.execute("SELECT * FROM possessions WHERE (zone, user_id, result, game_id) = ('"+str(zone)+"', '"+user+"', 'make', '"+game+"')")
-                temp2 = cursor.execute("SELECT * FROM possessions WHERE (zone, user_id, game_id) = ('"+str(zone)+"', '"+user+"', '"+game+"')")
+                temp = Game.query.filter_by(zone = zone, user_id = user_id, result = 'make', game_id = game).count()
+                temp2 = Game.query.filter_by(zone = zone, user_id = user_id, game_id = game).count()
             count += temp2
             if temp2 == 0:
                 individual_makes.append(0)
@@ -284,17 +214,17 @@ class Game(UserMixin, db.Model):
         individual_makes, individual_total, ind_used=[], [], []
         while(zone<=12):
             if game == None and player != None:
-                temp = cursor.execute("SELECT * FROM possessions WHERE (zone, user_id, result, player_id) = ('"+str(zone)+"', '"+user+"', 'make', '"+player+"')")
-                temp2 = cursor.execute("SELECT * FROM possessions WHERE (zone, user_id, player_id) = ('"+str(zone)+"', '"+user+"', '"+player+"')")
+                temp = Game.query.filter_by(zone = zone, user_id = user_id, result = 'make', player_id = player).count()
+                temp2 = Game.query.filter_by(zone = zone, user_id = user_id, player_id = player).count()
             elif game == None and player == None:
-                temp = cursor.execute("SELECT * FROM possessions WHERE (zone, user_id, result) = ('"+str(zone)+"', '"+user+"', 'make')")
-                temp2 = cursor.execute("SELECT * FROM possessions WHERE (zone, user_id) = ('"+str(zone)+"', '"+user+"')")
+                temp = Game.query.filter_by(zone = zone, user_id = user_id, result = 'make').count()
+                temp2 = Game.query.filter_by(zone = zone, user_id = user_id).count()
             elif(game != None and player != None):
-                temp = cursor.execute("SELECT * FROM possessions WHERE (zone, user_id, result, player_id, game_id) = ('"+str(zone)+"', '"+user+"', 'make', '"+player+"', '"+game+"')")
-                temp2 = cursor.execute("SELECT * FROM possessions WHERE (zone, user_id, player_id, game_id) = ('"+str(zone)+"', '"+user+"', '"+player+"', '"+game+"')")
+                temp = Game.query.filter_by(zone = zone, user_id = user_id, result = 'make', player_id = player, game_id = game).count()
+                temp2 = Game.query.filter_by(zone = zone, user_id = user_id, player_id = player, game_id = game).count()
             elif(game != None and player == None):
-                temp = cursor.execute("SELECT * FROM possessions WHERE (zone, user_id, result, game_id) = ('"+str(zone)+"', '"+user+"', 'make', '"+game+"')")
-                temp2 = cursor.execute("SELECT * FROM possessions WHERE (zone, user_id, game_id) = ('"+str(zone)+"', '"+user+"', '"+game+"')")
+                temp = Game.query.filter_by(zone = zone, user_id = user_id, result = 'make', game_id = game).count()
+                temp2 = Game.query.filter_by(zone = zone, user_id = user_id, game_id = game).count()
             count += temp2
             if temp2 == 0:
                 individual_makes.append(0)
@@ -313,31 +243,28 @@ class Game(UserMixin, db.Model):
 
     def game_data(self, user_id, game_id):
         possession, play, player, zone, result = [],[],[],[],[]
-        try:
-            cursor.execute("SELECT * FROM possessions WHERE (user_id, game_id) = ('"+user_id+"', '"+game_id+"')")
-            rcount = int(cursor.rowcount)
-            for r in range(0,rcount):
-                row = cursor.fetchone()
-                possession.append(str(row[1]))
-                play.append(str(row[2]))
-                player.append(str(row[3]))
-                zone.append(str(row[4]))
-                result.append(str(row[5]))
-        except:
-            abort(401)
+
+        data = Game.query.filter_by(user_id = user_id, game_id = game_id).all()
+
+        for d in data:
+            possession.append(str(d.possession))
+            play.append(str(d.play_id))
+            player.append(str(d.player_id))
+            zone.append(str(d.zone))
+            result.append(str(d.result))
         return(possession, play, player, zone, result)
 
-    def zones_both(self, user, play, player, game):
+    def zones_both(self, user_id, play, player, game):
         zone = 1
         count = 0
         individual_makes, individual_total, ind_used=[], [], []
         while(zone<=12):
             if game == None:
-                temp = cursor.execute("SELECT * FROM possessions WHERE (zone, user_id, result, player_id, play_id) = ('"+str(zone)+"', '"+user+"', 'make', '"+player+"', '"+play+"')")
-                temp2 = cursor.execute("SELECT * FROM possessions WHERE (zone, user_id, player_id, play_id) = ('"+str(zone)+"', '"+user+"', '"+player+"', '"+play+"')")
+                temp = Game.query.filter_by(zone = zone, user_id = user_id, result = 'make', player_id = player, play_id = play).count()
+                temp2 = Game.query.filter_by(zone = zone, user_id = user_id, player_id = player, play_id = play).count()
             elif(game != None):
-                temp = cursor.execute("SELECT * FROM possessions WHERE (zone, user_id, result, player_id, game_id, play_id) = ('"+str(zone)+"', '"+user+"', 'make', '"+player+"', '"+game+"', '"+play+"')")
-                temp2 = cursor.execute("SELECT * FROM possessions WHERE (zone, user_id, player_id, game_id, play_id) = ('"+str(zone)+"', '"+user+"', '"+player+"', '"+game+"', '"+play+"')")
+                temp = Game.query.filter_by(zone = zone, game_id = game, user_id = user_id, result = 'make', player_id = player, play_id = play).count()
+                temp2 = Game.query.filter_by(zone = zone, game_id = game, user_id = user_id, player_id = player, play_id = play).count()
             count += temp2
             if temp2 == 0:
                 individual_makes.append(0)
@@ -355,16 +282,16 @@ class Game(UserMixin, db.Model):
         return (individual_makes, ind_used)
 
     
-    def data(self, user, players, plays, zone):
+    def data(self, user_id, players, plays, zone):
         makes, used, total, individual_makes, individual_total, ind_used= {},{},{},{},{},{}
         count = 0
         for player in players:
             if zone == None:
-                temp = cursor.execute("SELECT * FROM possessions WHERE (user_id, result, player_id) = ('"+user+"', 'make', '"+player+"')")
-                temp2 = cursor.execute("SELECT * FROM possessions WHERE (user_id, player_id) = ('"+user+"', '"+player+"')")
+                temp = Game.query.filter_by(user_id = user_id, result = 'make', player_id = player).count()
+                temp2 = Game.query.filter_by(user_id = user_id, player_id = player).count()
             else:
-                temp = cursor.execute("SELECT * FROM possessions WHERE (user_id, result, player_id, zone) = ('"+user+"', 'make', '"+player+"', '"+zone+"')")
-                temp2 = cursor.execute("SELECT * FROM possessions WHERE (user_id, player_id, zone) = ('"+user+"', '"+player+"', '"+zone+"')")
+                temp = Game.query.filter_by(user_id = user_id, result = 'make', player_id = player, zone = zone).count()
+                temp2 = Game.query.filter_by(user_id = user_id, player_id = player, zone = zone).count()
             count += temp2
             if temp2 == 0:
                 individual_makes.update([(player, 0)])
@@ -381,11 +308,11 @@ class Game(UserMixin, db.Model):
         count = 0
         for play in plays:
             if zone == None:
-                temp = cursor.execute("SELECT * FROM possessions WHERE (user_id, result, play_id) = ('"+user+"', 'make', '"+play+"')")
-                temp2 = cursor.execute("SELECT * FROM possessions WHERE (user_id, play_id) = ('"+user+"', '"+play+"')")
+                temp = Game.query.filter_by(user_id = user_id, result = 'make', play_id = play).count()
+                temp2 = Game.query.filter_by(user_id = user_id, play_id = play).count()
             else:
-                temp = cursor.execute("SELECT * FROM possessions WHERE (user_id, result, play_id, zone) = ('"+user+"', 'make', '"+play+"', '"+zone+"')")
-                temp2 = cursor.execute("SELECT * FROM possessions WHERE (user_id, play_id, zone) = ('"+user+"', '"+play+"', '"+zone+"')")
+                temp = Game.query.filter_by(user_id = user_id, result = 'make', play_id = play, zone = zone).count()
+                temp2 = Game.query.filter_by(user_id = user_id, play_id = play, zone = zone).count()
             count += temp2
             if temp2 == 0:
                 makes.update([(play, 0)])
@@ -402,88 +329,76 @@ class Game(UserMixin, db.Model):
         return (used, makes, individual_makes, ind_used)
 
 
-    def individual_data(self, user, game, players, zone):
+    def individual_data(self, user_id, game, players, zone):
         makes, total, individual_makes, individual_total, ind_used= [],[],{},{},{}
         count = 0
         for player in players:
             if zone == None:
-                temp = cursor.execute("SELECT * FROM possessions WHERE (user_id, result, player_id, game_id) = ('"+user+"', 'make', '"+player+"', '"+game+"')")
-                temp2 = cursor.execute("SELECT * FROM possessions WHERE (user_id, player_id, game_id) = ('"+user+"', '"+player+"', '"+game+"')")
+                temp = Game.query.filter_by(game_id = game, user_id = user_id, result = 'make', player_id = player).count()
+                temp2 = Game.query.filter_by(game_id = game, user_id = user_id, player_id = player).count()
             else:
-                temp = cursor.execute("SELECT * FROM possessions WHERE (user_id, result, player_id, game_id, zone) = ('"+user+"', 'make', '"+player+"', '"+game+"', '"+zone+"')")
-                temp2 = cursor.execute("SELECT * FROM possessions WHERE (user_id, player_id, game_id, zone) = ('"+user+"', '"+player+"', '"+game+"', '"+zone+"')")
+                temp = Game.query.filter_by(zone = zone, game_id = game, user_id = user_id, result = 'make', player_id = player).count()
+                temp2 = Game.query.filter_by(zone = zone, game_id = game, user_id = user_id, player_id = player).count()
             count += temp2
             if temp2 != 0:
                 individual_makes.update([(player, round((float(temp)/float(temp2)*100),1))])              
                 individual_total.update([(player, temp2)])
+
         for key in individual_total:
             if count != 0:
                 ind_used.update([(key, round(float(individual_total[key])/float(count)*100,1))])
         ind_used = Counter(ind_used)
         individual_makes = Counter(individual_makes)
         if zone == None:
-            try:
-                cursor.execute("SELECT * FROM possessions WHERE (user_id, result, game_id) = ('"+user+"', 'make', '"+game+"')")
-                rcount = int(cursor.rowcount)
-                for r in range(0,rcount):
-                    row = cursor.fetchone()
-                    makes.append(str(row[2]))               
-            except:
-                abort(401)
-            try:
-                cursor.execute("SELECT * FROM possessions WHERE (user_id, game_id) = ('"+user+"', '"+game+"')")
-                rcount = int(cursor.rowcount)
-                for r in range(0,rcount):
-                    row = cursor.fetchone()
-                    total.append(str(row[2]))               
-            except:
-                abort(401)
+            pos = Game.query.filter_by(user_id = user_id, result = 'make', game_id = game).all()
+            for p in pos:
+                makes.append(p.play_id)             
+
+            pos = Game.query.filter_by(user_id = user_id, game_id = game).all()
+            for p in pos:
+                total.append(p.play_id) 
+
+            length = Game.query.filter_by(user_id = user_id, game_id = game).count()            
+
         else:
-            try:
-                    cursor.execute("SELECT * FROM possessions WHERE (user_id, result, game_id, zone) = ('"+user+"', 'make', '"+game+"', '"+zone+"')")
-                    rcount = int(cursor.rowcount)
-                    for r in range(0,rcount):
-                        row = cursor.fetchone()
-                        makes.append(str(row[2]))               
-            except:
-                abort(401)
-            try:
-                cursor.execute("SELECT * FROM possessions WHERE (user_id, game_id, zone) = ('"+user+"', '"+game+"', '"+zone+"')")
-                rcount = int(cursor.rowcount)
-                for r in range(0,rcount):
-                    row = cursor.fetchone()
-                    total.append(str(row[2]))               
-            except:
-                abort(401)
-        if(len(total) != 0):
-            total = Counter(total)
-            makes = Counter(makes)
-            efficient, used = {}, {}
-            for key in total:
-                efficient.update([(key , round(float(makes[key])/float(total[key])*100,1))])
-                used.update([(key, round(float(total[key])/float(rcount)*100,1))])
-            efficient = Counter(efficient)
-            used = Counter(used)
-            return (used, efficient, individual_makes, ind_used)
-        else:
-            return({}, {}, {}, {})
+
+            pos = Game.query.filter_by(user_id = user_id, result = 'make', game_id = game, zone = zone).all()
+            for p in pos:
+                makes.append(p.play_id)               
+
+            pos = Game.query.filter_by(user_id = user_id, game_id = game, zone = zone).all()
+            for p in pos:
+                total.append(p.play_id)               
+
+            length = Game.query.filter_by(user_id = user_id, game_id = game, zone = zone).count()
+
+        total = Counter(total)
+        makes = Counter(makes)
+        efficient, used = {}, {}
+        for key in total:
+            efficient.update([(key , round(float(makes[key])/float(total[key])*100,1))])
+            used.update([(key, round(float(total[key])/float(length)*100,1))])
+        efficient = Counter(efficient)
+        used = Counter(used)
+        return (used, efficient, individual_makes, ind_used)
+
         
-    def play_data(self, user, play, game, players, zone):
+    def play_data(self, user_id, play, game, players, zone):
         individual_makes, individual_total, ind_used= {},{},{}
         count = 0
         for player in players:
             if game != None and zone == None:
-                    temp = cursor.execute("SELECT * FROM possessions WHERE (user_id, result, player_id, game_id, play_id) = ('"+user+"', 'make', '"+player+"', '"+game+"', '"+play+"')")
-                    temp2 = cursor.execute("SELECT * FROM possessions WHERE (user_id, player_id, game_id, play_id) = ('"+user+"', '"+player+"', '"+game+"', '"+play+"')")
+                temp = Game.query.filter_by(game_id = game, user_id = user_id, result = 'make', player_id = player, play_id = play).count()
+                temp2 = Game.query.filter_by(game_id = game, user_id = user_id, player_id = player, play_id = play).count()
             elif game != None and zone != None:
-                    temp = cursor.execute("SELECT * FROM possessions WHERE (user_id, result, player_id, game_id, play_id, zone) = ('"+user+"', 'make', '"+player+"', '"+game+"', '"+play+"', '"+zone+"')")
-                    temp2 = cursor.execute("SELECT * FROM possessions WHERE (user_id, player_id, game_id, play_id, zone) = ('"+user+"', '"+player+"', '"+game+"', '"+play+"', '"+zone+"')")    
+                temp = Game.query.filter_by(game_id = game, user_id = user_id, result = 'make', player_id = player, play_id = play, zone = zone).count()
+                temp2 = Game.query.filter_by(game_id = game, user_id = user_id, player_id = player, play_id = play, zone = zone).count()    
             elif game == None and zone == None:
-                temp = cursor.execute("SELECT * FROM possessions WHERE (user_id, result, player_id, play_id) = ('"+user+"', 'make', '"+player+"', '"+play+"')")
-                temp2 = cursor.execute("SELECT * FROM possessions WHERE (user_id, player_id, play_id) = ('"+user+"', '"+player+"', '"+play+"')")
+                temp = Game.query.filter_by(user_id = user_id, result = 'make', player_id = player, play_id = play).count()
+                temp2 = Game.query.filter_by(user_id = user_id, player_id = player, play_id = play).count()
             elif game == None and zone != None:
-                temp = cursor.execute("SELECT * FROM possessions WHERE (user_id, result, player_id, play_id, zone) = ('"+user+"', 'make', '"+player+"', '"+play+"', '"+zone+"')")
-                temp2 = cursor.execute("SELECT * FROM possessions WHERE (user_id, player_id, play_id, zone) = ('"+user+"', '"+player+"', '"+play+"', '"+zone+"')")          
+                temp = Game.query.filter_by(zone = zone, user_id = user_id, result = 'make', player_id = player, play_id = play).count()
+                temp2 = Game.query.filter_by(zone = zone, user_id = user_id, player_id = player, play_id = play).count()         
             count += temp2
             if temp2 != 0:
                 individual_makes.update([(player, round((float(temp)/float(temp2)*100),1))])
@@ -502,18 +417,17 @@ class Game(UserMixin, db.Model):
         count = 0
         for play in plays:
             if game != None and zone == None:
-                temp = cursor.execute("SELECT * FROM possessions WHERE (user_id, result, player_id, game_id, play_id) = ('"+user+"', 'make', '"+player+"', '"+game+"', '"+play+"')")
-                temp2 = cursor.execute("SELECT * FROM possessions WHERE (user_id, player_id, game_id, play_id) = ('"+user+"', '"+player+"', '"+game+"', '"+play+"')")
+                temp = Game.query.filter_by(game_id = game, user_id = user_id, result = 'make', player_id = player, play_id = play).count()
+                temp2 = Game.query.filter_by(game_id = game, user_id = user_id, player_id = player, play_id = play).count()
             elif game != None and zone != None:
-                temp = cursor.execute("SELECT * FROM possessions WHERE (user_id, result, player_id, game_id, play_id, zone) = ('"+user+"', 'make', '"+player+"', '"+game+"', '"+play+"', '"+zone+"')")
-                temp2 = cursor.execute("SELECT * FROM possessions WHERE (user_id, player_id, game_id, play_id, zone) = ('"+user+"', '"+player+"', '"+game+"', '"+play+"', '"+zone+"')")    
+                temp = Game.query.filter_by(game_id = game, user_id = user_id, result = 'make', player_id = player, play_id = play, zone = zone).count()
+                temp2 = Game.query.filter_by(game_id = game, user_id = user_id, player_id = player, play_id = play, zone = zone).count()    
             elif game == None and zone == None:
-                temp = cursor.execute("SELECT * FROM possessions WHERE (user_id, result, player_id, play_id) = ('"+user+"', 'make', '"+player+"', '"+play+"')")
-                temp2 = cursor.execute("SELECT * FROM possessions WHERE (user_id, player_id, play_id) = ('"+user+"', '"+player+"', '"+play+"')")
+                temp = Game.query.filter_by(user_id = user_id, result = 'make', player_id = player, play_id = play).count()
+                temp2 = Game.query.filter_by(user_id = user_id, player_id = player, play_id = play).count()
             elif game == None and zone != None:
-                temp = cursor.execute("SELECT * FROM possessions WHERE (user_id, result, player_id, play_id, zone) = ('"+user+"', 'make', '"+player+"', '"+play+"', '"+zone+"')")
-                temp2 = cursor.execute("SELECT * FROM possessions WHERE (user_id, player_id, play_id, zone) = ('"+user+"', '"+player+"', '"+play+"', '"+zone+"')")          
-          
+                temp = Game.query.filter_by(zone = zone, user_id = user_id, result = 'make', player_id = player, play_id = play).count()
+                temp2 = Game.query.filter_by(zone = zone, user_id = user_id, player_id = player, play_id = play).count() 
             count += temp2
             if temp2 != 0:
                 individual_makes.update([(play, round((float(temp)/float(temp2)*100),1))])    
@@ -528,56 +442,46 @@ class Game(UserMixin, db.Model):
         return (individual_makes, ind_used)
         
 
-class NewGame(UserMixin, db.Model):
+class NewGame(db.Model):
 
     __tablename__ = 'games'
 
     game  = db.Column(db.String(28))
     game_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer)
+    date = db.Column(db.Date)
 
-    def add_game(self, game, user, date):
-        if(cursor.execute("SELECT * FROM games WHERE (game, user_id) = ('"+game+"', '"+user+"')") == 0):
-            cursor.execute("INSERT INTO games(game, user_id, date) VALUES('"+game+"', '"+user+"', '"+date+"')")
-            conn.commit()
-            return(True)
-        else:
-            return(False)
+    def add_game(self, game, user_id, date):
+        game = NewGame(game = game, user_id = user_id, date = date)
+        db.session.add(game)
+        db.session.commit()
+        return(True)
 
-    def get_game(self, game, user):    
-        cursor.execute("SELECT game_id FROM games WHERE (game, user_id) = ('"+game+"', '"+user+"')")
-        row = cursor.fetchone()
-        game_id = str(row[0])
-        return(game_id)
+    def get_game(self, game, user_id):    
+        game = NewGame.query.filter_by(game = game, user_id = user_id).first()
+        return(game.game_id)
 
-    def get_game_name(self, game):    
-        cursor.execute("SELECT game FROM games WHERE (game_id) = ('"+game+"')")
-        row = cursor.fetchone()
-        game_name = str(row[0])
-        return(game_name)
+    def get_game_name(self, game_id):    
+        game = NewGame.query.filter_by(game_id = game_id).first()
+        return(game.game)
 
-    def get_date(self, game):    
-        cursor.execute("SELECT date FROM games WHERE (game_id) = ('"+game+"')")
-        row = cursor.fetchone()
-        date = str(row[0])
-        return(date)
+    def get_date(self, game_id):    
+        game = NewGame.query.filter_by(game_id = game_id).first()
+        return(game.date)
 
-    def list_games(self, user):
+    def list_games(self, user_id):
         games, game_id, date = [],[],[]
-        try:
-            cursor.execute("SELECT * FROM games WHERE (user_id) = ('"+user+"')")
-            rcount = int(cursor.rowcount)
-            for r in range(0,rcount):
-                row = cursor.fetchone()
-                games.append(str(row[0]))
-                game_id.append(str(row[1]))
-                date.append(str(row[2]))
-        except:
-            abort(401)
+
+        games1 = NewGame.query.filter_by(user_id = user_id).all()
+        for game in games1:
+            games.append(str(game.game))
+            game_id.append(str(game.game_id))
+            date.append(str(game.date))
+
         return(games,game_id,date)
 
-    def delete_game(self, game):
-        cursor.execute("DELETE FROM games WHERE (game_id) = ('"+game+"')")
-        conn.commit()
-        cursor.close()
+    def delete_game(self, game_id):
+        game = NewGame.query.filter_by(game_id = game_id).first()
+        db.session.delete(game)
+        db.session.commit()
         return(True)

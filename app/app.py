@@ -3,15 +3,13 @@ from flask_login import current_user, LoginManager, login_user, logout_user, log
 from flaskext.mysql import MySQL
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
-from models import User, app, login, Plays, Players, Game, NewGame
+from models import User, app, db, login, Plays, Players, Game, NewGame
 from collections import Counter, OrderedDict
 import operator
 
 @login.user_loader
 def load_user(user_id):
-    user = User()
-    username = user.get_username(str(user_id))
-    user = User(username = username, id = user_id)
+    user = User.query.get(user_id)
     return user
 
 @app.route("/", methods=['GET', 'POST'])
@@ -24,11 +22,8 @@ def index():
     elif request.method == "POST":
         username = str(request.form.get('user'))
         password = str(request.form.get('password'))      
-        user = User(username = username)
-        my_hash = user.get_password(username)
-        if user.check_password(my_hash, password):
-            my_id = user.get_user_id(username)
-            user = User(username = username, id = my_id)
+        user = User.query.filter_by(username= username).first()
+        if check_password_hash(user.password, password):
             login_user(user)
             return redirect(url_for('home', username = str(current_user.username)))
         else:
@@ -77,8 +72,7 @@ def home(username):
         data.append(str(efficient))
         data.append(str(eff_player))
         data.append(str(used_player))
-        games, game_id, date = game_list.list_games(current_user.id)
-        return render_template('home.html', games = games, game_id = game_id, data = data, username=username)
+        return render_template('home.html', data = data, username=username)
     elif request.method == "POST":
         if (str(request.form.get('signout')) == 'true'):
             logout_user()
@@ -100,11 +94,11 @@ def game(game, zone):
         for key, value in sorted(efficient.items(), key=lambda kv: kv[1], reverse=True):
             most_efficient.append(play.get_play(key))
             efficient_name.append(str(value))
-            eff_play_id.append(key)
+            eff_play_id.append(str(key))
         for key, value in sorted(total.items(), key=lambda kv: kv[1], reverse=True):
             most_used.append(play.get_play(key))
             used_name.append(str(value))
-            used_play_id.append(key)
+            used_play_id.append(str(key))
         for key, value in sorted(individual.items(), key=lambda kv: kv[1], reverse=True):
             player_names.append(players.get_player(key))
             player_values.append(str(value))
@@ -550,4 +544,5 @@ def newgame():
             abort(401)
 
 if __name__ == '__main__':
-    app.run()
+    db.create_all()
+    app.run(debug=True)

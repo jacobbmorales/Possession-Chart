@@ -1,7 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -12,19 +10,13 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import createMuiTheme from '@material-ui/core/styles/createMuiTheme'
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import CardActionArea from '@material-ui/core/CardActionArea';
 import styles from '../../css/style.css';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import $ from "jquery";
-import { orange } from '@material-ui/core/colors';
 injectTapEventPlugin();
 
 class EditGame extends React.Component {

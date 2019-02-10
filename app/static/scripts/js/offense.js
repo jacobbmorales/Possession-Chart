@@ -5,7 +5,6 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
-import ButtonBase from '@material-ui/core/ButtonBase';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -13,7 +12,6 @@ import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 import red from '@material-ui/core/colors/red';
 import styles from '../../css/style.css';
-import CardActionArea from '@material-ui/core/CardActionArea';
 import $ from "jquery";
 injectTapEventPlugin();
 
@@ -100,7 +98,7 @@ class Offense extends React.Component {
                 player: number[key] + ' - ' + temp[key].toString()
             });
         }
-        var completed = '/game/' + window.game_id
+        var completed = '/game/' + window.game_id + '/None'
         var temp = (window.play)
         var plays = [];
         var play_id = (window.play_id)

@@ -13,6 +13,5 @@ class Config(object):
     CLEARDB_DATABASE_URL = 'mysql://b900e042a0b297:127eabae@us-cdbr-iron-east-03.cleardb.net/heroku_c5f672dc0e40eb4?reconnect=true'
     CLEARDB_MAROON_URL =   'mysql://b900e042a0b297:127eabae@us-cdbr-iron-east-03.cleardb.net/heroku_c5f672dc0e40eb4?reconnect=true'
     DATABASE_URL = 'mysql://b900e042a0b297:127eabae@us-cdbr-iron-east-03.cleardb.net/heroku_c5f672dc0e40eb4?reconnect=true'
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-        'sqlite:///' + os.path.join(basedir, 'app.db')
+    SQLALCHEMY_DATABASE_URI = 'mysql://b900e042a0b297:127eabae@us-cdbr-iron-east-03.cleardb.net/heroku_c5f672dc0e40eb4'
     SQLALCHEMY_TRACK_MODIFICATIONS = 'False'

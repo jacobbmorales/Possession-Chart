@@ -1,23 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
-import MenuList from '@material-ui/core/MenuList';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import Divider from '@material-ui/core/Divider';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import createMuiTheme from '@material-ui/core/styles/createMuiTheme'
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import styles from '../../css/style.css';
-import $ from "jquery";
+import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
 class Season_Play_Player extends React.Component {

@@ -30,8 +30,8 @@ module.exports = {
         tls: false
     },
     output: {
-        path: path.join(__dirname, './app/static/scripts/jsx'),
         filename: "[name].bundle.js",
+        path: path.resolve(__dirname, './app/static/scripts/jsx'),
     },
     module: {
         rules: [
