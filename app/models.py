@@ -181,7 +181,7 @@ class Game(db.Model):
         return(True)
 
     def add_possession(self, game_id, possession, play_id, player_id, zone, result, user_id): 
-        pos = Game(game_id = game_id, possession = possession, play_id = play_id, player_id = player_id, zone = zone, user_id = user_id)
+        pos = Game(game_id = game_id, possession = possession, play_id = play_id, player_id = player_id, zone = zone, user_id = user_id, result = result)
         db.session.add(pos)
         db.session.commit()
         return(True)
