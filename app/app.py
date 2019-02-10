@@ -419,8 +419,7 @@ def signup():
         user = User()
         success = user.create_user(username, password, email)
         if success == True:
-            my_id = user.get_user_id(username)
-            user = User(username = username, id = my_id)
+            user = User.query.filter_by(username= username).first()
             login_user(user)
             return redirect(url_for('home', username =current_user.username))
         else:

@@ -24,9 +24,20 @@ class User(UserMixin, db.Model):
 
     username = db.Column(db.String(28), index=True, unique=True)
     password = db.Column(db.String(128))
+    email = db.Column(db.String(28))
     user_id = db.Column(db.Integer, primary_key=True)
     id = synonym("user_id")
-    
+
+    def create_user(self, username, password, email):
+        if (User.query.filter_by(username = username).count()) == 0:
+            password = generate_password_hash(password)
+            user = User(username = username, password = password, email = email)
+            db.session.add(user)
+            db.session.commit()
+            return(True)
+        else:
+            return(False)
+
 class Plays(db.Model):
 
     __tablename__ = 'plays'
@@ -208,7 +219,7 @@ class Game(db.Model):
             zone+=1
         return (individual_makes, ind_used)
 
-    def zones_players(self, user, plays, player, game):
+    def zones_players(self, user_id, plays, player, game):
         zone = 1
         count = 0
         individual_makes, individual_total, ind_used=[], [], []
