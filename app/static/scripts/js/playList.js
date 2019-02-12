@@ -429,7 +429,7 @@ class PlayList extends React.Component {
                         </div>
                     ))}
                 </MenuList>
-                <MenuList subheader={<ListSubheader><center><h6>Most Efficient Play</h6></center></ListSubheader>} className={styles.left}>
+                <MenuList subheader={<ListSubheader><center><h6>Most Efficient Play</h6></center></ListSubheader>} className={styles.left2}>
                     {most_efficient.map((play) => (
                         <div>
                             <MenuItem
@@ -456,7 +456,7 @@ class PlayList extends React.Component {
                         </div>
                     ))}
                 </MenuList>
-                <MenuList subheader={<ListSubheader><center><h6>Most Used Player</h6></center></ListSubheader>} className={styles.right}>
+                <MenuList subheader={<ListSubheader><center><h6>Most Used Player</h6></center></ListSubheader>} className={styles.right2}>
                     {players_used.map((player) => (
                         <div>
                             <MenuItem

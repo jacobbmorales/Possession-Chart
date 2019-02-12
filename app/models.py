@@ -204,7 +204,7 @@ class Game(db.Model):
                 temp2 = Game.query.filter_by(zone = zone, user_id = user_id).count()
             elif(game != None and play != None):
                 temp = Game.query.filter_by(zone = zone, user_id = user_id, result = 'make', play_id = play, game_id = game).count()
-                temp2 = Game.query.filter_by(zone = zone, user_id = user_id, player_id = play, game_id = game).count()
+                temp2 = Game.query.filter_by(zone = zone, user_id = user_id, play_id = play, game_id = game).count()
             elif(game != None and play == None):
                 temp = Game.query.filter_by(zone = zone, user_id = user_id, result = 'make', game_id = game).count()
                 temp2 = Game.query.filter_by(zone = zone, user_id = user_id, game_id = game).count()

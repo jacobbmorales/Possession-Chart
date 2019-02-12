@@ -379,7 +379,7 @@ class Game_Play extends React.Component {
         return (
             <div>
                 <div className={styles.logoleft} />
-                <MenuList subheader={<ListSubheader><center><h6>Most Efficient Player</h6></center></ListSubheader>} className={styles.right}>
+                <MenuList subheader={<ListSubheader><center><h6>Most Efficient Player</h6></center></ListSubheader>} className={styles.rightsecond}>
                     {players.map((player) => (
                         <div>
                             <MenuItem
@@ -393,7 +393,7 @@ class Game_Play extends React.Component {
                     ))}
                 </MenuList>
                 <MyCard></MyCard>
-                <MenuList subheader={<ListSubheader><center><h6>Most Used Player</h6></center></ListSubheader>} className={styles.right}>
+                <MenuList subheader={<ListSubheader><center><h6>Most Used Player</h6></center></ListSubheader>} className={styles.right2second}>
                     {players_used.map((player) => (
                         <div>
                             <MenuItem

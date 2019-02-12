@@ -93,13 +93,84 @@
     background-image: url('/static/css/images/logo.jpg');
     background-repeat: no-repeat;
 }
-
-.left {
-    position: relative;
-    top: 25px;
-    float: left;
+.left0 {
+    position: absolute;
+    top: 125px;
+    left: 10px;
     width: 160px;
     background:  white;
+    border: 3px solid rgb(233, 121, 29);
+}
+.right0 {
+    position: absolute;
+    top: 125px;
+    right: 10px;
+    width: 160px;
+    background: white;
+    border: 3px solid rgb(233, 121, 29);
+}
+.left {
+    position: absolute;
+    top: 190px;
+    left: 10px;
+    width: 160px;
+    background:  white;
+    border: 3px solid rgb(233, 121, 29);
+}
+.right {
+    position: absolute;
+    top: 190px;
+    right: 10px;
+    width: 160px;
+    background: white;
+    border: 3px solid rgb(233, 121, 29);
+}
+.left2 {
+    position: absolute;
+    top: 190px;
+    left: 175px;
+    width: 160px;
+    background:  white;
+    border: 3px solid rgb(233, 121, 29);
+}
+.right2 {
+    position: absolute;
+    top: 190px;
+    right: 175px;
+    width: 160px;
+    background: white;
+    border: 3px solid rgb(233, 121, 29);
+}
+.leftsecond {
+    position: absolute;
+    top: 225px;
+    left: 10px;
+    width: 160px;
+    background:  white;
+    border: 3px solid rgb(233, 121, 29);
+}
+.rightsecond {
+    position: absolute;
+    top: 225px;
+    right: 10px;
+    width: 160px;
+    background: white;
+    border: 3px solid rgb(233, 121, 29);
+}
+.left2second {
+    position: absolute;
+    top: 225px;
+    left: 175px;
+    width: 160px;
+    background:  white;
+    border: 3px solid rgb(233, 121, 29);
+}
+.right2second {
+    position: absolute;
+    top: 225px;
+    right: 175px;
+    width: 160px;
+    background: white;
     border: 3px solid rgb(233, 121, 29);
 }
 .resultmenu{
@@ -123,14 +194,6 @@
     left: 50%;
     border: 3px solid rgb(233, 121, 29);
     transform: translate(-50%, 0);
-}
-.right {
-    position: relative;
-    top: 25px;
-    float: right;
-    width: 160px;
-    background: white;
-    border: 3px solid rgb(233, 121, 29);
 }
 .signin {
     position: absolute;

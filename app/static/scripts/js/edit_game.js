@@ -447,7 +447,8 @@ class EditGame extends React.Component {
                     className={styles.background}
                 >
                     <DialogTitle id="form-dialog-title"><center>Edit Possession</center></DialogTitle>
-                    <MenuList subheader={<ListSubheader><center>Players</center></ListSubheader>} className={styles.right}>
+                    <div className={styles.right0}>
+                    <MenuList subheader={<ListSubheader><center>Players</center></ListSubheader>} >
                         {players.map((name) => (
                             <div>
                                 <MenuItem
@@ -462,7 +463,9 @@ class EditGame extends React.Component {
                             </div>
                         ))}
                     </MenuList>
-                    <MenuList subheader={<ListSubheader><center>Plays</center></ListSubheader>} className={styles.left} >
+                    </div>
+                    <div className={styles.left0}>
+                    <MenuList subheader={<ListSubheader><center>Plays</center></ListSubheader>}  >
                         {plays.map((play) => (
                             <div>
                                 <MenuItem
@@ -478,6 +481,7 @@ class EditGame extends React.Component {
                             </div>
                         ))}
                     </MenuList>
+                    </div>
                     <Card className={styles.court}>
                         <svg id="basketball" x="0px" y="0px" viewBox="0 0 1280 1024">
 

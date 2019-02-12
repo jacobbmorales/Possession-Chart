@@ -374,7 +374,7 @@ class Season_Player extends React.Component {
         return (
             <div>
                 <div className={styles.logoright}/>
-                <MenuList subheader={<ListSubheader><center><h6>Most Used Play</h6></center></ListSubheader>} className={styles.left}>
+                <MenuList subheader={<ListSubheader><center><h6>Most Used Play</h6></center></ListSubheader>} className={styles.leftsecond}>
                     {plays_used.map((play) => (
                         <div>
                             <MenuItem
@@ -387,7 +387,7 @@ class Season_Player extends React.Component {
                         </div>
                     ))}
                 </MenuList>
-                <MenuList subheader={<ListSubheader><center><h6>Most Efficient Play</h6></center></ListSubheader>} className={styles.left}>
+                <MenuList subheader={<ListSubheader><center><h6>Most Efficient Play</h6></center></ListSubheader>} className={styles.left2second}>
                     {plays.map((play) => (
                         <div>
                             <MenuItem

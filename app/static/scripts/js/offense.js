@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import Divider from '@material-ui/core/Divider';
 import styles from '../../css/style.css';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -392,61 +392,68 @@ class Offense extends React.Component {
         }
         return (
             <div>
-                <MenuList subheader={<ListSubheader><center>Players</center></ListSubheader>} className={styles.right}>
-                    {last.map((name) => (
-                        <div>
-                            <MenuItem
-                                key={name.key}
-                                onClick={() => this.updatePlayerSelected(name.key, name.player)}
-                                selected={playerSelected === name.key}
-                                classes={{ selected: styles.primary }}
-                            >
-                                <ListItemText primary={name.player} />
-                            </MenuItem>
-                            <Divider inset={false} />
-                        </div>
-                    ))}
-                </MenuList>
-                <MenuList subheader={<ListSubheader><center>Plays</center></ListSubheader>} className={styles.left} >
-                    {plays.map((play) => (
-                        <div>
-                            <MenuItem
-                                key={play.key}
-                                onClick={() => this.updatePlaySelected(play.key, play.value)}
-                                selected={playSelected === play.key}
-                                classes={{ selected: styles.primary }}
-                            >
+                <div className={styles.left0}>
+                    <MenuList subheader={<ListSubheader><center>Plays</center></ListSubheader>} >
+                        {plays.map((play) => (
+                            <div>
+                                <MenuItem
+                                    key={play.key}
+                                    onClick={() => this.updatePlaySelected(play.key, play.value)}
+                                    selected={playSelected === play.key}
+                                    classes={{ selected: styles.primary }}
+                                >
 
-                                <ListItemText primary={play.value} />
-                            </MenuItem>
-                            <Divider inset={false} />
-                        </div>
-                    ))}
-                </MenuList>
+                                    <ListItemText primary={play.value} />
+                                </MenuItem>
+                                <Divider inset={false} />
+                            </div>
+                        ))}
+                    </MenuList>
+                </div>
+                <div className={styles.right0}>
+                    <MenuList subheader={<ListSubheader><center>Players</center></ListSubheader>}>
+                        {last.map((name) => (
+                            <div>
+                                <MenuItem
+                                    key={name.key}
+                                    onClick={() => this.updatePlayerSelected(name.key, name.player)}
+                                    selected={playerSelected === name.key}
+                                    classes={{ selected: styles.primary }}
+                                >
+                                    <ListItemText primary={name.player} />
+                                </MenuItem>
+                                <Divider inset={false} />
+                            </div>
+                        ))}
+                    </MenuList>
+                </div>
                 <MenuList subheader={<ListSubheader><center><h3>Edit Possessions</h3></center></ListSubheader>} className={styles.offpossessionlist}>
-                    <MenuItem disabled={true}>
-                        <ListItemText primary="POSSESSION" />
-                        <ListItemText className={styles.left120} primary="PLAY" />
-                        <ListItemText className={styles.left240} primary="PLAYER" />
-                        <ListItemText className={styles.left360} primary="ZONE" />
-                        <ListItemText className={styles.left480} primary="RESULT" />
-                    </MenuItem>
-                    <Divider inset={false} />
-                    {possessions.map((possession) => (
-                        <div>
-                            <MenuItem
-                                key={possession.possession}
-                                onClick={() => this.editPossession(possession.possession, possession.player_id, possession.play_id, possession.zone, possession.result)}
-                            >
-                                <ListItemText primary={possession.possession} />
-                                <ListItemText className={styles.left120} primary={possession.play} />
-                                <ListItemText className={styles.left240} primary={possession.player} />
-                                <ListItemText className={styles.left360} primary={possession.zone} />
-                                <ListItemText className={styles.left480} primary={possession.result} />
-                            </MenuItem>
-                            <Divider inset={false} />
-                        </div>
-                    ))}
+                    <div>
+                        <MenuItem disabled={true}>
+                            <ListItemText primary="POSSESSION" />
+                            <ListItemText className={styles.left120} primary="PLAY" />
+                            <ListItemText className={styles.left240} primary="PLAYER" />
+                            <ListItemText className={styles.left360} primary="ZONE" />
+                            <ListItemText className={styles.left480} primary="RESULT" />
+                        </MenuItem>
+                        <Divider inset={false} />
+                        {possessions.map((possession) => (
+                            <div>
+                                <MenuItem
+                                    key={possession.possession}
+                                    onClick={() => this.editPossession(possession.possession, possession.player_id, possession.play_id, possession.zone, possession.result)}
+                                >
+                                    <ListItemText primary={possession.possession} />
+                                    <ListItemText className={styles.left120} primary={possession.play} />
+                                    <ListItemText className={styles.left240} primary={possession.player} />
+                                    <ListItemText className={styles.left360} primary={possession.zone} />
+                                    <ListItemText className={styles.left480} primary={possession.result} />
+                                </MenuItem>
+                                <Divider inset={false} />
+                            </div>
+
+                        ))}
+                    </div>
                 </MenuList>
                 <Card className={styles.court}>
                     <svg id="basketball" x="0px" y="0px" viewBox="0 0 1280 1024">
@@ -492,7 +499,7 @@ class Offense extends React.Component {
                 <Card className={styles.menu}>
                     <CardContent>
                         <CardActions>
-                            <div className={styles.ten}>
+                            <div>
                                 <Button variant="outlined" class={this.state.make} onClick={() => this.handleResult('make')}>Make</Button>
                                 &nbsp;
                                 <Button variant="outlined" class={this.state.miss} onClick={() => this.handleResult('miss')}>Miss</Button>
@@ -591,40 +598,43 @@ class Offense extends React.Component {
                     onClose={this.handleClose}
                     aria-labelledby="form-dialog-title"
                     fullScreen={true}
-                    className={styles.background}
                 >
                     <DialogTitle id="form-dialog-title"><center>Edit Possession</center></DialogTitle>
-                    <MenuList subheader={<ListSubheader><center>Players</center></ListSubheader>} className={styles.right}>
-                        {last.map((name) => (
-                            <div>
-                                <MenuItem
-                                    key={name.key}
-                                    onClick={() => this.updatePlayerSelected(name.key)}
-                                    selected={playerSelected === name.key}
-                                    classes={{ selected: styles.primary }}
-                                >
-                                    <ListItemText primary={name.player} />
-                                </MenuItem>
-                                <Divider inset={false} />
-                            </div>
-                        ))}
-                    </MenuList>
-                    <MenuList subheader={<ListSubheader><center>Plays</center></ListSubheader>} className={styles.left} >
-                        {plays.map((play) => (
-                            <div>
-                                <MenuItem
-                                    key={play.key}
-                                    onClick={() => this.updatePlaySelected(play.key)}
-                                    selected={playSelected === play.key}
-                                    classes={{ selected: styles.primary }}
-                                >
+                    <div className={styles.left0}>
+                        <MenuList subheader={<ListSubheader><center>Plays</center></ListSubheader>}  >
+                            {plays.map((play) => (
+                                <div>
+                                    <MenuItem
+                                        key={play.key}
+                                        onClick={() => this.updatePlaySelected(play.key)}
+                                        selected={playSelected === play.key}
+                                        classes={{ selected: styles.primary }}
+                                    >
 
-                                    <ListItemText primary={play.value} />
-                                </MenuItem>
-                                <Divider inset={false} />
-                            </div>
-                        ))}
-                    </MenuList>
+                                        <ListItemText primary={play.value} />
+                                    </MenuItem>
+                                    <Divider inset={false} />
+                                </div>
+                            ))}
+                        </MenuList>
+                    </div>
+                    <div className={styles.right0}>
+                        <MenuList subheader={<ListSubheader><center>Players</center></ListSubheader>} >
+                            {last.map((name) => (
+                                <div>
+                                    <MenuItem
+                                        key={name.key}
+                                        onClick={() => this.updatePlayerSelected(name.key)}
+                                        selected={playerSelected === name.key}
+                                        classes={{ selected: styles.primary }}
+                                    >
+                                        <ListItemText primary={name.player} />
+                                    </MenuItem>
+                                    <Divider inset={false} />
+                                </div>
+                            ))}
+                        </MenuList>
+                    </div>
                     <Card className={styles.court}>
                         <svg id="basketball" x="0px" y="0px" viewBox="0 0 1280 1024">
 
