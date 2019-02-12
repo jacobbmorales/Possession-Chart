@@ -11,7 +11,7 @@
 
 .court{
     position: absolute;
-    top: 125px;
+    top: 230px;
     left:50%;
     height: 360px;
     width: 552px;
@@ -102,12 +102,27 @@
     background:  white;
     border: 3px solid rgb(233, 121, 29);
 }
+.resultmenu{
+    position: absolute;
+    top: 120px;
+    height: 80px;
+    left: 51%;
+    border: 3px solid rgb(233, 121, 29);
+}
 .menu{
     position: absolute;
-    top: 550px;
-    left: 50%;
-    transform: translate(-50%, 0);
+    top: 120px;
+    height: 80px;
+    right: 51%;
     border: 3px solid rgb(233, 121, 29);
+}
+.endmenu{
+    position: absolute;
+    top: 620px;
+    height: 80px;
+    left: 50%;
+    border: 3px solid rgb(233, 121, 29);
+    transform: translate(-50%, 0);
 }
 .right {
     position: relative;
@@ -248,6 +263,15 @@
     transform: translate(-50%, 0);
     border: 3px solid rgb(233, 121, 29);
 }
+.offpossessionlist {
+    position: relative;
+    left: 50%;
+    top: 630px;
+    width: 600px;
+    background: white;
+    transform: translate(-50%, 0);
+    border: 3px solid rgb(233, 121, 29);
+}
 .title{
     font-family: 'kionaregular';
     background-color: black;
@@ -262,6 +286,10 @@
     left: 50%;
     padding: 10px;
     transform: translate(-50%, 0);
+}
+.tenpix{
+    position: relative;
+    margin-left: 10px;
 }
 .editgame{
     position: absolute;
@@ -336,9 +364,19 @@
     fill: rgb(233, 121, 29);
 }
 
+.left120{
+    position: absolute;
+    left: 120px;
+    font-family: 'kionaregular';
+}
 .left200{
     position: absolute;
     left: 200px;
+    font-family: 'kionaregular';
+}
+.left240{
+    position: absolute;
+    left: 240px;
     font-family: 'kionaregular';
 }
 .left400{
@@ -346,9 +384,19 @@
     left: 400px;
     font-family: 'kionaregular';
 }
+.left360{
+    position: absolute;
+    left: 360px;
+    font-family: 'kionaregular';
+}
 .left600{
     position: absolute;
     left: 600px;
+    font-family: 'kionaregular';
+}
+.left480{
+    position: absolute;
+    left: 480px;
     font-family: 'kionaregular';
 }
 .left800{
@@ -361,4 +409,14 @@
     top: 360px;
     left:50%;
     transform: translate(-50%, 0);
+}
+.offense{
+    position: relative;
+    background: white;
+    color: black;
+}
+.offenseclicked{
+    position: relative;
+    background: gray;
+    color: black;
 }

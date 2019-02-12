@@ -15,3 +15,4 @@ class Config(object):
     DATABASE_URL = 'mysql://b900e042a0b297:127eabae@us-cdbr-iron-east-03.cleardb.net/heroku_c5f672dc0e40eb4?reconnect=true'
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://b900e042a0b297:127eabae@us-cdbr-iron-east-03.cleardb.net/heroku_c5f672dc0e40eb4'
     SQLALCHEMY_TRACK_MODIFICATIONS = 'False'
+    SQLALCHEMY_POOL_RECYCLE = 1

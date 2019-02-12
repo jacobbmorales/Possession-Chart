@@ -27,7 +27,7 @@ class AddPlay extends React.Component {
             play: "",
             open: false,
             editPlay: "",
-            editId: "", 
+            editId: "",
             confirm: false
         };
         this.handlePlay = this.handlePlay.bind(this);
@@ -39,7 +39,7 @@ class AddPlay extends React.Component {
         this.handleDelete = this.handleDelete.bind(this);
         this.handleConfirm = this.handleConfirm.bind(this);
         this.handleClose = this.handleClose.bind(this);
-        
+
     }
 
     handlePlay(event) {
@@ -164,15 +164,17 @@ class AddPlay extends React.Component {
                     aria-labelledby="form-dialog-title"
                 >
                     <DialogTitle id="form-dialog-title"></DialogTitle>
-                    <DialogActions>
-                        <div className={styleMedia.ten}>
-                            <Typography>
-                                <center>Are you sure you want to delete this play?</center>
-                            </Typography>
-                            <Button variant="outlined" onClick={() => { this.handleClose() }} color="primary">Do Not Delete</Button>
-                            <Button variant="outlined" onClick={() => { this.handleDelete(this.state.editId) }} color="primary">Delete Play</Button>
-                        </div>
-                    </DialogActions>
+                    <DialogContent>
+                        <Typography>
+                            <center>Are you sure you want to delete this play?</center>
+                        </Typography>
+                        &nbsp;
+                            <center>
+                            <Button variant="outlined" onClick={() => { this.handleClose() }} >Do Not Delete</Button>
+                            &nbsp;&nbsp;
+                            <Button variant="outlined" onClick={() => { this.handleDelete(this.state.editId) }} >Delete Play</Button>
+                        </center>
+                    </DialogContent>
                 </Dialog>
                 <Dialog
                     open={this.state.open}
@@ -193,9 +195,9 @@ class AddPlay extends React.Component {
                         </center>
                     </DialogContent>
                     <DialogActions>
-                        <div className={styleMedia.ten}>
-                            <Button variant="outlined" onClick={() => this.handleEdit(this.state.editPlay, this.state.editId)} color="primary">Save</Button>
-                            <Button variant="outlined" onClick={() => { this.handleConfirm() }} color="primary">Delete Play</Button>
+                        <div className={styles.ten}>
+                            <Button variant="outlined" onClick={() => this.handleEdit(this.state.editPlay, this.state.editId)} >Save</Button>
+                            <Button variant="outlined" onClick={() => { this.handleConfirm() }} >Delete Play</Button>
                         </div>
                     </DialogActions>
                 </Dialog>

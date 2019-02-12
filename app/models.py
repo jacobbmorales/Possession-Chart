@@ -7,10 +7,15 @@ from random import randint
 from config import Config
 from collections import Counter, OrderedDict
 from sqlalchemy.orm import synonym
+import time
+from sqlalchemy.engine import create_engine
+
+
+url = 'mysql+pymysql://b900e042a0b297:127eabae@us-cdbr-iron-east-03.cleardb.net/heroku_c5f672dc0e40eb4'
+engine = create_engine(url, pool_recycle=1)
 
 app = Flask(__name__)
 login = LoginManager(app)
-
 app.config.from_object(Config)
 mysql = MySQL()
 mysql.init_app(app)
@@ -155,7 +160,7 @@ class Game(db.Model):
 
     __tablename__ = 'possessions'
 
-    game_id = db.Column(db.Integer)
+    game_id = db.Column(db.Integer, primary_key=True)
     possession = db.Column(db.Integer, primary_key=True)
     play_id = db.Column(db.Integer)
     player_id = db.Column(db.Integer)
@@ -172,11 +177,11 @@ class Game(db.Model):
         return(True)
 
     def edit_possession(self, possession, play_id, player_id, zone, result, game_id):
-        possession1 = Game.query.filter_by(game_id = game_id, possession = possession).first()
-        possession1.play_id = play_id
-        possession1.player_id = player_id
-        possession1.result = result
-        possession1.zone = zone
+        mypossession = Game.query.filter_by(possession = possession, game_id = game_id).first()
+        mypossession.play_id = play_id
+        mypossession.player_id = player_id
+        mypossession.result = result
+        mypossession.zone = zone
         db.session.commit()
         return(True)
 
@@ -463,10 +468,13 @@ class NewGame(db.Model):
     date = db.Column(db.Date)
 
     def add_game(self, game, user_id, date):
-        game = NewGame(game = game, user_id = user_id, date = date)
-        db.session.add(game)
-        db.session.commit()
-        return(True)
+        if (NewGame.query.filter_by(game = game, user_id = user_id).count()) == 0:
+            game = NewGame(game = game, user_id = user_id, date = date)
+            db.session.add(game)
+            db.session.commit()
+            return(True)
+        else:
+            return(False)
 
     def get_game(self, game, user_id):    
         game = NewGame.query.filter_by(game = game, user_id = user_id).first()

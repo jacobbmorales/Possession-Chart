@@ -6,6 +6,11 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Typography from '@material-ui/core/Typography';
 import styles from '../../css/style.css';
 import $ from "jquery";
 injectTapEventPlugin();
@@ -15,11 +20,14 @@ class NewGame extends React.Component {
         super(props);
         this.state = {
             game: "",
-            date: "1892-03-11"
+            date: "1892-03-11",
+            error: false
         };
         this.handleGame = this.handleGame.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
         this.handleDate = this.handleDate.bind(this);
+        this.handleError = this.handleError.bind(this);
+        this.handleClose = this.handleClose.bind(this)
     }
 
     handleGame(event) {
@@ -27,6 +35,18 @@ class NewGame extends React.Component {
             game: event.target.value
         });
     };
+
+    handleError() {
+        this.setState({
+            error: true
+        });
+    }
+
+    handleClose() {
+        this.setState({
+            error: false,
+        });
+    }
 
     handleDate(event) {
         this.setState({
@@ -42,16 +62,19 @@ class NewGame extends React.Component {
             type: 'POST',
             success: function (response) {
                 document.write(response)
-                window.location.href = '/offense/' + game
-            }
+                window.location.href = '/offense/' + game + '/1'
+            },
+            error: function () {
+                this.handleError()
+            }.bind(this)
         });
 
     };
     render() {
         return (
             <div>
-                <div className={styles.logoleft}/>
-                <div className={styles.logoright}/>
+                <div className={styles.logoleft} />
+                <div className={styles.logoright} />
                 <Card className={styles.newgame}>
                     <CardContent>
                         <CardActions>
@@ -65,16 +88,16 @@ class NewGame extends React.Component {
                                     onChange={this.handleGame}
                                 />
                                 <center>
-                                <TextField
-                                    id="date"
-                                    label="Date of Game"
-                                    type="date"
-                                    value={this.state.date}
-                                    onChange={this.handleDate}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
+                                    <TextField
+                                        id="date"
+                                        label="Date of Game"
+                                        type="date"
+                                        value={this.state.date}
+                                        onChange={this.handleDate}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
                                 </center>
                                 <br></br>
                                 <center>
@@ -84,6 +107,25 @@ class NewGame extends React.Component {
                         </CardActions>
                     </CardContent>
                 </Card>
+                <Dialog
+                    open={this.state.error}
+                    onClose={this.handleClose}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="form-dialog-title"></DialogTitle>
+                    <DialogContent>
+                        <center>
+                            <Typography>
+                                You already have a game with this name. You must enter a unique name for your game.
+                            </Typography>
+                        </center>
+                        &nbsp;
+                        <center>
+                            <Button variant="outlined" onClick={() => this.handleClose()} >OK</Button>
+                        </center>
+
+                    </DialogContent>
+                </Dialog>
             </div>
         )
     }

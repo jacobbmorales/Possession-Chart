@@ -102,8 +102,8 @@ class SignUp extends React.Component {
     render() {
         return (
             <div>
-                <div className={styles.logoleft}/>
-                <div className={styles.logoright}/>
+                <div className={styles.logoleft} />
+                <div className={styles.logoright} />
                 <Card className={styles.signin}>
                     <CardContent>
                         <CardActions>
@@ -169,12 +169,12 @@ class SignUp extends React.Component {
                                 The passwords you entered do not match.
                             </Typography>
                         </center>
+                        &nbsp;
+                        <center>
+                            <Button variant="outlined" onClick={() => this.handleClose()} >OK</Button>
+                        </center>
+
                     </DialogContent>
-                    <DialogActions>
-                        <div className={styleMedia.ten}>
-                            <Button variant="outlined" onClick={() => this.handleClose()} color="primary">OK</Button>
-                        </div>
-                    </DialogActions>
                 </Dialog>
                 <Dialog
                     open={this.state.userexists}
@@ -188,12 +188,11 @@ class SignUp extends React.Component {
                                 The username you entered already exists.
                             </Typography>
                         </center>
+                        &nbsp;
+                        <center>
+                            <Button variant="outlined" onClick={() => this.handleClose()} >OK</Button>
+                        </center>
                     </DialogContent>
-                    <DialogActions>
-                        <div className={styleMedia.ten}>
-                            <Button variant="outlined" onClick={() => this.handleClose()} color="primary">OK</Button>
-                        </div>
-                    </DialogActions>
                 </Dialog>
             </div>
         )

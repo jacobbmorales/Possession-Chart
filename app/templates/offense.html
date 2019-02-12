@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
-    <link rel="shortcut icon" type="image/x-icon" href="../static/css/images/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="../../static/css/style.css">
+    <link rel="shortcut icon" type="image/x-icon" href="../../static/css/images/favicon.ico" />
     <link rel="shortcut icon" href="">
     <title>{{ gameName | safe }}</title>
     <style>
@@ -29,9 +29,18 @@
             window.play = {{ play | safe }}
             window.play_id = {{ play_id | safe }}
             window.player_id = {{ player_id | safe }}
+            window.play_ids = {{ play_ids | safe }}
+            window.player_ids = {{ player_ids | safe }}
             window.game = {{ game | safe }}
             window.game_id = {{ game_id | safe }}
             window.number = {{ number | safe }}
+            window.possession = {{ possession | safe }}
+            window.possessions = {{ possessions | safe }}
+            window.plays = {{ plays | safe }}
+            window.players = {{ players | safe }}
+            window.zones = {{ zones | safe }}
+            window.results = {{ results | safe }}
+            window.numbers = {{ numbers | safe }}
         </script>
     </div>
 

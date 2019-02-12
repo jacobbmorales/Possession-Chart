@@ -7,6 +7,11 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import styles from '../../css/style.css';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Typography from '@material-ui/core/Typography';
 import $ from "jquery";
 injectTapEventPlugin();
 
@@ -16,10 +21,13 @@ class SignIn extends React.Component {
         this.state = {
             user: "",
             password: "",
+            error: false
         };
         this.handleUser = this.handleUser.bind(this);
         this.handlePassword = this.handlePassword.bind(this);
-        this.handleSignIn = this.handleSignIn.bind(this)
+        this.handleSignIn = this.handleSignIn.bind(this);
+        this.handleError = this.handleError.bind(this);
+        this.handleClose = this.handleClose.bind(this)
     }
 
     handleUser(event) {
@@ -28,11 +36,23 @@ class SignIn extends React.Component {
         });
     };
 
+    handleError() {
+        this.setState({
+            error: true
+        });
+    }
+
     handlePassword(event) {
         this.setState({
             password: event.target.value,
         });
     };
+
+    handleClose() {
+        this.setState({
+            error: false,
+        });
+    }
 
     handleSignIn(user, password) {
         $.ajax({
@@ -41,15 +61,18 @@ class SignIn extends React.Component {
             type: 'POST',
             success: function (response) {
                 window.location.href = '/' + user
-            }
+            },
+            error: function () {
+                this.handleError()
+            }.bind(this)
         });
 
     };
     render() {
         return (
             <div>
-                <div className={styles.logoleft}/>
-                <div className={styles.logoright}/>
+                <div className={styles.logoleft} />
+                <div className={styles.logoright} />
                 <Card className={styles.signin}>
                     <CardContent>
                         <CardActions>
@@ -82,6 +105,24 @@ class SignIn extends React.Component {
                         </CardActions>
                     </CardContent>
                 </Card>
+                <Dialog
+                    open={this.state.error}
+                    onClose={this.handleClose}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="form-dialog-title"></DialogTitle>
+                    <DialogContent>
+                        <center>
+                            <Typography>
+                                Incorrect username or password.
+                            </Typography>
+                        </center>
+                        &nbsp;
+                        <center>
+                            <Button variant="outlined" onClick={() => this.handleClose()} >OK</Button>
+                        </center>
+                    </DialogContent>
+                </Dialog>
             </div>
         )
     }

@@ -151,23 +151,10 @@ def edit_game(game):
         player = str(request.form.get('player'))
         zone = str(request.form.get('zone'))
         result = str(request.form.get('result'))
+        game = str(request.form.get('game'))
         g = Game()
         g.edit_possession(possession, play, player, zone, result, game)
-        play, player = [],[]
-        p = Plays()
-        play_name, play_id_list = p.get_plays(current_user.id)
-        pl = Players()
-        player_name, player_number, player_id_list = pl.get_players(current_user.id)
-        possession, play_id, player_id, zone, result = g.game_data(current_user.id, game)
-        for i in play_id:
-            play.append(p.get_play(i))
-        for i in player_id:
-            player.append(pl.get_player(i))
-        ng = NewGame()
-        my_game = []
-        game_name = ng.get_game_name(game)
-        my_game.append(game_name)
-        return render_template('edit_game.html', game = game, game_name = game_name, my_game = my_game, possession = possession, play = play, player = player, zone = zone, result = result, play_id = play_id, player_id = player_id, player_name = player_name, player_number = player_number, player_id_list = player_id_list, play_name = play_name, play_id_list = play_id_list)
+        return redirect(url_for('edit_game', game = game))
     if request.method == "POST" and str(request.form.get('add')) == 'true':
         possession = str(request.form.get('possession'))
         play = str(request.form.get('play'))
@@ -176,21 +163,7 @@ def edit_game(game):
         result = str(request.form.get('result'))
         g = Game()
         g.add_possession(game, possession, play, player, zone, result, current_user.id)
-        play, player = [],[]
-        p = Plays()
-        play_name, play_id_list = p.get_plays(current_user.id)
-        pl = Players()
-        player_name, player_number, player_id_list = pl.get_players(current_user.id)
-        possession, play_id, player_id, zone, result = g.game_data(current_user.id, game)
-        for i in play_id:
-            play.append(p.get_play(i))
-        for i in player_id:
-            player.append(pl.get_player(i))
-        ng = NewGame()
-        my_game = []
-        game_name = ng.get_game_name(game)
-        my_game.append(game_name)
-        return render_template('edit_game.html', game = game, game_name = game_name, my_game = my_game, possession = possession, play = play, player = player, zone = zone, result = result, play_id = play_id, player_id = player_id, player_name = player_name, player_number = player_number, player_id_list = player_id_list, play_name = play_name, play_id_list = play_id_list, username = str(current_user.username))
+        return redirect(url_for('edit_game', game = game))
     if request.method == "POST" and str(request.form.get('delete')) == 'true':
         game = str(request.form.get('game'))
         g = Game()
@@ -426,21 +399,28 @@ def signup():
             abort(401)     
                  
 
-@app.route("/offense/<game>", methods=['GET', 'POST'])
+@app.route("/offense/<game>/<possession>", methods=['GET', 'POST'])
 @login_required
-def offense(game):
+def offense(game, possession):
     if request.method == "GET":
-        first, last, number, plays, play_id = [],[],[],[], []
-        plays = Plays()
-        playlist, play_id = plays.get_plays(current_user.id)
-        players = Players()
-        last, number, player_id = players.get_players(current_user.id)
+        last, number, plays, play_id, players, plays, numbers = [],[],[],[],[],[],[],
+        p = Plays()
+        playlist, play_id = p.get_plays(current_user.id)
+        pl= Players()
+        last, number, player_id = pl.get_players(current_user.id)
         gamereturn = []
         gamereturn.append(str(game))
         get_game = NewGame()
         game_id = get_game.get_game(game, current_user.id)
-        return render_template('offense.html', last = last, play = playlist, player_id = player_id, play_id = play_id,game = gamereturn, gameName = game, game_id = game_id, username = str(current_user.username), number = number)
-    elif request.method == "POST":
+        g = Game()
+        possessions, play_ids, player_ids, zones, results = g.game_data(current_user.id, game_id)
+        for i in play_ids:
+            plays.append(p.get_play(i))
+        for i in player_ids:
+            players.append(pl.get_player(i))
+            numbers.append(pl.get_number(i))
+        return render_template('offense.html', last = last, play = playlist, player_id = player_id, play_id = play_id, player_ids = player_ids, play_ids = play_ids, game = gamereturn, gameName = game, game_id = game_id, username = str(current_user.username), number = number, possession = possession, possessions = possessions, plays = plays, players = players, zones = zones, results = results, numbers = numbers)
+    elif request.method == "POST" and request.form.get('edit') == 'false':
         playName = request.form.get('play')
         player = request.form.get('player')
         zone = request.form.get('zone')
@@ -452,7 +432,20 @@ def offense(game):
         get_game = NewGame()
         game_id = get_game.get_game(game, current_user.id)
         my_game.add_possession(str(game_id), str(possession), str(playName), str(player), str(zone), str(result), str(current_user.id))
-        abort(401)
+        return redirect(url_for('offense', game = game, possession = str(int(possession)+ 1)))
+    elif request.method == "POST" and request.form.get('edit') == 'true':
+        possession = str(request.form.get('possession'))
+        possession1 = str(request.form.get('possession1'))
+        play = str(request.form.get('play'))
+        player = str(request.form.get('player'))
+        zone = str(request.form.get('zone'))
+        result = str(request.form.get('result'))
+        get_game = NewGame()
+        game_id = get_game.get_game(game, current_user.id)
+        g = Game(game_id = game_id)
+        g.edit_possession(possession, play, player, zone, result, game_id)
+        return redirect(url_for('offense', game = game, possession = possession1))
+
 
 @app.route("/addplayer", methods=['GET', 'POST'])
 @login_required
@@ -538,7 +531,7 @@ def newgame():
         game = NewGame()
         success = game.add_game(name, current_user.id, date)
         if success == True:
-            return redirect(url_for('offense', game = name))
+            return redirect(url_for('offense', game = name, possession = '1'))
         else:
             abort(401)
 

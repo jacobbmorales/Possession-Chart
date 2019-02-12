@@ -200,6 +200,7 @@ class AddPlayer extends React.Component {
                             value={this.state.editLast}
                             onChange={this.handleEditLast}
                         />
+                        &nbsp;
                         <TextField
                             label="Number"
                             name="email"
@@ -208,32 +209,33 @@ class AddPlayer extends React.Component {
                             value={this.state.editNumber}
                             onChange={this.handleEditNumber}
                         />
+                        &nbsp;
+                        &nbsp;
+                        <center>
+                            <Button variant="outlined" onClick={() => this.handleEdit(this.state.editLast, this.state.editNumber, this.state.editId)} >Save</Button>
+                            &nbsp;
+                            <Button variant="outlined" onClick={() => { this.handleConfirm() }} >Delete Player</Button>
+                        </center>
                     </DialogContent>
-                    <DialogActions>
-                        <div className={styleMedia.ten}>
-                            <Button onClick={() => this.handleEdit(this.state.editLast, this.state.editNumber, this.state.editId)} color="primary">Save</Button>
-                            <Button onClick={() => { this.handleConfirm() }} color="primary">Delete Player</Button>
-                        </div>
-                    </DialogActions>
                 </Dialog>
-                <Dialog
-                    open={this.state.confirm}
-                    onClose={this.handleClose}
-                    aria-labelledby="form-dialog-title"
-                >
-                    <DialogTitle id="form-dialog-title"></DialogTitle>
-                    <DialogActions>
-                        <div className={styleMedia.ten}>
-                            <Typography>
-                                <center>Are you sure you want to delete this player?</center>
-                            </Typography>
-                            <Button variant="outlined" onClick={() => { this.handleClose() }} color="primary">Do Not Delete</Button>
-                            <Button variant="outlined" onClick={() => { this.handleDelete(this.state.editId) }} color="primary">Delete Player</Button>
-                        </div>
-                    </DialogActions>
-                </Dialog>
+            <Dialog
+                open={this.state.confirm}
+                onClose={this.handleClose}
+                aria-labelledby="form-dialog-title"
+            >
+                <DialogTitle id="form-dialog-title"></DialogTitle>
+                <DialogActions>
+                    <div className={styleMedia.ten}>
+                        <Typography>
+                            <center>Are you sure you want to delete this player?</center>
+                        </Typography>
+                        <Button variant="outlined" onClick={() => { this.handleClose() }} >Do Not Delete</Button>
+                        <Button variant="outlined" onClick={() => { this.handleDelete(this.state.editId) }} >Delete Player</Button>
+                    </div>
+                </DialogActions>
+            </Dialog>
 
-            </div>
+            </div >
         )
     }
 }
