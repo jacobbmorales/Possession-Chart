@@ -342,7 +342,6 @@ def game_play(game, play, zone):
         last, number, player_id = players.get_deleted_players(current_user.id)
         individual, ind_used = g.play_data(current_user.id, play, game, player_id, zone)
         zone_eff, zone_used = g.zones_plays(current_user.id, player_id, play, game)
-        print(zone_used)
         player_names, player_values, ind_names, ind_values, used_player_id, eff_player_id, eff_player_id, used_number, eff_number = [], [], [], [], [], [], [], [], []
         for key, value in sorted(individual.items(), key=lambda kv: kv[1], reverse=True):
             player_names.append(players.get_player(key))

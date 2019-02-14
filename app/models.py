@@ -9,12 +9,14 @@ from collections import Counter, OrderedDict
 from sqlalchemy.orm import synonym
 import time
 from sqlalchemy.engine import create_engine
+from flask_compress import Compress
 
 
 url = 'mysql+pymysql://b900e042a0b297:127eabae@us-cdbr-iron-east-03.cleardb.net/heroku_c5f672dc0e40eb4'
 engine = create_engine(url, pool_recycle=1)
 
 app = Flask(__name__)
+Compress(app)
 login = LoginManager(app)
 app.config.from_object(Config)
 mysql = MySQL()

@@ -19,7 +19,6 @@ import Typography from '@material-ui/core/Typography';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import $ from "jquery";
 injectTapEventPlugin();
-
 class AddPlay extends React.Component {
     constructor(props) {
         super(props);

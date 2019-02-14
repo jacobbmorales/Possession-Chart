@@ -18,11 +18,13 @@
     "flask": "^0.2.10",
     "html-webpack-plugin": "^3.2.0",
     "jquery": "^3.3.1",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "style-loader": "^0.23.1",
     "svg-inline-loader": "^0.8.0",
-    "webpack": "^4.29.0",
+    "uglifyjs-webpack-plugin": "^2.1.1",
+    "webpack": "^4.29.3",
     "webpack-bundle-tracker": "^0.3.0",
     "webpack-merge": "^4.2.1"
   },
@@ -31,6 +33,7 @@
     "@material-ui/icons": "^3.0.2",
     "async-run": "^1.0.2",
     "bootstrap": "^3.4.0",
+    "compression-webpack-plugin": "^2.0.0",
     "deep-extend": "^0.6.0",
     "devs": "^0.2.2",
     "gcc": "^1.0.2",
@@ -40,6 +43,7 @@
     "jss": "^9.8.7",
     "material-ui": "^1.0.0-beta.47",
     "material-ui-icons": "^1.0.0-beta.36",
+    "mini-css-extract-plugin": "^0.5.0",
     "mysql": "^2.16.0",
     "node": "^8.15.0",
     "pip": "0.0.1",
@@ -48,6 +52,7 @@
     "react-router-dom": "^4.4.0-beta.6",
     "react-tap-event-plugin": "^2.0.1",
     "stringify": "^5.2.0",
+    "uglify": "^0.1.5",
     "url-loader": "^1.1.2",
     "webpack-cli": "^3.2.1"
   }
