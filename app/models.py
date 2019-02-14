@@ -14,9 +14,13 @@ from flask_compress import Compress
 
 url = 'mysql+pymysql://b900e042a0b297:127eabae@us-cdbr-iron-east-03.cleardb.net/heroku_c5f672dc0e40eb4'
 engine = create_engine(url, pool_recycle=1)
+compress = Compress()
 
-app = Flask(__name__)
-Compress(app)
+def start_app():
+   app = Flask(__name__)
+   compress.init_app(app)
+   return app
+app = start_app()
 login = LoginManager(app)
 app.config.from_object(Config)
 mysql = MySQL()
